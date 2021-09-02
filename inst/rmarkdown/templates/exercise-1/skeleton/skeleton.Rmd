@@ -1,17 +1,21 @@
 ---
-title: "The Effects of Education and Income on Opioid Use in Kentucky"
-#subtitle: "A subtitle"
-thanks: "Paper submitted to complete the requirements of ENVSOCTY 4GA3 Applied Spatial Statistics; with additional edits by Antonio Paez for this version."
+title: "Exercise 1: Energy consumption trends"
 author:
 - name: My Name
   student_number: 123456789
 subject: "ENVSOCTY 3LT3"
-abstract: "This paper reports our analysis of opioid prescriptions in Kentucky, USA, and its relationship with income and education at the level of counties. Data were obtained from the Washington Post database and the US Census."
-keywords: "opioids, education, income, spatial analysis"
+highlights: |
+    Write a brief summary from your perspective of the highlights of working on this assignment.
+threshold_concepts: 
+# 
+- threshold concept 1
+- threshold concept 2 
+- threshold concept 3
+- threshold concept 4
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document:
-    # The project-template-default.tex file was minimally adapted from Steven V. Miller's template for academic manuscripts. See:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
     # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
     # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
     template: exercise-template-default.tex
@@ -32,7 +36,11 @@ In this exercise, you will analyze trends pertaining to energy use and emissions
 * Due date:	See course outline for due date.
 * Materials: This R Notebook, and the following Excel file (found under Exercises)
     + `Energy and Emissions.xlsx`
-* Instructions:	Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 1 (Name-Student Number).Rmd`
+
+
+# Instructions
+
+Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 1 (Name-Student Number).Rmd`
 
 The variables in the data file are:
 
@@ -76,9 +84,7 @@ Words go here.
 
 1.	What was the approximate population of Earth circa 2016? How many barrels of oil per day did this population consume? (10)
 
-
 2.	What proportion of the world's oil is consumed by Canada and the US? Do these two countries have the same per capita levels of demand for energy use? Why do you think this is so? (15)
-
 
 3.	Calculate the consumption of oil in barrels per day per 1000 people for the countries listed in the data frame. What type of pattern do you observe? Try to explain the pattern. (20)
 

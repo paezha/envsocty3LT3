@@ -15,11 +15,11 @@ The goal of envsocty3LT3 is to …
 
 ## Installation
 
-You can install the released version of envsocty3LT3 from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the development version of envsocty3LT3 from
+[GitHub](https://github.com/paezha/envsocty3LT3) with:
 
 ``` r
-install.packages("envsocty3LT3")
+remotes::install_github("paezha/envsocty3LT3")
 ```
 
 ## Example
