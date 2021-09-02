@@ -6,8 +6,10 @@ author:
 subject: "ENVSOCTY 3LT3"
 highlights: |
     Write a brief summary from your perspective of the highlights of working on this assignment.
+    
+    You can use more than one paragraph but remember to indent the paragraphs. Try to keep this at less than 200 (?) words.
 threshold_concepts: 
-# 
+# Write the concepts that in your opinion are threshold concepts in this exercise.
 - threshold concept 1
 - threshold concept 2 
 - threshold concept 3
@@ -22,7 +24,6 @@ output:
 always_allow_html: true
 ---
 
-
 # Introduction
 
 Transport is fraught with many issues including growth in demand for energy use, greenhouse gases, urban air pollution and noise, negative health impacts and road traffic accidents and fatalities. It is well argued that these problems are not typical to one region but are becoming global in nature. Similar trends have been observed in many places around the world, albeit there are still individual differences among various countries. The observed data suggest an emerging transport crisis that could potentially compromise our quality of life.
@@ -36,7 +37,6 @@ In this exercise, you will analyze trends pertaining to energy use and emissions
 * Due date:	See course outline for due date.
 * Materials: This R Notebook, and the following Excel file (found under Exercises)
     + `Energy and Emissions.xlsx`
-
 
 # Instructions
 

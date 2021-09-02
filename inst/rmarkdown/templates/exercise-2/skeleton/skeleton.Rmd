@@ -1,0 +1,138 @@
+---
+title: "Exercise 2: Geographic information for transportation analysis"
+author:
+- name: My Name
+  student_number: 123456789
+subject: "ENVSOCTY 3LT3"
+highlights: |
+    Write a brief summary from your perspective of the highlights of working on this assignment.
+    
+    You can use more than one paragraph but remember to indent the paragraphs. Try to keep this at less than 200 (?) words.
+threshold_concepts: 
+# Write the concepts that in your opinion are threshold concepts in this exercise.
+- threshold concept 1
+- threshold concept 2 
+- threshold concept 3
+- threshold concept 4
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
+    # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+    # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
+    template: exercise-template-default.tex
+always_allow_html: true
+---
+
+# Introduction
+
+In this exercise, you will use R's geospatial visualization capabilities to analyze trends pertaining to travel in the Hamilton Census Metropolitan Area (CMA). The objective of the exercise is to practice skills displaying and manipulating spatial information, to demonstrate the ability to analyze spatial data, and to gain a better understanding of transportation trends in this metropolitan areaa.
+
+* Readings:
+    + 03 Geospatial Visualization for Transportation Trends.Rmd (found under Labs/Assignments)
+* Due date:	See course outline for due date.
+* Materials: This R Notebook, and a zip file that contains the following files (found under found under Labs/Assignments)
+    + `Hamilton CMA TTS06.shp` with the Trafic Analysis Zones (TAZ) for Hamilton CMA, according to the Transportation Tomorrow Survey of 2011.
+    + `Trips by Mode 2011.xlsx` with the number of trips by mode of transportation by TAZ, and other useful information from the 2011 census for Hamilton CMA.
+    + `Hamilton CMA Trips by Purpose.xlsx` with the number of trips by purpose of transportation by TAZ, and other useful information from the 2011 census for Hamilton CMA.
+    + `travel_time_car.xlsx` with the travel distance/time from TAZ centroids to Jackson Square in downtown Hamilton.
+
+# Instructions
+
+Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 2 (Name-Student Number).Rmd`.
+
+Add new code chunkS by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+***
+
+# Preliminaries
+
+Begin by loading the datasets that you will need for this exercise. They are available from the Readings section. For instance, you will need the `rgdal` package to read the shape file. Make sure all packages that you need are installed and loaded `library()`. 
+```{r}
+library(envsocty3LT3) # Course package
+library(sf)
+library(tidyverse)
+```
+
+Load the boundaries of the traffic analysis zones:
+```{r}
+data("hamilton_taz")
+```
+
+Change identifier variable to type character:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  mutate(GTA06 = as.character(GTA06))
+```
+
+Read travel data:
+```{r}
+data("hamilton_trips_purpose")
+data("hamilton_trips_mode")
+```
+
+There is one TAZ where data is missing, it will cause you problems later on. Let me fix this for you before you do the exercise by fudging one number:
+
+```{r}
+#tmode$Auto_driver[tmode$GTA06==5253] <- 1
+```
+
+# Context
+
+Words go here.
+
+# Questions
+
+## Transportation Trends in Hamilton (100 marks)
+
+1.	How many Traffic Analysis Zones comprise the Hamilton CMA? (10 marks)
+
+
+2.	What was the total population of the Hamilton CMA in 2011? What was the total number of trips by Car as driver and Car as passenger? What is the overall total number of trips made by Car? (15 marks)
+
+
+3.	How many zones did not produce any trips by bicycle according to the TTS? (10 marks)
+
+
+4.	Calculate for each Traffic Analysis Zone the proportion of trips made by Car (as passenger) with respect to the total number of trips by all modes. Next, calculate the proportion of walking trips with respect to the total number of trips. Attach the results to your data frame for further analysis. (10 marks)
+
+
+5.	Create a thematic map to show the proportion of 1) trips by Car as driver and 2) Walking trips across TAZ in the Hamilton CMA. (20 marks)
+
+
+**EDITED Q6:**
+
+6.  Create a thematic map showing population density in the Hamilton CMA. Do a simple linear regression and explain what it says the relationship is between population density and travel by car and walking. (10 marks)
+
+
+**ALTERNATE QUESTION 6:**
+
+6A. What is the median proportion of walking trips for a TAZ in the Hamilton CMA? Make a comparative density plot showing the difference in walking proportion for different population densities and explain what you find.
+
+
+7.	Read the file with the information about travel time/distance by car from TAZ centroids to Jackson Square in downtown Hamilton, and attach it to your data frame. Create a thematic map showing travel time in minutes. How does the proportion of travel by car compare to travel time to downtown Hamilton? (10 marks)
+
+
+**ADDITIONS TO Q7:**
+
+7A. Create a scatterplot to visualize the relationship between distance to downtown Hamilton and car proportion, and add a regression line to it. What relationship do you see? (/10)
+
+
+8.	Create scatterplots to visualize the relationship between the proportion of trips by car versus population density and travel time by car. Then, estimate a regression model with the proportion of trips as the dependent variables and population density and travel time as independent variables. What are the relationships between these variables? What would be the implications of a general increase in travel times, for instance as a consequence of congestion, for travel by car? Discuss. (15 marks)
+
+I CHANGE THIS QUESTION BELOW. MAKE THEM DO INDIVIDUAL SCATTERPLOTS AND REGRESSIONS, THEN INVESTIGATE CORRELATION BETWEEN TRAVEL TIME AND CAR PROPORTION ALONG WITH THEIR 2-VARIABLE REGRESSION IN Q8. 
+
+
+**ALTERNATE Q8:**
+
+8a.	Create a scatterplot to visualize the relationship between the proportion of trips by car versus population density. What relationship do you see? (10)
+
+
+8b. Estimate a regression model with the proportion of trips as the dependent variable and population density and travel time as independent variables. What are the relationships between these variables? What would be the implications of a general increase in travel times, for instance as a consequence of congestion, for travel by car? Discuss. (10 marks)
+
+
+**NEW QUESTION**
+
+9. Create a scatterplot to visualize the relationship between the proportion of trips by bicycle versus population density. What relationship do you see? Does this seem related to the relationship between car driving and population density? (10)
+
+
+10. Produce a scatterplot, and then estimate a simple linear regression for proportion of trips by car versus median age (it is another variable in the taz file). Discuss whether you think there is a relationship between the median age of residents in a TAZ and proportion of trips by car. (15 marks)
