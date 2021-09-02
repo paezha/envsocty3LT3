@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • envsocty3LT3</title>
+<title>Energy and emissions data for world countries. — energy_and_emissions • envsocty3LT3</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Energy and emissions data for world countries. — energy_and_emissions" />
+<meta property="og:description" content="A dataset containing information about 188 world countries, including
+population estimates, GDP per capita, energy consumption estimates,
+and CO_2 emissions." />
 
 
 
@@ -58,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,42 +108,50 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Energy and emissions data for world countries.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paezha/envsocty3LT3/blob/master/R/envsocty3LT3-package.R'><code>R/envsocty3LT3-package.R</code></a></small>
+    <div class="hidden name"><code>energy_and_emissions.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>A dataset containing information about 188 world countries, including
+population estimates, GDP per capita, energy consumption estimates,
+and CO_2 emissions.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>energy_and_emissions</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="energy_and_emissions.html">energy_and_emissions</a></code> </p>
-        </td>
-        <td><p>Energy and emissions data for world countries.</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A data frame with 188 rows and 11 variables:</p><dl>
+<dt>Country</dt><dd><p>Names of countries as factor</p></dd>
+<dt>Area</dt><dd><p>Surface land area of country in sq.km</p></dd>
+<dt>Population</dt><dd><p>Population estimates</p></dd>
+<dt>PYear</dt><dd><p>Year of the population estimate</p></dd>
+<dt>GDPPC</dt><dd><p>Nominal GDP per capita in US dollars</p></dd>
+<dt>bblpd</dt><dd><p>Estimated energy consumption in barrels of oil per day</p></dd>
+<dt>EYear</dt><dd><p>Year of the energy consumption estimate</p></dd>
+<dt>CO2_1995</dt><dd><p>CO_2 emissions in kilotonnes per year - 1995 estimates</p></dd>
+<dt>CO2_2005</dt><dd><p>CO_2 emissions in kilotonnes per year - 2005 estimates</p></dd>
+<dt>CO2_2015</dt><dd><p>CO_2 emissions in kilotonnes per year - 2015 estimates</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Energy Consumption Data Source: CIA Factbook, Refined Oil Products Consumption (https://www.cia.gov/library/publications/the-world-factbook/rankorder/2246rank.html) Accessed: September 5, 2017</p>
+<p>CO2 Emissions Data Source: EC Emissions Database for Global Atmospheric Research (http://edgar.jrc.ec.europa.eu/overview.php?v=CO2ts1990-2015) Accessed: September 5, 2017</p>
+<p>GDP Data Source: Wikipedia (https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)_per_capita) Accessed: September 5, 2017</p>
+<p>Continent names were extracted from package <code>countrycode</code> (https://CRAN.R-project.org/package=countrycode)</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>energy_and_emissions</span><span class='op'>)</span>
+ <span class='va'>GDPPC</span> <span class='op'>&lt;-</span> <span class='va'>energy_and_emissions</span><span class='op'>$</span><span class='va'>GDPPC</span>
+</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
