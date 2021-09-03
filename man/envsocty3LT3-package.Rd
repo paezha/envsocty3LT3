@@ -4,9 +4,9 @@
 \name{envsocty3LT3-package}
 \alias{envsocty3LT3}
 \alias{envsocty3LT3-package}
-\title{envsocty3LT3: What the Package Does (One Line, Title Case)}
+\title{envsocty3LT3: A Course Package for Transportation Geography}
 \description{
-What the package does (one paragraph).
+Course package for ENVSOCTY 3LT3 Transportation Geography.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,13 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Antonio Páez \email{paezha@mcmaster.ca} (\href{https://orcid.org/0000-0001-6912-9919}{ORCID})
+
+Authors:
+\itemize{
+  \item Shaila Jamal \email{jamals16@mcmaster.ca} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+  \item Elise Desjardins \email{desjae@mcmaster.ca } (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+}
 
 }
 \keyword{internal}

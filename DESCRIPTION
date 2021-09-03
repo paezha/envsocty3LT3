@@ -1,13 +1,23 @@
 Package: envsocty3LT3
-Title: What the Package Does (One Line, Title Case)
+Title: A Course Package for Transportation Geography
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    c(person(given = "Antonio",
+           family = "Páez",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "paezha@mcmaster.ca",
+           comment = c(ORCID = "0000-0001-6912-9919")),
+      person(given = "Shaila",
+           family = "Jamal",
+           role = c("aut"),
+           email = "jamals16@mcmaster.ca",
+           comment = c(ORCID = "YOUR-ORCID-ID")),
+      person(given = "Elise",
+           family = "Desjardins",
+           role = c("aut"),
+           email = "desjae@mcmaster.ca ",
+           comment = c(ORCID = "YOUR-ORCID-ID")))
+Description: Course package for ENVSOCTY 3LT3 Transportation Geography.
 License: MIT + file LICENSE
 Suggests: 
     testthat (>= 3.0.0)

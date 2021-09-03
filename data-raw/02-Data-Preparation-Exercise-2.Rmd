@@ -55,7 +55,8 @@ hamilton_demo_taz <- hamilton_trips_purpose %>%
             Median_income,
             Average_income,
             Employment_rate,
-            Unemployment_rate)
+            Unemployment_rate,
+            Median_commuting_duration)
 ```
 
 Prepare table:

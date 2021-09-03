@@ -65,9 +65,9 @@ NULL
 #'  summary(hamilton_taz)
 "hamilton_taz"
 
-#' Socio-demographic information in the Hamilton CMA.
+#' Socio-demographic information for the Hamilton CMA.
 #'
-#' A table with socio-demographicinformation from the Transportation Tomorrow Survey
+#' A table with socio-demographic information from the Transportation Tomorrow Survey
 #' by traffic analysis zone. These data are for 2016.
 #'
 #' @format A data frame with 297 rows and 15 variables:

@@ -3,7 +3,7 @@
 \docType{data}
 \name{hamilton_demo_taz}
 \alias{hamilton_demo_taz}
-\title{Socio-demographic information in the Hamilton CMA.}
+\title{Socio-demographic information for the Hamilton CMA.}
 \format{
 A data frame with 297 rows and 15 variables:
 \describe{
@@ -32,7 +32,7 @@ Transportation Tomorrow Survey (http://dmg.utoronto.ca/transportation-tomorrow-s
 data(hamilton_demo_taz)
 }
 \description{
-A table with socio-demographicinformation from the Transportation Tomorrow Survey
+A table with socio-demographic information from the Transportation Tomorrow Survey
 by traffic analysis zone. These data are for 2016.
 }
 \examples{
