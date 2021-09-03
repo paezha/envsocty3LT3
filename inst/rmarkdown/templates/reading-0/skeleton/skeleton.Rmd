@@ -1,0 +1,325 @@
+---
+title: "Reading 0: Basic Data Operations and Visualization"
+author: Antonio Paez
+output: pdf_document
+---
+
+# Introduction
+
+NOTE: This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Now that you have installed `R` and RStudio we can begin with a quick introduction to data operations and visualization using this computing language. Please note that this document you are reading is an rmarkdown file; it is an example of what is called "literate computing", a style of writing computational documents that uses code to illustrate a discussion, as opposed to discussing/documenting the code. It flips around the usual way in which code is writen, and it helps to make learning how to code more intuitive and accessible. 
+
+Whenever you see a chunk of code in an rmarkdown document as follows, you can run it (by clicking the green 'play' icon on the top right corner of the code window) to see the results. Try it below!
+```{r}
+print("Hello, ENVSOCTY 3LT3")
+```
+
+# RStudio Window
+
+If you are reading this, you must have already read the document 'Installation of `R`'. We can now proceed to discuss some basic concepts regarding data types and operations.
+
+# Preliminaries
+
+It is good practice to clear the working memory in RStudio when you begin working on something new. This is to make sure that there is not extraneous info in memory that might confuse your work. The command in `R` to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
+
+```{r}
+rm(list = ls())
+```
+
+Note that `ls()` lists all objects currently on the workspace.
+
+An alternative way of doing this is to just click on the little broom icon in the "Environment" tab (top right of your screen in the standard configuration of the RStudio app).
+
+Next, we probably want to load the _packages_ that we wish to use. A package is a unit of shareable code that augments the capabilities of base `R`. In this document, we will use the package `tidyverse`. If you have not done so before, you can install the package with `install.packages("tidyverse")`. As an alternative, you can install it from RStudio using the 'Install Packages' command in the "Tools" menu, on the menu bar above. Simply click on "Tools - Install Packages..." on the menu bar, and enter `tidyverse` in the window. Or you can use the 'Packages' pane in the app (in the bottom right).
+
+Once the package is part of your _library_, it becomes available for use in your computer; to use the package afterwards, you must load it into memory. For this, we use the command `library()`, which is used to load a package, that is, to activate it for use:
+```{r}
+library(tidyverse)
+```
+
+# Dataframes in `R`
+
+`R` can work with different data types, including scalars (essentially matrices with only one element), vectors (matrices of one dimension), and full matrices. Here's an illustration of the difference:
+```{r}
+print('This is a scalar')
+1
+
+print('This is a vector')
+c(1, 2, 3, 4)
+
+print('This is a matrix')
+matrix(c(1, 2, 3, 4, 0, 0, 0, 0, 1),
+       nrow = 3, 
+       ncol=3)
+```
+
+The command `c()` is used to concatenate (i.e., to string together) the arguments. The command `matrix()` creates a matrix with the indicated number of rows `nrow` and columns `ncol`.
+
+An important data type in `R` is a data frame. A data frame is a _rectangular_ table consisting of rows and columns - commonly a set of vectors that have been collected for convenience. Data frame are used to store data in digital format. (If you have used Excel or another spreadsheet software before, data frames will be familiar to you: they look a lot like a table in a spreadsheet.)
+
+A data frame can accommodate large amounts of information (several billion individual items, depending on the memory of a computer). The data can be numeric, alphanumeric (i.e., characters), logical, and so on. Each grid cell in a data frame has an address that can be identified based on the row and column it belongs to. `R` can use these addresses to perform mathematical operations. `R` labels columns alphabetically and rows numerically (or less commonly alphabetically).
+
+To illustrate a data frame, let us first create the following vectors:
+```{r}
+Country <- c('Finland',
+             'France',
+             'Germany',
+             'Greece',
+             'Hungary',
+             'Ireland')
+Population <- c(5238514,
+                60876136,
+                82400498,
+                10706212,
+                9956253,
+                4109126)
+Cars <- c(2053407,
+          27756518,
+          41859426,
+          2719551,
+          2231226,
+          1273850)
+```
+
+Note that `<-` is an assignment. In other words, it assigns the values on the right to the name on the left.
+
+After you execute the chunk of code above, you will notice that three values appear now in your Environment (upper right pane tab). These are 3 vectors of size 1:6 - one that is composed of alphanumeric information (or 'chr', for 'character'), and two columns that are numeric ('num').
+
+These vectors can be combined into a data frame. We do this for convenience, so we know that all these data belong together in some way. Please note: to create a data frame, the vectors must have the same length. In other words, you cannot create a table with elements that have different numbers of rows. (Other data types allow you to do this, but not data frames).
+
+We will now create a data frame. We will call it `CO` (for _C_ar _O_wnership by country). You can, if you wish, choose a different name. There are some rules of thumb for naming objects, but in most cases it helps if the names are intuitive, easy to remember, and not too long. 
+
+The function used to create a data frame is `data.frame()`, and its arguments are the vectors that we wish to collect there. The next chunk of code collects the vectors we created before into a data frame:
+```{r}
+CO <- data.frame(Country,
+                 Population,
+                 Cars)
+```
+
+After running the chunk above, now you have a new data frame, called `CO`, in your environment. It is important to know that data frames are _rectangular_ tables: in other words, all vectors used to create a data frame must be the same length. We cannot have a vector with 6 rows and a vector with 7 rows in the same table. This is because each row represents an object of interest, in the case of our table a country. Suppose that we had seven countries but only information for six of them. We could exclude the country that lacks information, or we could include it and indicate that other information about it is missing. The effect is the same, the vectors need to be all the same size.
+ 
+If you double-click on `CO` in the Environment tab, you will see that this data frame has three columns (labeled `Country`, `Population`, `Cars`), and 6 rows. The row numbers and column names can be used to identify particular cells in the data frame. 
+
+You can even enter data into a data frame and then use the many built-in functions of `R` to perform various types of analysis. 
+
+You can also simply display the data frame by typing it in as an `R` command, like this:
+
+```{r}
+CO
+```
+
+The variable `Country` currently is a character vector. If we summarize the data frame we can see this clearly:
+```{r}
+summary(CO)
+```
+
+We can turn the character variable into a to a _factor_. What is a factor? Factors are a class of data used to store variables that are _categories_ (e.g., labels, names, classes). Typically, this means that the variable has two or more _levels_. In the present case, the factor variable has six levels, corresponding to one of six unique countries. If we had information for multiple years, each country might appear more than once, for each year that information was available. To convert `Country` to a factor, we can use the function `mutate` from the `tidyverse` package (more on packages later):
+
+```{r}
+CO <- mutate(CO,
+             Country = factor(Country))
+```
+
+We use the `<-` assignment again, to store the results of _mutating_ our data frame `CO` in the object `CO` (we could have stored it in a new data frame if we wished, but we don't really need to do that at the moment). The function `factor()` converts a variable into a factor. Compare the summary of the factor to the summary of the character variable:
+```{r}
+summary(CO)
+```
+
+How would you explain the difference between the two?
+
+# More Basic Operations
+
+`R` can perform many types of operations. Some simple operations are arithmetic. Other are logical. And so on. 
+
+To perform operations effectively, it is useful to understand the way `R` locates information, for instance in a data frame. As noted above, each grid cell has an address, or in other words an index, that can be referenced in several convenient ways. For instance, assume that you wish to reference the first value of the data frame, in other words, row 1 of column `Country`. To do this, you would go use the following instruction:
+```{r}
+CO[1,1]
+```
+
+This will recall the element in the first row and first column of `CO`.
+
+As an alternative, you could type:
+```{r}
+CO$Country[1]
+```
+
+As you see, this has the same effect. The string sign `$` is used to reference columns in a data frame. Therefore, `R` will call the first element of `Country` in data frame `CO`.
+
+Each country is referenced by the number inside the brackets. So, the second country on the list is:
+
+```{r}
+CO$Country[2]
+```
+
+Asking for `CO[1,1]` is identical to asking for `CO$Country[1]`. Try changing the code in the chunks above and executing. If you type `CO$Country`, `R` will recall the full column.
+
+Indexing is useful to conduct operations. Suppose for instance, that you wished to calculate the total population of two major European countries, say France and Germany. You can execute the following instructions:
+
+```{r}
+CO$Population[2] + CO$Population[3]
+```
+
+The problem with indexing cells this way is that, if someone later adds some countries to your list, their row number changes and you're no longer referencing the same countries with those numbers.
+
+So a better way to index the cells in a data frame is by using logical operators, like in the following chunk of code. Here, we're essentially asking for "population of (country which is France)" + "population of (country which is Germany)":
+
+```{r}
+CO$Population[CO$Country=='France'] + CO$Population[CO$Country=='Germany']
+```
+
+The text inside the square bracket tells `R` to look at the row with that country's name, and the command outside the square bracket returns the number in the population column for that country's row.
+
+Suppose that you wanted to calculate the total population of the countries in your data frame. To do this, you would use the instruction `sum`, and use the $ to identify the column that you want the sum for:
+
+```{r}
+sum(CO$Population)
+```
+
+As you can see, `R` can be used as a calculator, but it is much more powerful than that.
+
+You have already seen how it allows you to store in memory the results of some instruction, by means of an assignment `<-`. You can also perform many other useful operations. For instance, you can calculate the maximum value for a set of values:
+
+```{r}
+max(CO$Population)
+```
+
+This doesn't have to be just the maximum of a column. You can ask for the max of any set of values:
+
+```{r}
+max(CO$Population[CO$Country=='France'], CO$Population[CO$Country=='Germany'])
+```
+
+And, if you wanted to find the name of the country with the largest population, you can do this:
+
+```{r}
+CO$Country[CO$Population == max(CO$Population)]
+```
+
+As you see, Germany is the largest country (by population) in this dataset. Using indexing in imaginative ways provides a way to do fairly sophisticated data analysis.
+
+Likewise, the function for finding the minimum value for a set of values is `min`:
+```{r}
+min(CO$Population)
+```
+
+So which of our 6 countries has the minimum population?
+
+```{r}
+CO$Country[CO$Population == min(CO$Population)]
+```
+
+Try calculating the mean population, using the command `mean`. To do this, type some code into the empty chunk below:
+
+```{r}
+
+```
+
+You can insert code chunks into `R` markdown files by pressing CTRL-ALT-I.
+
+# Data Analysis
+
+A powerful feature of `R` is the flexibility to use calculations to implement data analysis. Your sample data frame contains information on Population and number of Cars per Country. Suppose that you would like to discover which country has the highest car ownership rate. Sure, big countries will have more cars. But in relative terms, is this still true?
+
+We will define the car ownership rate (COR) as the number of cars per 1000 people in a country. This is computed as:
+
+$$
+COR_i = \frac{1000*Cars_i}{Population_i}
+$$
+
+Where $COR_i$ is the Car Ownership rate in country i.
+
+The above chunk (with the `$$` at the start and end) is a piece of LaTex code. It simply allows you to draw mathematical formulas in an `R` Notebook; it does not execute any commands, and is not a piece of `R` code at all. Do not worry too much about how to write mathematial expressions at the moment.
+
+Car Ownership Rate can be easily calculated by `R` as follows:
+```{r}
+COR <- 1000*CO$Cars/CO$Population
+```
+
+This has created a new vector called `COR`. If you wanted to add this quantity (i.e., car ownership rate) to your data frame as a new column, you could do the following:
+
+```{r}
+CO$COR <- 1000*CO$Cars/CO$Population
+```
+
+The instruction above has added a new column to your existing `CO` data frame, and stored the results of your calculation there:
+
+```{r}
+CO
+```
+
+By the way, if you want to round off data, you can use the round() command:
+
+```{r}
+CO$COR <- round(1000*CO$Cars/CO$Population, 2)
+CO
+```
+
+# Visualization
+
+The data frame, in essence a table, informative as it is, may not be the best way to learn from the data. Visualization is an important complement to data analysis. 
+After having calculated the car ownership rate per country, we might be interested in finding which country has the highest car ownership rate and which country has the lowest car ownership rate. We could achieve this by using similar instructions as before, for example:
+
+```{r}
+paste('The country with the highest car ownership rate is',
+      CO$Country[CO$COR==max(CO$COR)])
+paste('The country with the lowest car ownership rate is',
+      CO$Country[CO$COR==min(CO$COR)])
+```
+
+(Note that `paste` is similar to `print`, except that it converts everything to characters before printing. We use this command because the contents of `Country` in data frame `CO` are not characters, but "levels", so they need to be converted into characters before printing.)
+
+A more convenient way of understanding these data is by visualizing them, using for instance a bar chart.
+
+We will proceed to create a bar chart, using a package of pre-prepared `R` code called `ggplot2`. This package implements a grammar of graphics, and is a very flexible way of creating plots in `R`. 
+
+Note, by the way, that if you're working through this semester's labs on the computers at McMaster, you will need to reinstall your packages every time you go to a new computer. In a multi-user environment they will be installed on that computer's user subdirectory for your name; they don't follow your program around, nor do they follow your login across the university. This is a good reason to always do your `R` work at the same lab computer if you are working in the lab.
+
+Assuming that you already have installed `ggplot2`, we proceed to load it into memory:
+
+```{r}
+library(ggplot2)
+```
+
+Now all commands from the `ggplot2` package are available to us.
+
+This package works by layering a series of objects, beginning with a blank plot, to which we can add things. The command to create a plot is `ggplot()`. This command accepts different arguments. For instance, we can pass data to it in the form of a data frame. We can also indicate different _aesthetic_ values, that is, the things that we wish to plot. None of this is plotted, though, until we indicate which kind of _geom_ or geometric object we wish to plot.
+
+For a bar chart, we would use the following instructions:
+```{r}
+ggplot(data = CO, 
+       aes(x = Country,
+           y = COR)) + 
+  geom_bar(stat = 'identity')
+```
+
+Let us break down these instructions. We are asking `ggplot2` to create a plot that will use the data frame `CO`. Furthermore, we tell it to use the named data frame's values of `Country` in the x-axis, and its values of `COR` in the y-axis. Run the following chunk:
+
+```{r}
+ggplot(data = CO, 
+       aes(x = Country, 
+           y = COR))
+```
+
+Notice how `ggplot2` creates a blank plot, but it has yet to actually render any of the information in `CO` there. We layer elements onto a plot by using the `+` sign. It is only when we tell the package to add some geometric element that it renders something. In the previous case, we told 'ggplot2' to draw bars (by using the 'geom_bar' command). The argument of `geom_bar` was `stat = 'identity'`, to indicate that the data for the y-axis was to be used 'as-is' without further statistical transformations.
+
+There are many different geoms that can be used in `ggplot2`. You can always consult the help/tutorial files by typing `??ggplot2` in the console window at the bottom. See:
+
+```{r}
+??ggplot2
+```
+
+Alternately, the free e-book "R For Data Science" by Wickham & Grolemund has an entire chapter on `ggplot2`, which will give you a good introduction. It is available as a free pdf, and also is readable online.
+
+This concludes your basic overview of data analysis and visualization in `R`. You will have an opportunity to learn more about the analysis of data and the creation of plots in `R` with your assignment.
+
+
+# An important note about working on multiple files at once!
+
+When working on the labs, you may want to refer back to the example code to see how things are done. This is fine; however, if you execute code from different `R` markdown files within the same window, the results get stored in the same working memory. 
+
+If you are using the same variable names in two different pieces of `R` code (for example, you have another file that also has a data frame named `CO`), you can overwrite your lab data files using commands executed from the other file.
+
+You should be able to get around this by opening one file in one RStudio window, and the other file in a different RStudio window (i.e., running two different instances of RStudio on your computer, using alt-tab to switch between windows): each window has its own memory.
+
+An alternative is to just refer back to the .nb.html document for the examples, instead of keeping the example code open.

@@ -3,7 +3,7 @@ title: "Exercise 1: Energy consumption trends"
 author:
 - name: My Name
   student_number: 123456789
-subject: "ENVSOCTY 3LT3"
+subject: "ENVSOCTY 3LT3 Transportation Geography"
 highlights: |
     Write a brief summary from your perspective of the highlights of working on this assignment.
     
