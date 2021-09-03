@@ -71,35 +71,96 @@
 <a href="#envsocty3lt3" class="anchor"></a>envsocty3LT3</h1></div>
 <!-- badges: start -->
 
-<p>The goal of envsocty3LT3 is to …</p>
-<div id="installation" class="section level2">
+<p>Package <code>envsocty3LT3</code> is an open educational resource that aims to combine various advantages of working with the <a href="https://www.r-project.org/"><code>R</code> statistical computing project</a>:</p>
+<ul>
+<li>Ease of distribution</li>
+<li>Reproducibility</li>
+<li>Availability of templates for computational notebooks</li>
+<li>Rigor in documentation of data sets and computational products</li>
+</ul>
+<p>This course package is designed for use in the course <a href="https://academiccalendars.romcmaster.ca/preview_course_nopop.php?catoid=41&amp;coid=221967">ENVSOCTY 3LT3 <em>Transportation Geography</em></a> offered by the <a href="https://www.science.mcmaster.ca/ees/">School of Earth, Environment and Society</a> at <a href="https://www.mcmaster.ca/">McMaster University</a>. The course package includes the following components:</p>
+<ul>
+<li>Document templates with <strong>Readings</strong>.</li>
+<li>Document templates with <strong>Exercises</strong>.</li>
+<li>Data sets used in the Readings and Exercises.</li>
+<li>Custom functions.</li>
+</ul>
+<div id="what-do-i-need-to-use-the-course-package" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>You can install the development version of envsocty3LT3 from <a href="https://github.com/paezha/envsocty3LT3">GitHub</a> with:</p>
+<a href="#what-do-i-need-to-use-the-course-package" class="anchor"></a>What do I need to use the course package?</h2>
+<p>This course does not assume knowledge of, or experience working with <code>R</code>. So no previous knowledge is required, other than some experience using computers in general, and maybe a word processor (e.g., Microsoft Word) and spreadsheets (e.g., Microsoft Excel). To use the package you will begin from the very basics: how to install and use the necessary software.</p>
+<div id="r-the-open-statistical-computing-project" class="section level3">
+<h3 class="hasAnchor">
+<a href="#r-the-open-statistical-computing-project" class="anchor"></a><code>R</code>: The open statistical computing project</h3>
+<p>What is <code>R</code>?</p>
+<p><code>R</code> is an open-source language for statistical computing. It was created in the early 1990s by <a href="https://en.wikipedia.org/wiki/Ross_Ihaka">Ross Ihaka</a> and <a href="https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician)">Robert Gentleman</a> at the University of Auckland, New Zealand, as a way to provide their students with an accessible, no-cost statistical application for their courses. <code>R</code> is now maintained by the <code>R</code> Development Core Team, and it continues to be developed by hundreds of contributors around the globe. <code>R</code> is an attractive alternative to other software packages for data analysis (e.g., Microsoft Excel, Matlab, Stata, ArcGIS) due to its open-source character (i.e., it is free), its flexibility, and large user community. The size of the <code>R</code> community means that if there is something you want to do (for instance, estimate a linear regression model or plot geographical information), it is very likely that someone has already developed a package for it.</p>
+<p>A good way to think about <code>R</code> is as a core package, with a library of optional packages can be attached to increase its core functionality. <code>R</code> can be downloaded for free at:</p>
+<p><a href="https://cran.rstudio.com/" class="uri">https://cran.rstudio.com/</a></p>
+<p><code>R</code> comes with a built-in console (a user graphical interface), but better alternatives to the basic interface include RStudio, which can also be downloaded for free:</p>
+<p><a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a></p>
+<p><code>R</code> requires you to work using the command line, which is going to be unfamiliar to many of you accustomed to user-friendly graphical interfaces. Do not fear. People worked for a long time using the command line, or using even more cumbersome systems, such as punched cards in early computers. Graphical user interfaces are convenient, but they have a major drawback, namely their inflexibility. A program that functions based on graphical user interfaces allows you to do only what is hard-coded in the user interface. Command line, as you will soon discover, is somewhat more involved, but provides much more flexibility in operation, and the ability to be more creative.</p>
+<p>To begin, install <code>R</code> and RStudio in your computer. This <a href="https://www.youtube.com/watch?v=gZh91IdIMts">video</a> (5:23 min) shows how to install these application.</p>
+<p>If you are working in the GIS lab at McMaster you will find that these have already been installed there. If you have used <code>R</code> and have a previous instal, update it to <code>R</code> version 4.1.1 (2021-08-10) – “Kick Things”. <strong>The course package was developed using “Kick Things”!</strong></p>
+</div>
+<div id="rstudio-window-a-quick-tour" class="section level3">
+<h3 class="hasAnchor">
+<a href="#rstudio-window-a-quick-tour" class="anchor"></a>RStudio window: A Quick Tour</h3>
+<p>RStudio is an <em>Interactive Development Environment</em> (IDE for short). It takes the form of a familiar window application, and it provides a complete interface to interact with the language <code>R</code>. The application consists of a window with toolbars and several panes. Some panes include in addition several tabs. There are the usual drop-down menus for common operations. See Figure 1 below.</p>
+<div class="figure">
+<img src="images/01-RStudio-Window-Anatomy.png" alt="Figure 1. RStudio IDE" width="100%"><p class="caption">
+Figure 1. RStudio IDE
+</p>
+</div>
+<!-- ![Figure 1. RStudio IDE](images/01-RStudio-Window-Anatomy.png) -->
+<p>The editor pane allows you to open and work with text and other files. In these files you can write instructions that can be passed on to <code>R</code> for execution. Writing something in the editor does not execute the instructions, it merely records them for possible future use.</p>
+<p>The console pane is where instructions are passed on to the program. When an instruction is typed (or copied and pasted) there, <code>R</code> will understand that it needs to do something. The instructions must be written in a way that <code>R</code> understands, otherwise errors will occur.</p>
+<p>The top-right pane includes a tab for the environment; this is where all data objects that are currently in memory are reported. The History tab in the same pane acts like a log: it keeps track of all instructions that have been executed in the console. Depending on your project, you may see other tabs there.</p>
+<p>The last pane in the bottom-right includes a few other useful tabs. The File tab allows you to navigate directories in your computer, change the working directory, see what files are where, and so on. The Plot tab is where plots are rendered, when instructions require <code>R</code> to do so. The Packages tab allows you to manage packages, which as mentioned above, are pieces of code that can augment the functionality of <code>R</code>. The Help tab is where you can consult the documentation for functions/packages/see examples, and so on. The Viewer tab is for displaying web content locally. Many <code>R</code> functions create html output and it is in this pane where this kind of content can be previewed.</p>
+</div>
+</div>
+<div id="quick-start-guide" class="section level2">
+<h2 class="hasAnchor">
+<a href="#quick-start-guide" class="anchor"></a>Quick Start Guide</h2>
+<p>Once you have installed <code>R</code> and RStudio you are ready to install the course package <code>envsocty3LT3</code>. The package is available from <a href="https://github.com/paezha/envsocty3LT3">GitHub</a>, and to install it you need to run the following code in your <code>R</code> console:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"paezha/envsocty3LT3"</span><span class="op">)</span></code></pre></div>
+<p>This will download the package to your personal library of packages and install it to make the package available for use locally.</p>
 </div>
-<div id="example" class="section level2">
+<div id="recommended-workflow" class="section level2">
 <h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paezha/envsocty3LT3">envsocty3LT3</a></span><span class="op">)</span>
-<span class="co">## basic example code</span></code></pre></div>
-<p>What is special about using <code>README.Rmd</code> instead of just <code>README.md</code>? You can include R chunks like so:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">cars</span><span class="op">)</span>
-<span class="co">#&gt;      speed           dist       </span>
-<span class="co">#&gt;  Min.   : 4.0   Min.   :  2.00  </span>
-<span class="co">#&gt;  1st Qu.:12.0   1st Qu.: 26.00  </span>
-<span class="co">#&gt;  Median :15.0   Median : 36.00  </span>
-<span class="co">#&gt;  Mean   :15.4   Mean   : 42.98  </span>
-<span class="co">#&gt;  3rd Qu.:19.0   3rd Qu.: 56.00  </span>
-<span class="co">#&gt;  Max.   :25.0   Max.   :120.00</span></code></pre></div>
-<p>You’ll still need to render <code>README.Rmd</code> regularly, to keep <code>README.md</code> up-to-date. <code>devtools::build_readme()</code> is handy for this. You could also use GitHub Actions to re-render <code>README.Rmd</code> every time you push. An example workflow can be found here: <a href="https://github.com/r-lib/actions/tree/master/examples" class="uri">https://github.com/r-lib/actions/tree/master/examples</a>.</p>
-<p>You can also embed plots, for example:</p>
-<p><img src="reference/figures/README-pressure-1.png" width="100%"></p>
-<p>In that case, don’t forget to commit and push the resulting figure files, so they display on GitHub and CRAN.</p>
+<a href="#recommended-workflow" class="anchor"></a>Recommended Workflow</h2>
+<p>After installing the course package, this is the recommended workflow for using it in this course.</p>
+<p>Create a project for all your work in this course.</p>
+<div class="figure">
+<img src="images/02-Create-Project-1.png" alt="Figure 2. Create new project - option 1" width="100%"><p class="caption">
+Figure 2. Create new project - option 1
+</p>
+</div>
+<div class="figure">
+<img src="images/03-Create-Project-2.png" alt="Figure 3. Create new project - option 2" width="100%"><p class="caption">
+Figure 3. Create new project - option 2
+</p>
+</div>
+<div class="figure">
+<img src="images/04-Create-Project-New-Directory.png" alt="Figure 4. Choose to create the project in a new directory" width="100%"><p class="caption">
+Figure 4. Choose to create the project in a new directory
+</p>
+</div>
+<div class="figure">
+<img src="images/05-Create-Project-Empty-Directory.png" alt="Figure 5. Choose the type of project to create: new directory for your project" width="100%"><p class="caption">
+Figure 5. Choose the type of project to create: new directory for your project
+</p>
+</div>
+<div class="figure">
+<img src="images/06-Create-Project.png" alt="Figure 6. Create your project" width="100%"><p class="caption">
+Figure 6. Create your project
+</p>
+</div>
+<div class="figure">
+<img src="images/07-New-Project.png" alt="Figure 7. Admire your brand new project" width="100%"><p class="caption">
+Figure 7. Admire your brand new project
+</p>
+</div>
 </div>
 </div>
   </div>
