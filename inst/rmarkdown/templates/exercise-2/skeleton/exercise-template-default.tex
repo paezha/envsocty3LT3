@@ -97,8 +97,8 @@ $if(anonymous)$$else$\author{$for(author)$\Large $author.name$\vspace{0.05in} \n
 
 \usepackage{titlesec}
 
-\titleformat*{\section}{\normalsize\bfseries}
-\titleformat*{\subsection}{\normalsize\itshape}
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\large\itshape}
 \titleformat*{\subsubsection}{\normalsize\itshape}
 \titleformat*{\paragraph}{\normalsize\itshape}
 \titleformat*{\subparagraph}{\normalsize\itshape}
@@ -237,7 +237,7 @@ $if(highlights)$
 \begin{abstract}
 
     % Add an horizontal rule
-    \hbox{\vrule height .2pt width 39.14pc}
+    \hbox{\vrule height .8pt width 39.14pc}
 
     \vskip 8.5pt % \small
 
@@ -257,11 +257,11 @@ $if(highlights)$
     $endfor$ \par
 
     % Close the box for the highlights and threshold concepts with another rule
-    \hbox{\vrule height .2pt width 39.14pc}
+    \hbox{\vrule height .8pt width 39.14pc}
 
 % If there are not highlights just create a rule
     $else$
-    \hbox{\vrule height .2pt width 39.14pc}
+    \hbox{\vrule height .8pt width 39.14pc}
     $endif$
 
 % Finish highlights

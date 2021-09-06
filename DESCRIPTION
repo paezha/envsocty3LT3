@@ -11,12 +11,12 @@ Authors@R:
            family = "Jamal",
            role = c("aut"),
            email = "jamals16@mcmaster.ca",
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0002-3628-4346")),
       person(given = "Elise",
            family = "Desjardins",
            role = c("aut"),
            email = "desjae@mcmaster.ca ",
-           comment = c(ORCID = "YOUR-ORCID-ID")))
+           comment = c(ORCID = "0000-0002-3350-4534")))
 Description: Course package for ENVSOCTY 3LT3 Transportation Geography.
 License: MIT + file LICENSE
 Suggests: 
@@ -30,3 +30,5 @@ URL: https://github.com/paezha/envsocty3LT3
 BugReports: https://github.com/paezha/envsocty3LT3/issues
 Depends: 
     R (>= 2.10)
+Imports: 
+    tinytex

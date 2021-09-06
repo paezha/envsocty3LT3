@@ -1,28 +1,49 @@
 ---
 title: "Reading 0: Basic Data Operations and Visualization"
-author: Antonio Paez
-output: pdf_document
+author: 
+- name: Antonio Páez
+- name: My Name 
+subject: "ENVSOCTY 3LT3 Transportation Geography"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
+    # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+    # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
+    template: reading-template-default.tex
+always_allow_html: true
 ---
 
 # Introduction
 
 NOTE: This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
-Now that you have installed `R` and RStudio we can begin with a quick introduction to data operations and visualization using this computing language. Please note that this document you are reading is an rmarkdown file; it is an example of what is called "literate computing", a style of writing computational documents that uses code to illustrate a discussion, as opposed to discussing/documenting the code. It flips around the usual way in which code is writen, and it helps to make learning how to code more intuitive and accessible. 
+Now that you have installed `R` and RStudio we can begin with a quick introduction to data operations and visualization using this computing language. Please note that this document you are reading is an rmarkdown file; it is an example of what is called [_literate programming_](https://en.wikipedia.org/wiki/Literate_programming), a style of writing computational documents that uses code to illustrate a discussion, as opposed to discussing/documenting the code. It flips around the usual way in which code is written, and it helps to make learning how to code more intuitive and accessible. 
 
 Whenever you see a chunk of code in an rmarkdown document as follows, you can run it (by clicking the green 'play' icon on the top right corner of the code window) to see the results. Try it below!
 ```{r}
 print("Hello, ENVSOCTY 3LT3")
 ```
 
+Each of the Notebooks in the course that comprise the _Readings_ is like a mini-chapter in a book. You can _knit_ the notebook to produce a pdf file to study. But the notebooks can be much more than that, they can be the basis for your own notes! As you read and study, you can 'customize' the chapter based on your developing understanding of the subject matter and/or to complement the notebook with other information. To make the readings uniquely yours, you can use the following style to create a _textbox_:
+
+:::{.textbox data-latex=""}
+**NOTICE:** 
+
+This is an annotation. Here I can write my thoughts as I study, or I can add useful links or other information to help me learn.  
+
+To create a new paragraph, I need to type two blanks after the last one.
+:::
+
+Try creating your own textbox next.
+
 # RStudio Window
 
-If you are reading this, you must have already read the document 'Installation of `R`'. We can now proceed to discuss some basic concepts regarding data types and operations.
+If you are reading this, you must already have learned how to [create a new project and documents](https://github.com/paezha/envsocty3LT3#recommended-workflow) using the course package templates. We can now proceed to discuss some basic concepts regarding data types and operations.
 
 # Preliminaries
 
-It is good practice to clear the working memory in RStudio when you begin working on something new. This is to make sure that there is not extraneous info in memory that might confuse your work. The command in `R` to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
-
+It is good practice to clear the working memory in RStudio when you begin working on something new. This is to make sure that there is no extraneous info in memory that might confuse your work. The command in `R` to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, run the following chunk (by clicking on the 'play' icon):
 ```{r}
 rm(list = ls())
 ```
@@ -31,7 +52,7 @@ Note that `ls()` lists all objects currently on the workspace.
 
 An alternative way of doing this is to just click on the little broom icon in the "Environment" tab (top right of your screen in the standard configuration of the RStudio app).
 
-Next, we probably want to load the _packages_ that we wish to use. A package is a unit of shareable code that augments the capabilities of base `R`. In this document, we will use the package `tidyverse`. If you have not done so before, you can install the package with `install.packages("tidyverse")`. As an alternative, you can install it from RStudio using the 'Install Packages' command in the "Tools" menu, on the menu bar above. Simply click on "Tools - Install Packages..." on the menu bar, and enter `tidyverse` in the window. Or you can use the 'Packages' pane in the app (in the bottom right).
+Next, we probably want to load all _packages_ that we wish to use in our work session. A package is a unit of shareable code that augments the capabilities of base `R`. In this document, we will use the package `tidyverse`. If you have not done so before, you can install the package with `install.packages("tidyverse")`. As an alternative, you can install it from RStudio using the 'Install Packages' command in the 'Tools' menu, on the menu bar above. Simply click on 'Tools - Install Packages...' on the menu bar, and enter `tidyverse` in the window. Or you can use the 'Packages' pane in the app (in the bottom right).
 
 Once the package is part of your _library_, it becomes available for use in your computer; to use the package afterwards, you must load it into memory. For this, we use the command `library()`, which is used to load a package, that is, to activate it for use:
 ```{r}
@@ -40,21 +61,26 @@ library(tidyverse)
 
 # Dataframes in `R`
 
-`R` can work with different data types, including scalars (essentially matrices with only one element), vectors (matrices of one dimension), and full matrices. Here's an illustration of the difference:
+`R` can work with different data types, including scalars (essentially matrices with only one element), vectors (matrices of one dimension), and full matrices. Here's an illustration of the difference.L:
+
+This is a scalar:
 ```{r}
-print('This is a scalar')
 1
+```
 
-print('This is a vector')
+Notice that it is an object with only one row and one column. In contrast, this is a vector:
+```{r}
 c(1, 2, 3, 4)
+```
 
-print('This is a matrix')
+This is a data object with one row and four columns. And this is a matrix:
+```{r}
 matrix(c(1, 2, 3, 4, 0, 0, 0, 0, 1),
        nrow = 3, 
        ncol=3)
 ```
 
-The command `c()` is used to concatenate (i.e., to string together) the arguments. The command `matrix()` creates a matrix with the indicated number of rows `nrow` and columns `ncol`.
+This particular matrix has three rows and three columns, but matrices generally can be of size $n\times m$, meaning they can have $n$ rows and $m$ columns. The command `c()` is used to concatenate (i.e., to string together) the arguments. The command `matrix()` creates a matrix with the indicated number of rows `nrow` and columns `ncol`.
 
 An important data type in `R` is a data frame. A data frame is a _rectangular_ table consisting of rows and columns - commonly a set of vectors that have been collected for convenience. Data frame are used to store data in digital format. (If you have used Excel or another spreadsheet software before, data frames will be familiar to you: they look a lot like a table in a spreadsheet.)
 
@@ -303,11 +329,7 @@ ggplot(data = CO,
 
 Notice how `ggplot2` creates a blank plot, but it has yet to actually render any of the information in `CO` there. We layer elements onto a plot by using the `+` sign. It is only when we tell the package to add some geometric element that it renders something. In the previous case, we told 'ggplot2' to draw bars (by using the 'geom_bar' command). The argument of `geom_bar` was `stat = 'identity'`, to indicate that the data for the y-axis was to be used 'as-is' without further statistical transformations.
 
-There are many different geoms that can be used in `ggplot2`. You can always consult the help/tutorial files by typing `??ggplot2` in the console window at the bottom. See:
-
-```{r}
-??ggplot2
-```
+There are many different geoms that can be used in `ggplot2`. You can always consult the help/tutorial files by typing `??ggplot2` in the console window at the bottom.
 
 Alternately, the free e-book "R For Data Science" by Wickham & Grolemund has an entire chapter on `ggplot2`, which will give you a good introduction. It is available as a free pdf, and also is readable online.
 
