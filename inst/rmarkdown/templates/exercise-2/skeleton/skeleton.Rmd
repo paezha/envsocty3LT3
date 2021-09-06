@@ -5,9 +5,9 @@ author:
   student_number: 123456789
 subject: "ENVSOCTY 3LT3 Transportation Geography"
 highlights: |
-    Write a brief summary from your perspective of the highlights of working on this assignment.
+    After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
     
-    You can use more than one paragraph but remember to indent the paragraphs. Try to keep this at less than 200 (?) words.
+    You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words.
 threshold_concepts: 
 # Write the concepts that in your opinion are threshold concepts in this exercise.
 - threshold concept 1
