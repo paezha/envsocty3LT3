@@ -80,21 +80,23 @@
 </ul>
 <p>This course package is designed for use in the course <a href="https://academiccalendars.romcmaster.ca/preview_course_nopop.php?catoid=41&amp;coid=221967">ENVSOCTY 3LT3 <em>Transportation Geography</em></a> offered by the <a href="https://www.science.mcmaster.ca/ees/">School of Earth, Environment and Society</a> at <a href="https://www.mcmaster.ca/">McMaster University</a>. The course package includes the following components:</p>
 <ul>
-<li>Document templates with <strong>Readings</strong>.</li>
-<li>Document templates with <strong>Exercises</strong>.</li>
+<li>Document templates with <em>Readings</em>.</li>
+<li>Document templates with <em>Exercises</em>.</li>
 <li>Data sets used in the Readings and Exercises.</li>
 <li>Custom functions.</li>
 </ul>
-<div id="what-do-i-need-to-use-the-course-package" class="section level2">
+<p><em>Readings</em> are like mini-chapters in a book. But they are interactive and editable, which meas you can work with them in ways not possible with conventional books.</p>
+<p><em>Exercises</em> are the documents that you will use to complete most of your coursework. The templates are pre-formatted for you, so you do not have to think about how to prepare the document, and can devote all your attention and energy to learn instead.</p>
+<div id="what-do-i-need-to-use-this-course-package" class="section level2">
 <h2 class="hasAnchor">
-<a href="#what-do-i-need-to-use-the-course-package" class="anchor"></a>What do I need to use the course package?</h2>
-<p>This course does not assume knowledge of, or experience working with <code>R</code>. So no previous knowledge is required, other than some experience using computers in general, and maybe a word processor (e.g., Microsoft Word) and spreadsheets (e.g., Microsoft Excel). To use the package you will begin from the very basics: how to install and use the necessary software.</p>
+<a href="#what-do-i-need-to-use-this-course-package" class="anchor"></a>What do I need to use this course package?</h2>
+<p>This course does not assume knowledge of, or experience working with <code>R</code>. So, no previous knowledge is required, other than some experience using computers in general, and maybe a word processor (e.g., Microsoft Word) and spreadsheets (e.g., Microsoft Excel). To use the package you will begin from the very basics: how to install and use the necessary software.</p>
 <div id="r-the-open-statistical-computing-project" class="section level3">
 <h3 class="hasAnchor">
 <a href="#r-the-open-statistical-computing-project" class="anchor"></a><code>R</code>: The open statistical computing project</h3>
 <p>What is <code>R</code>?</p>
 <p><code>R</code> is an open-source language for statistical computing. It was created in the early 1990s by <a href="https://en.wikipedia.org/wiki/Ross_Ihaka">Ross Ihaka</a> and <a href="https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician)">Robert Gentleman</a> at the University of Auckland, New Zealand, as a way to provide their students with an accessible, no-cost statistical application for their courses. <code>R</code> is now maintained by the <code>R</code> Development Core Team, and it continues to be developed by hundreds of contributors around the globe. <code>R</code> is an attractive alternative to other software packages for data analysis (e.g., Microsoft Excel, Matlab, Stata, ArcGIS) due to its open-source character (i.e., it is free), its flexibility, and large user community. The size of the <code>R</code> community means that if there is something you want to do (for instance, estimate a linear regression model or plot geographical information), it is very likely that someone has already developed a package for it.</p>
-<p>A good way to think about <code>R</code> is as a core package, with a library of optional packages can be attached to increase its core functionality. <code>R</code> can be downloaded for free at:</p>
+<p>A good way to think about <code>R</code> is as a core package, with a library of optional packages that can be attached to increase its core functionality. <code>R</code> can be downloaded for free at:</p>
 <p><a href="https://cran.rstudio.com/" class="uri">https://cran.rstudio.com/</a></p>
 <p><code>R</code> comes with a built-in console (a user graphical interface), but better alternatives to the basic interface include RStudio, which can also be downloaded for free:</p>
 <p><a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a></p>
@@ -111,7 +113,6 @@
 Figure 1. RStudio IDE
 </p>
 </div>
-<!-- ![Figure 1. RStudio IDE](images/01-RStudio-Window-Anatomy.png) -->
 <p>The editor pane allows you to open and work with text and other files. In these files you can write instructions that can be passed on to <code>R</code> for execution. Writing something in the editor does not execute the instructions, it merely records them for possible future use.</p>
 <p>The console pane is where instructions are passed on to the program. When an instruction is typed (or copied and pasted) there, <code>R</code> will understand that it needs to do something. The instructions must be written in a way that <code>R</code> understands, otherwise errors will occur.</p>
 <p>The top-right pane includes a tab for the environment; this is where all data objects that are currently in memory are reported. The History tab in the same pane acts like a log: it keeps track of all instructions that have been executed in the console. Depending on your project, you may see other tabs there.</p>
@@ -130,7 +131,10 @@ Figure 1. RStudio IDE
 <h2 class="hasAnchor">
 <a href="#recommended-workflow" class="anchor"></a>Recommended Workflow</h2>
 <p>After installing the course package, this is the recommended workflow for using it in this course.</p>
-<p>Create a project for all your work in this course.</p>
+<div id="create-a-project-for-all-your-work-in-this-course" class="section level3">
+<h3 class="hasAnchor">
+<a href="#create-a-project-for-all-your-work-in-this-course" class="anchor"></a>Create a project for all your work in this course.</h3>
+<p>Follow the steps below to create a new project. A project is the best way to keep your work in this course nicely organized.</p>
 <div class="figure">
 <img src="images/02-Create-Project-1.png" alt="Figure 2. Create new project - option 1" width="100%"><p class="caption">
 Figure 2. Create new project - option 1
@@ -157,9 +161,52 @@ Figure 6. Create your project
 </p>
 </div>
 <div class="figure">
-<img src="images/07-New-Project.png" alt="Figure 7. Admire your brand new project" width="100%"><p class="caption">
-Figure 7. Admire your brand new project
+<img src="images/07-New-Project.png" alt="Figure 7. Your project can keep all your files nicely organized" width="100%"><p class="caption">
+Figure 7. Your project can keep all your files nicely organized
 </p>
+</div>
+</div>
+<div id="working-with-your-first-reading-in-the-course-package" class="section level3">
+<h3 class="hasAnchor">
+<a href="#working-with-your-first-reading-in-the-course-package" class="anchor"></a>Working with your first reading in the course package</h3>
+<p>All your readings are included in the course package. Each reading is like a mini-chapter in a book (instead of asking you to buy a book, we will give you the contents). But readings can be much more than that. To begin working with your first reading, follow the steps below.</p>
+<div class="figure">
+<img src="images/08-New-File-Reading-1.png" alt="Figure 8. Create a new file - option 1: go to the File dropdown menu, select 'New File' -&gt; 'R Markdown" width="100%"><p class="caption">
+Figure 8. Create a new file - option 1: go to the File dropdown menu, select ‘New File’ -&gt; ’R Markdown
+</p>
+</div>
+<div class="figure">
+<img src="images/09-New-File-Reading-2.png" alt="Figure 9. Create a new file - option 1: use the  'New File' button in the toolbar and then select 'R Markdown" width="100%"><p class="caption">
+Figure 9. Create a new file - option 1: use the ‘New File’ button in the toolbar and then select ’R Markdown
+</p>
+</div>
+<div class="figure">
+<img src="images/10-New-R-Markdown-from-Template.png" alt="Figure 10. Create a new R Markdown file using the template for Reading-0" width="100%"><p class="caption">
+Figure 10. Create a new R Markdown file using the template for Reading-0
+</p>
+</div>
+<div class="figure">
+<img src="images/11-New-File.png" alt="Figure 11. After you click 'OK' a new file will be created for you" width="100%"><p class="caption">
+Figure 11. After you click ‘OK’ a new file will be created for you
+</p>
+</div>
+<p>Your new file is an R Markdown document. This is a text file with <em>chunks</em> of code that can be executed. Reading 0 will introduce you to the use of R Markdown. The document is editable, which means that you can annotate it. For convenience, the format template includes a definition for a <em>textbox</em>. You can introduce a textbox in the text using this format:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">:::</span>{.textbox data<span class="op">-</span>latex=<span class="st">""</span>}</span>
+<span id="cb2-2"><a href="#cb2-2"></a>This is my annotation.</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">:::</span></span></code></pre></div>
+<p>You can create a pdf file to study by _knitting the document. See Figure 12.</p>
+<div class="figure">
+<img src="images/12-Knitting.png" alt="Figure 12. Click 'Knit' on the toolbar to convert your R Markdown into a pdf file" width="100%"><p class="caption">
+Figure 12. Click ‘Knit’ on the toolbar to convert your R Markdown into a pdf file
+</p>
+</div>
+<p>Figure 13 shows the result of knitting your R Markdown file.</p>
+<div class="figure">
+<img src="images/13-Knitted-Reading.png" alt="Figure 13. The result of knitting is a pdf file with your reading" width="100%"><p class="caption">
+Figure 13. The result of knitting is a pdf file with your reading
+</p>
+</div>
+<p>Since you can edit and annotate the text, you can essentially <em>customize</em> the chapter so that it is a unique reflection of your learning. As you progress with the course and complete all readings, you will have a collection of <em>unique</em> chapters that track your experience learning in this course.</p>
 </div>
 </div>
 </div>
