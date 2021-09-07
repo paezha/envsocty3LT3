@@ -4,12 +4,13 @@ author:
 - name: My Name
   student_number: 123456789
 subject: "ENVSOCTY 3LT3 Transportation Geography"
+# In the highlights you are asked to reflect about your learning experience while working on this exercise. This section is worth 10 marks.
 highlights: |
     After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
     
-    You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words. 
+    You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words. This section of the 
+# Write the concepts that in your opinion are threshold concepts in this exercise. A threshold concept is a key idea that once you grasp it, it changes your understanding of a topic, phenomenon, subject, method, etc. Write between three and five threshold concepts that apply to your learning experience working on this exercise. This section is worth 5 marks.
 threshold_concepts: 
-# Write the concepts that in your opinion are threshold concepts in this exercise.
 - threshold concept 1
 - threshold concept 2 
 - threshold concept 3
@@ -82,11 +83,11 @@ Words go here.
 
 ## Energy Use and Emission Trends (100 marks)
 
-1.	What was the approximate population of Earth circa 2016? How many barrels of oil per day did this population consume? (10)
+1.	What was the approximate population of Earth circa 2016? How many barrels of oil per day did this population consume? (5)
 
-2.	What proportion of the world's oil is consumed by Canada and the US? Do these two countries have the same per capita levels of demand for energy use? Why do you think this is so? (15)
+2.	What proportion of the world's oil is consumed by Canada and the US? Do these two countries have the same per capita levels of demand for energy use? Why do you think this is so? (10)
 
-3.	Calculate the consumption of oil in barrels per day per 1000 people for the countries listed in the data frame. What type of pattern do you observe? Try to explain the pattern. (20)
+3.	Calculate the consumption of oil in barrels per day per 1000 people for the countries listed in the data frame. What type of pattern do you observe? Try to explain the pattern. (15)
 
 Hint: rank countries according to their oil consumption per 1000 people. You can use the `order()` function to do this. A good explanation is at the following link:
 

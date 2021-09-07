@@ -358,3 +358,37 @@ Figure 13. Working to answer the questions in your exercise
 </p>
 
 </div>
+
+After you complete your exercise, you will need to return to the header
+and complete two sections: `highlights` and `threshold_concepts`. The
+highlights ask you to reflect on your learning experience working on the
+exercise. Try to write concisely in approximately 200 words. The
+threshold concepts are key ideas that once you grasp them they change
+your understanding of a topic, phenomenon, subject, method, etc. Write
+between three and five threshold concepts that apply to your learning
+experience working on this exercise. Figure 14 illustrates this step.
+
+<div class="figure">
+
+<img src="images/14-Working-on-an-Exercise-Highlights.gif" alt="Figure 14. Writing the highlights of the exercise" width="100%" />
+<p class="caption">
+Figure 14. Writing the highlights of the exercise
+</p>
+
+</div>
+
+The highlights and threshold concepts are the last element of your
+exercise, and after writing them you can knit the document to generate
+the pdf file for submission (see Figure 15).
+
+<div class="figure">
+
+<img src="images/15-Knitting-the-Exercise.gif" alt="Figure 14. Writing the highlights of the exercise" width="100%" />
+<p class="caption">
+Figure 14. Writing the highlights of the exercise
+</p>
+
+</div>
+
+You are now ready to submit the exercise following the instructions in
+the course outline.
