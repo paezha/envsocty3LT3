@@ -30,15 +30,24 @@ Society](https://www.science.mcmaster.ca/ees/) at [McMaster
 University](https://www.mcmaster.ca/). The course package includes the
 following components:
 
--   Document templates with **Readings**.
--   Document templates with **Exercises**.
+-   Document templates with *Readings*.
+-   Document templates with *Exercises*.
 -   Data sets used in the Readings and Exercises.
 -   Custom functions.
 
-## What do I need to use the course package?
+*Readings* are like mini-chapters in a book. But they are interactive
+and editable, which meas you can work with them in ways not possible
+with conventional books.
+
+*Exercises* are the documents that you will use to complete most of your
+coursework. The templates are pre-formatted for you, so you do not have
+to think about how to prepare the document, and can devote all your
+attention and energy to learn instead.
+
+## What do I need to use this course package?
 
 This course does not assume knowledge of, or experience working with
-`R`. So no previous knowledge is required, other than some experience
+`R`. So, no previous knowledge is required, other than some experience
 using computers in general, and maybe a word processor (e.g., Microsoft
 Word) and spreadsheets (e.g., Microsoft Excel). To use the package you
 will begin from the very basics: how to install and use the necessary
@@ -65,8 +74,8 @@ model or plot geographical information), it is very likely that someone
 has already developed a package for it.
 
 A good way to think about `R` is as a core package, with a library of
-optional packages can be attached to increase its core functionality.
-`R` can be downloaded for free at:
+optional packages that can be attached to increase its core
+functionality. `R` can be downloaded for free at:
 
 <https://cran.rstudio.com/>
 
@@ -114,8 +123,6 @@ Figure 1. RStudio IDE
 
 </div>
 
-<!-- ![Figure 1. RStudio IDE](images/01-RStudio-Window-Anatomy.png) -->
-
 The editor pane allows you to open and work with text and other files.
 In these files you can write instructions that can be passed on to `R`
 for execution. Writing something in the editor does not execute the
@@ -162,7 +169,10 @@ install it to make the package available for use locally.
 After installing the course package, this is the recommended workflow
 for using it in this course.
 
-Create a project for all your work in this course.
+### Create a project for all your work in this course.
+
+Follow the steps below to create a new project. A project is the best
+way to keep your work in this course nicely organized.
 
 <div class="figure">
 
@@ -212,9 +222,95 @@ Figure 6. Create your project
 
 <div class="figure">
 
-<img src="images/07-New-Project.png" alt="Figure 7. Admire your brand new project" width="100%" />
+<img src="images/07-New-Project.png" alt="Figure 7. Your project can keep all your files nicely organized" width="100%" />
 <p class="caption">
-Figure 7. Admire your brand new project
+Figure 7. Your project can keep all your files nicely organized
 </p>
 
 </div>
+
+### Working with your first reading in the course package
+
+All your readings are included in the course package. Each reading is
+like a mini-chapter in a book (instead of asking you to buy a book, we
+will give you the contents). But readings can be much more than that. To
+begin working with your first reading, follow the steps below.
+
+<div class="figure">
+
+<img src="images/08-New-File-Reading-1.png" alt="Figure 8. Create a new file - option 1: go to the File dropdown menu, select 'New File' -&gt; 'R Markdown" width="100%" />
+<p class="caption">
+Figure 8. Create a new file - option 1: go to the File dropdown menu,
+select ‘New File’ -&gt; ’R Markdown
+</p>
+
+</div>
+
+<div class="figure">
+
+<img src="images/09-New-File-Reading-2.png" alt="Figure 9. Create a new file - option 1: use the  'New File' button in the toolbar and then select 'R Markdown" width="100%" />
+<p class="caption">
+Figure 9. Create a new file - option 1: use the ‘New File’ button in the
+toolbar and then select ’R Markdown
+</p>
+
+</div>
+
+<div class="figure">
+
+<img src="images/10-New-R-Markdown-from-Template.png" alt="Figure 10. Create a new R Markdown file using the template for Reading-0" width="100%" />
+<p class="caption">
+Figure 10. Create a new R Markdown file using the template for Reading-0
+</p>
+
+</div>
+
+<div class="figure">
+
+<img src="images/11-New-File.png" alt="Figure 11. After you click 'OK' a new file will be created for you" width="100%" />
+<p class="caption">
+Figure 11. After you click ‘OK’ a new file will be created for you
+</p>
+
+</div>
+
+Your new file is an R Markdown document. This is a text file with
+*chunks* of code that can be executed. Reading 0 will introduce you to
+the use of R Markdown. The document is editable, which means that you
+can annotate it. For convenience, the format template includes a
+definition for a *textbox*. You can introduce a textbox in the text
+using this format:
+
+    :::{.textbox data-latex=""}
+    This is my annotation.
+    :::
+
+You can create a pdf file to study by \_knitting the document. See
+Figure 12.
+
+<div class="figure">
+
+<img src="images/12-Knitting.png" alt="Figure 12. Click 'Knit' on the toolbar to convert your R Markdown into a pdf file" width="100%" />
+<p class="caption">
+Figure 12. Click ‘Knit’ on the toolbar to convert your R Markdown into a
+pdf file
+</p>
+
+</div>
+
+Figure 13 shows the result of knitting your R Markdown file.
+
+<div class="figure">
+
+<img src="images/13-Knitted-Reading.png" alt="Figure 13. The result of knitting is a pdf file with your reading" width="100%" />
+<p class="caption">
+Figure 13. The result of knitting is a pdf file with your reading
+</p>
+
+</div>
+
+Since you can edit and annotate the text, you can essentially
+*customize* the chapter so that it is a unique reflection of your
+learning. As you progress with the course and complete all readings, you
+will have a collection of *unique* chapters that track your experience
+learning in this course.

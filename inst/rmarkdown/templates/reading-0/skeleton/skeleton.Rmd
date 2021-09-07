@@ -18,9 +18,9 @@ always_allow_html: true
 
 NOTE: This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
-Now that you have installed `R` and RStudio we can begin with a quick introduction to data operations and visualization using this computing language. Please note that this document you are reading is an rmarkdown file; it is an example of what is called [_literate programming_](https://en.wikipedia.org/wiki/Literate_programming), a style of writing computational documents that uses code to illustrate a discussion, as opposed to discussing/documenting the code. It flips around the usual way in which code is written, and it helps to make learning how to code more intuitive and accessible. 
+Now that you have installed `R` and RStudio we can begin with a quick introduction to data operations and visualization using this computing language. Please note that this document you are reading is an R Markdown file; it is an example of what is called [_literate programming_](https://en.wikipedia.org/wiki/Literate_programming), a style of writing computational documents that uses code to illustrate a discussion, as opposed to discussing/documenting the code. It flips around the usual way in which code is written, and it helps to make learning how to code more intuitive and accessible. 
 
-Whenever you see a chunk of code in an rmarkdown document as follows, you can run it (by clicking the green 'play' icon on the top right corner of the code window) to see the results. Try it below!
+Whenever you see a chunk of code in an R Markdown document as follows, you can run it (by clicking the green 'play' icon on the top right corner of the code window) to see the results. Try it below!
 ```{r}
 print("Hello, ENVSOCTY 3LT3")
 ```
