@@ -1,5 +1,5 @@
 ---
-title: "Reading 1: Simple linear regression in R"
+title: "Reading 1: Linear regression in R"
 author: 
 - name: Antonio Páez
 - name: My Name 
@@ -44,35 +44,51 @@ $$
 
 where:
 
-- Y is called the dependent variable,
-- X is called the independent variable,
-- a is a coefficient called the intercept and is estimated given data X and Y, and
-- b is a coefficient called the slope of the regression line and is estimated given data X and Y.
+- $Y$ is called the dependent variable,
+- $X$ is called the independent variable,
+- $a$ is a coefficient called the intercept and is estimated given data $X$ and $Y$, and
+- $b$ is a coefficient called the slope of the regression line and is estimated given data $X$ and $Y$.
 
-Given observations of X and Y, regression analysis provides a method to estimate coefficients a and b, so that the generated linear regression line Y = a + b X gives the best fit for the data. 'Best fit' in this case means that the difference between the observed values of X and Y and the regression line has the smallest errors (technically, the estimation method aims to minimize the sum of the squared errors).
+Given observations of $X$ and $Y$, regression analysis provides a method to estimate coefficients $a$ and $b$, so that the generated linear regression line $Y = a + bX$ gives the best fit to the data. 'Best fit' in this case means that the difference between the observed values of $X$ and $Y$ and the regression line has the smallest errors (technically, the estimation method aims to minimize the sum of the squared errors).
 
 # Example
 
 To illustrate the procedure of fitting a linear model to a dataset, let us first create a simple data frame, as follows:
 ```{r}
-Country <- c('Finland','France','Germany','Greece','Hungary','Ireland')
-Population <- c(5238514,60876136,82400498,10706212,9956253,4109126)
-Cars <- c(2053407,27756518,41859426,2719551,2231226,1273850)
-df <- data.frame(Country, Population, Cars)
+Country <- c('Finland',
+             'France',
+             'Germany',
+             'Greece',
+             'Hungary',
+             'Ireland')
+Population <- c(5238514,
+                60876136,
+                82400498,
+                10706212,
+                9956253,
+                4109126)
+Cars <- c(2053407,
+          27756518,
+          41859426,
+          2719551,
+          2231226,
+          1273850)
+df <- data.frame(Country, 
+                 Population, 
+                 Cars)
 ```
 
-The `lm()` function in R can be used to estimate linear models. The function requires as arguments a formula, that defines the form of the model, and a data frame with the variables to be used for estimation. The results of the function can be assigned to a variable.
+The `lm()` function in `R` is used to estimate linear models. The function requires as arguments a formula, that defines the form of the model, and a data frame with the variables to be used for estimation. The results of the function can given a name and stored in memory.
 
-See for example below. We will call the `lm()` function using the data frame that we created earlier. The formula `Cars ~ Population` indicates a model of the following form:
+See the example below. We will call the `lm()` function using the data frame that we created earlier. The formula `Cars ~ Population` indicates a model of the following form:
 
 $$
 Cars = a + b*Population
 $$
 
-That is, we are regressing the dependent variable `Cars` on the independent variable `Population` (and the regression will include an intercept.)
+That is, we are regressing the _dependent_ variable `Cars` on the _independent_ variable `Population` (and the regression will include an intercept).
 
 We can store the results of the `lm()` operation in `results`:
-
 ```{r}
 results <- lm(formula = Cars ~ Population, data = df)
 ```
@@ -82,190 +98,170 @@ To examine the output, you can simply type `results` in the console:
 results
 ```
 
-This reports the call to the function and the coefficients only.
-
-What does the above mean? Given the formula 
-
+This reports the call to the function and the coefficients only. What do the coefficients represent? Given the formula:
 $$
 Cars = a + b*Population
 $$
 
-It means that the linear regression estimates that the number of cars in a country equals -1,870,000 + 0.5143*Population.
+The linear regression estimates that the number of cars in a country increases with the population of a country: $-1,870,000 + 0.5143*Population$. This is obviously incorrect for small countries... but for the six countries in our list, it does approximately explain the number of cars in each country.
 
-This is obviously incorrect for small countries... but for the six countries in our list, it does approximately explain the number of cars in each country.
-
-More informative is the command `summary()`:
-
+More information about the regression model can be retrieved by means of `summary()`:
 ```{r}
 summary(results)
 ```
 
-The summary includes the estimated values of the coefficients (corresponding to a and b in the regression model), but also some important model diagnostics. 
-
+The summary includes the estimated values of the coefficients (corresponding to $a$ and $b$ in the regression model), but also some important model diagnostics. 
 
 ## Interpreting the regression results
 
-The t-values are used to assess the statistical _significance_ of the coefficients (how probable it is that they are _not_ zero). Their associated probability values (or p-values) indicate the probability that the coefficient is zero. For instance, the p-value 0.0000133, above, indicates that the probability of the coefficient being zero is 0.00133% or less. Smaller p-values increase our confidence when making a statement such as "the coefficient a is different from zero". More accurately, we would state "the coefficient a is _significantly_ different from zero, at the 0.01% (or whatever) _level of confidence_".
+The $t$-values in the summary are used to assess the statistical _significance_ of the coefficients (how probable it is that they are _not_ zero). Their associated probability values (or $p$-values) indicate the probability that the coefficient is indistinguishable of zero. For instance, the $p$-value 0.0000133, above, indicates that the probability of the coefficient being close to zero is 0.00133% or less. Smaller $p$-values increase our confidence when making a statement such as "the coefficient $a$ is different from zero". More accurately, we would state "the coefficient $a$ is _significantly_ different from zero, at the 0.01% (or whatever) _level of confidence_".
 
-In this case, the p-value for Population indicates that there is a very definite relationship between a country's population and its number of cars; there's only about a one in ten thousand chance that our results could have come entirely by chance.
+In this case, the $p$-value for Population indicates that there is a high probability of a relationship between a country's population and its number of cars, and that that relationship is unlikely to happen by chance only; there's only about a one in ten thousand chance that our results could have come entirely by chance.
 
-The _coefficient of determination_, or R-squared, indicates how well the model fits the data. This coefficient is bounded between 0 and 1. The closer it is to 1, the better the fit of the model. Conventionally, R-squared (multiplied by 100) is interpreted as the percentage of the variance in the dependent variable which has been captured by the model. An R-squared value of 1 indicates that the regression line passes through _every single_ observation in the sample: this is quite extraordinary and seldom seen in practice! In the social sciences, R-squared values are seldom as high, and values around 0.4~0.5 might be considered a very good fit.
+The _coefficient of determination_, or $R$-squared, indicates how well the model fits the data. This coefficient is bounded between 0 and 1. The closer it is to 1, the better the fit of the model. Conventionally, $R$-squared (multiplied by 100) is interpreted as the percentage of the variance in the dependent variable which has been captured by the model. An $R$-squared value of 1 indicates that the regression line passes through _every single_ observation in the sample: this is quite extraordinary and never seen in practice! In the social sciences, $R$-squared values are seldom as high, and values around 0.4~0.5 might be considered a very good fit.
 
-In this regression above, the R-squared of 0.994 indicates that almost all the variation in Cars is explained by Population. This means that the value of Population is a _very_ highly significant determinant of number of cars. Cars are owned by people, so it kind of makes sense, no?
+In this regression above, the $R$-squared of 0.994 indicates that almost all the variation in Cars is explained by Population. This means that the value of Population is a _very_ highly significant correlate of number of cars. Cars are owned by people, so it kind of makes sense, yes? More people means more cars.
 
-A companion to R-squared is the _Adjusted_ R-squared. The adjusted R-squared penalizes large models and so it is a compromise between goodness of fit and parsimony.
+A companion to $R$-squared is the _Adjusted_ R-squared. The adjusted $R$-squared penalizes large models and so it is a compromise between goodness of fit and parsimony.
 
-The F-statistic is a joint test that all the coefficients are different from zero (it also comes with its own p-value). When the p-value of this statistic is low, we are more confident that at least _some_ of the coefficients are different from zero. Unfortunately, F does not indicate which one or ones might be. The t-values are much more useful in this sense.
+The $F$-statistic is a joint test that all the coefficients are different from zero (it also comes with its own $p$-value). When the $p$-value of this statistic is low, we are more confident that at least _some_ of the coefficients are different from zero. Unfortunately, $F$ does not indicate which one or ones might be. The $t$-values are much more useful in this sense.
 
+## A note on 'independent' and 'dependent' variables
 
-## A note on "independent" and "dependent"
+Note: you need to remember an important distinction between 'independent' and 'dependent' variables. 
 
-Note: you need to remember an important distinction between "independent" and "dependent" variables. 
-
-The "dependent" variable, in a regression, is the variable that you think _depends_ on the other variables in the equation. 
-
-In the case of our regression above, we are saying that we think the number of cars in a country depends on its population. If we were instead to type in:
+The 'dependent' variable, in a regression, is the variable that you think _depends_ on the other variables in the equation.  In the case of our regression model above, when we use the formula `Cars ~ Population` we are saying that we think the number of cars in a country depends on its population. If we were instead to type in:
 
 ```{r}
 a <- lm(formula = Population ~ Cars, data = df)
 summary(a)
 ```
 
-then we would be saying that we think the number of people in a country depends on its number of cars! This idea doesn't really make much sense. This regression will get the exact same F-stat and p-value, meaning the relationship is significant, but our expectation of the relationship is completely backwards. It's important to be careful, when doing regressions, to select the proper dependent variable.
-
+then we would be saying that we think the number of people in a country depends on its number of cars! This idea does not really make much sense. This regression will get the exact same $F$-stat and $p$-value, meaning the relationship is significant, but our expectation of the relationship is completely backwards. It is important to be careful, when doing regressions, to select the proper dependent variable.
 
 ## More on linear regressions
 
 It is important to note that the term "linear regression" is somewhat misleading. The model belongs to a family of models that are linear-in-parameters. This means that the coefficients of the model are strictly linear. A non-linear model would be, for example:
-
-
 $$
 Y = aX^b 
 $$
 
-In the model above, coefficients a and b are not additive (a linear operation), but multiplicative or otherwise non-linear. 
+In the model above, coefficients $a$ and $b$ are not additive (a linear operation), but multiplicative or otherwise non-linear. 
 
-It is possible to use so-called _data transformations_ to obtain models that are still "linear", but not limited to straight lines. For instance, look at the following model:
-
+It is possible to use so-called _data transformations_ to obtain models that are still linear (in parameters), but not limited to straight lines. For instance, look at the following model:
 $$
 log(Y)= a + b*log(X)
 $$
 
-The model above is still linear-in-parameters (i.e., the coefficients a and b are still additive), but using the logarithms of X and Y as an additional independent variables means that the model is no longer a straight line, but a curve.
+The model above is still linear-in-parameters (i.e., the coefficients $a$ and $b$ are still additive), but using the logarithms of $X$ and $Y$ in the formula means that the model is no longer a straight line, but a curve.
 
-Let us see how this is so. Begin by defining a blank plot (note how ggplot2 objects can be named too!).
-
+Let us see how this is so. Begin by defining a blank plot (note how `ggplot2` objects can be named too!).
 ```{r}
-p <- ggplot(data = data.frame(x = 0), mapping = aes(x = x)) 
+p <- ggplot(data = data.frame(x = 0), 
+            mapping = aes(x = x)) 
 ```
 
-We will then define a function (we will just asume that the coefficients a and b are known, with a = 1 and b = 2)
+We will then define a function (we will just assume that the coefficients $a$ and $b$ are known, with a = 1 and b = 2)
 ```{r}
 fun.1 <- function(x) 1 + 2 * x
 ```
 
 We can add this function to the plot by means of the `stat_function` command of `ggplot2`:
 ```{r}
-p + stat_function(fun = fun.1) + xlim(0,5)
+p + 
+  stat_function(fun = fun.1) + 
+  xlim(0,5)
 ```
 
 The result is the straight line y = 1 + 2x, exactly the function we defined above.
 
-We will now define a second function with transformed independent variables. In this case, it's important to know that 
-
+We will now define a second function with transformed independent variables. In this case, it's important to know that
 $$
 log(Y)= a + b*log(X)
 $$
 is exactly the same relationship mathematically as 
- 
 $$
 Y= e^{a + blog{X}}
 $$
 
-
+We can define this function for plotting:
 ```{r}
 fun.2 = function(x) exp(1 + 2 * log(x))
 ```
 
 Rendering this function in our blank plot:
 ```{r}
-p + stat_function(fun = fun.2) + xlim(0,5)
+p + 
+  stat_function(fun = fun.2) + xlim(0,5)
 ```
 
 And so we get a plot of the curve log(y) = 1 + 2log(x). 
 
 The ability to transform the independent variables means that we have quite a bit of flexibility in obtaining models that are non-linear, even if they are still linear-in-parameters.
 
-Logarithmic transformations can be done fairly easily in R, just by putting the variable inside a log() function: you don't even have to calculate it separately and create a new column, though you can if you want to.
+Logarithmic transformations can be done fairly easily in `R`, just by putting the variable inside a log() function: you don't even have to calculate it separately and create a new column, though you can if you want to.
 
-
-Let us try log regression with our example:
-
+Let us try a regression with a variables transformed using the logarithm:
 ```{r}
 results <- lm(formula = log(Cars) ~ log(Population), data = df)
 summary(results)
 ```
 
-The results of this model indicate that the logarithmic regression gives a slightly worse fit, since R-squared has gone down; also, the confidence level for the coefficient for Population (i.e. its p-value, in the column "Pr(>|t|)") has also gotten worse, meaning we're a bit less certain that this regression is true.
+The results of this model indicate that the logarithmic regression gives a slightly worse fit, since $R$-squared has gone down; also, the confidence level for the coefficient for Population (i.e. its $p$-value, in the column "Pr(>|t|)") has also gotten worse, meaning we're a bit less certain that this regression is true.
 
 The relationship between population and number of cars found in this logarithmic model, estimated above, would be written as:
-
-
 $$
 log(Cars) = -3.85 + 1.168*log(Population)
 $$
 
 This log-log sort of relationship is interpreted as
-
-$$
-\frac{\delta(Cars)}{Cars} = 1.168*\frac{\delta(Population)}{Population}
-$$
-
-Which, if you're doing econometrics and you don't remember your first-year calculus, gets sort-of-incorrectly reduced to
-
 $$
 \textrm{percent change in Cars} = 1.168 * \textrm{percent change in Population}
 $$
 
-so, for example, if country A's population is 5% higher than country B's, we predict that it is going to have 5 * 1.168 (or 5.84) percent more cars than country B.
-
-The answer is "sort-of-incorrect" because the percent relationship only holds approximately, and is only accurate for very small values of percent change - definitely less than 10%. The true relationship is actually one of exponential growth, not percent change: but for small values, it's almost right, so we generally let it slide.
-
+What this represent is that, for example, if country A's population is 5% higher than country B's, we predict that it is going to have 5 * 1.168 (or 5.84) percent more cars than country B.
 
 ## Visualization
 
 Now, we can visualize our models using `ggplot`. We'll begin by creating a scatterplot, as follows:
 
 ```{r}
-p <- ggplot(data = df, aes(x = Population, y = Cars)) + geom_point()
+p <- ggplot(data = df, 
+            aes(x = Population, 
+                y = Cars)) + 
+  geom_point()
 ```
 
-Add a simple regression line to the scatterplot. Note that the formula is entered as `y ~ x`, because `ggplot2` alread knows from the definitions of the `aes` above, that `x = Population` and `y = Cars`.
-
+Add a simple regression line to the scatterplot. Note that the formula is entered as `y ~ x`, because `ggplot2` already knows from the definitions of the `aes` above, that `x = Population` and `y = Cars`:
 ```{r}
 p + geom_smooth(method = 'lm', formula = y ~ x)
 ```
 
 The grey area indicates the 95% confidence bands of predictions. In the present case, all observations fall within these bands. However, when an observations is outside of the bands, it means that it is unusual in some way (for example, it indicates a country that has very few cars for its population size, or that has too many cars for its population size).
 
-Let us now try to plot the log-log transformation instead. The code is a bit more complicated to execute:
-
+Let us now try to plot the log-log transformation instead. The code is a bit more complicated to execute (don't worry too much about the details for now):
 ```{r}
-p + geom_smooth(method = 'glm', formula = y~x,
-                      method.args = list(family = gaussian(link = 'log')))
+p + geom_smooth(method = 'glm', 
+                formula = y~x,
+                method.args = list(family = gaussian(link = 'log')))
 ```
 
 You can easily see in the above that a log-log regression fits this data poorly, compared with the linear regression above. So in this case, a linear regression is likely a better explanation of the relationship.
 
-We can label the observations with the country names to see which country is which:
-
+We can add labels to the observations with the country names to see which country is which:
 ```{r}
-p + geom_smooth(method = 'lm', formula = y ~ x) + geom_text(label = df$Country, size = 3, vjust = 1, nudge_x = 5, nudge_y = 5)
+p + geom_smooth(method = 'lm', 
+                formula = y ~ x) + 
+  geom_text(aes(label = Country), # The `ggplot2` object knows the data frame that we used to create it. We map the labels to the column `Country` that has the names of the countries
+            size = 3, # Size of the text
+            vjust = 1, # vertical justification of the text
+            nudge_x = 5, # nudge the text in the x direction
+            nudge_y = 5) # nudge the text in the y direction
 ```
 
 The figure indicates that Germany, with the largest population, also has the largest vehicle fleet. The simple linear model slightly underestimates the number of cars for Germany given its population, but not unusually so: the observation still falls within the confidence bands for predictions.
 
-
+<!--
 ## Choosing whether to use a semilog or log-log regression
 
 In the dataset above, we did get a slightly better fit with the linear regression. However, sometimes you're better off with a logarithmic regression like
@@ -294,7 +290,8 @@ For example, you may have learned in economic geography that as the population o
 The greater-than-normal increase in productivity is generally attributed to positive "agglomeration effects". These are just a kind of multiplicative, positive feedback effect: my very existence as a co-worker makes you 2% more productive, and your existence makes your next-door neighbour 2% more productive - but then their improvement improves me more, and then I improve you more, and so on. 
 
 These sorts of multiplicative positive feedback effects are everywhere in societies - as are negative feedback effects too - and discovering them is the first step into the fantastic science of Complexity Theory. If you want to learn more on that topic, there are entire courses and video series online on Complexity Theory: one example is the Santa Fe Institute's Complexity Explorer channel on YouTube (https://www.youtube.com/channel/UC6s-1TYa-1fBrUUIGijshCQ). Another channel is the Systems Innovation channel (https://www.youtube.com/channel/UCutCcajxhR33k9UR-DdLsAQ).
+-->
 
 # Conclusion
 
-This concludes your basic overview of regression analysis in `R`. You will have an opportunity to learn more about the analysis of data and the creation of plots in `R` with your assignment.
+This concludes your basic overview of regression analysis in `R`. You will have an opportunity to learn more about the analysis of data and the creation of plots in `R` with your exercise.

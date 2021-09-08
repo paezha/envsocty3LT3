@@ -31,17 +31,39 @@ Transport is fraught with many issues including growth in demand for energy use,
 
 In this exercise, you will analyze trends pertaining to energy use and emissions in several countries. In so doing, you will gain a better understanding of emerging transportation trends and their impacts on quality of life.
 
-* Readings:
-    + Installation of R.pdf
-    + 00 Overview of Data Analysis and Visualization Using R.Rmd (found under Labs/Assignments)
-    + 01 Regression Analysis.Rmd (found under READINGS)
+* Before working on this exercise, it is strongly recommended that you have completed two readings.
+    + Reading-0 ('Basic Data Operations and Visualization', available as a template in your course package)
+    + Reading-1 ('Linear regression in R', available as a template in your course package)
 * Due date:	See course outline for due date.
-* Materials: This R Notebook, and the following Excel file (found under Exercises)
-    + `Energy and Emissions.xlsx`
+* Materials: the following data object is used in this exercise (available in your course package)
+    + `energy_and_emissions`
 
 # Instructions
 
-Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 1 (Name-Student Number).Rmd`
+Change the name of the file to `exercise-1-studentnumber.Rmd`. 
+
+Provide your answers by typing them in this R Markdown document. Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. Remember to write the highlights of this exercise and the threshold concepts in the header section where you entered your personal information!
+
+When you are done working on this exercise, _knit_ the file to create the pdf file for submission.
+
+# Preliminaries
+
+Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
+
+```{r}
+rm(list = ls())
+```
+
+Begin by loading the datasets that you will need for this exercise. They are available from the Readings section. Note that you also need the package `readxl`. Make sure that it is installed before loading it with `library()`. 
+```{r}
+library(envsocty3LT3) # Course package
+library(ggplot2)
+```
+
+Load the data frame for this exercise:
+```{r}
+data("energy_and_emissions")
+```
 
 The variables in the data file are:
 
@@ -58,22 +80,7 @@ CO2_1995 | CO2 emissions in kilotonnes per year (1995)
 CO2_2005 | CO2 emissions in kilotonnes per year (2005)
 CO2_2015 | CO2 emissions in kilotonnes per year (2015)
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-# Preliminaries
-
-Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
-
-```{r}
-rm(list = ls())
-```
-
-Begin by loading the datasets that you will need for this exercise. They are available from the Readings section. Note that you also need the package `readxl`. Make sure that it is installed before loading it with `library()`. 
-
-```{r}
-library(envsocty3LT3) # Course package
-library(ggplot2)
-```
+You can also check the documentation of this data object by running `?energy_and_emissions`.
 
 # Context
 
