@@ -158,6 +158,7 @@ course package `envsocty3LT3`. The package is available from
 need to run the following code in your `R` console:
 
 ``` r
+install.packages("remotes")
 remotes::install_github("paezha/envsocty3LT3")
 ```
 

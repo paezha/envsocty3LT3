@@ -85,6 +85,7 @@ The last pane in the bottom-right includes a few other useful tabs. The File tab
 Once you have installed `R` and RStudio you are ready to install the course package `envsocty3LT3`. The package is available from [GitHub](https://github.com/paezha/envsocty3LT3), and to install it you need to run the following code in your `R` console:
 
 ``` r
+install.packages("remotes")
 remotes::install_github("paezha/envsocty3LT3")
 ```
 
