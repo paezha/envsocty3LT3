@@ -21,8 +21,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Shaila Jamal \email{jamals16@mcmaster.ca} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
-  \item Elise Desjardins \email{desjae@mcmaster.ca } (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+  \item Shaila Jamal \email{jamals16@mcmaster.ca} (\href{https://orcid.org/0000-0002-3628-4346}{ORCID})
+  \item Elise Desjardins \email{desjae@mcmaster.ca } (\href{https://orcid.org/0000-0002-3350-4534}{ORCID})
 }
 
 }

@@ -156,3 +156,29 @@ NULL
 #'  data(hamilton_trips_purpose)
 #'  summary(hamilton_trips_purpose)
 "hamilton_trips_purpose"
+
+#' Travel cost by car in the Hamilton CMA.
+#'
+#' A table with information about the estimated cost of travel from each traffic analysis zone
+#' to downtown Hamilton (Jackson Square).
+#'
+#' @format A data frame with 297 rows and 10 variables:
+#' \describe{
+#'   \item{GTA06}{Unique identifier of zone in the GTA06 system}
+#'   \item{from}{Address in the traffic analysis zone used for routing}
+#'   \item{to}{Address of destination}
+#'   \item{km}{Distance of trip in km}
+#'   \item{minutes}{Duration of trip in minutes}
+#'   \item{hours}{Duration of trip in hours}
+#' }
+#'
+#' @docType data
+#' @keywords datasets
+#' @keywords transportation
+#' @name travel_cost_car
+#' @usage data(travel_cost_car)
+#' @source Estimated travel distances and durations obtained from Google Maps Routing API
+#' @examples
+#'  data(travel_cost_car)
+#'  summary(travel_cost_car)
+"travel_cost_car"

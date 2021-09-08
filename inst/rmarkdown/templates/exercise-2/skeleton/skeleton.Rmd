@@ -27,55 +27,50 @@ always_allow_html: true
 
 # Introduction
 
-In this exercise, you will use R's geospatial visualization capabilities to analyze trends pertaining to travel in the Hamilton Census Metropolitan Area (CMA). The objective of the exercise is to practice skills displaying and manipulating spatial information, to demonstrate the ability to analyze spatial data, and to gain a better understanding of transportation trends in this metropolitan areaa.
+In this exercise, you will use the geospatial visualization capabilities available in `R` to analyze trends pertaining to travel in the Hamilton Census Metropolitan Area (CMA). The objective of the exercise is to practice skills displaying and manipulating spatial information, to demonstrate the ability to analyze spatial data, and to gain a better understanding of transportation trends in this metropolitan area.
 
-* Readings:
-    + 03 Geospatial Visualization for Transportation Trends.Rmd (found under Labs/Assignments)
+* Before working on this exercise, it is strongly recommended that you have completed one reading.
+    + Reading-2 ('Geospatial Visualization for Transportation Trends using R', available as a template in your course package)
 * Due date:	See course outline for due date.
-* Materials: This R Notebook, and a zip file that contains the following files (found under found under Labs/Assignments)
-    + `Hamilton CMA TTS06.shp` with the Trafic Analysis Zones (TAZ) for Hamilton CMA, according to the Transportation Tomorrow Survey of 2011.
-    + `Trips by Mode 2011.xlsx` with the number of trips by mode of transportation by TAZ, and other useful information from the 2011 census for Hamilton CMA.
-    + `Hamilton CMA Trips by Purpose.xlsx` with the number of trips by purpose of transportation by TAZ, and other useful information from the 2011 census for Hamilton CMA.
-    + `travel_time_car.xlsx` with the travel distance/time from TAZ centroids to Jackson Square in downtown Hamilton.
+* Materials: the following data objects are used in this exercise (available in your course package)
+    + `hamilton_demo_taz`
+    + `hamilton_taz`
+    + `hamilton_trips_mode`
+    + `hamilton_trips_purpose`
+    + `travel_cost_car`
 
 # Instructions
 
-Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 2 (Name-Student Number).Rmd`.
+Change the name of the file to `exercise-2-studentnumber.Rmd`. 
 
-Add new code chunkS by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-***
+Provide your answers by typing them in this R Markdown document. Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. Remember to write the highlights of this exercise and the threshold concepts in the header section where you entered your personal information!
+
+When you are done working on this exercise, _knit_ the file to create the pdf file for submission.
 
 # Preliminaries
 
-Begin by loading the datasets that you will need for this exercise. They are available from the Readings section. For instance, you will need the `rgdal` package to read the shape file. Make sure all packages that you need are installed and loaded `library()`. 
+Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
+```{r}
+rm(list = ls())
+```
+
+Begin by loading the packages that you will need for this exercise. Make sure that the packages are installed before trying to load them with `library()`. 
 ```{r}
 library(envsocty3LT3) # Course package
-library(sf)
-library(tidyverse)
+library(sf) # Package for working with geospatial information
+library(tidyverse) # Package for data carpentry and data analysis
 ```
 
-Load the boundaries of the traffic analysis zones:
+Load the data objects that you will need for this exercise:
 ```{r}
+data("hamilton_demo_taz")
 data("hamilton_taz")
-```
-
-Change identifier variable to type character:
-```{r}
-hamilton_taz <- hamilton_taz %>%
-  mutate(GTA06 = as.character(GTA06))
-```
-
-Read travel data:
-```{r}
-data("hamilton_trips_purpose")
 data("hamilton_trips_mode")
+data("hamilton_trips_purpose")
+data("travel_cost_car")
 ```
 
-There is one TAZ where data is missing, it will cause you problems later on. Let me fix this for you before you do the exercise by fudging one number:
-
-```{r}
-#tmode$Auto_driver[tmode$GTA06==5253] <- 1
-```
+You can consult the documentation of these data objects by going to their help file (e.g., `?hamilton_demo_taz`).
 
 # Context
 

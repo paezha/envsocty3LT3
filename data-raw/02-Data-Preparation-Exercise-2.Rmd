@@ -90,12 +90,24 @@ hamilton_trips_mode <- hamilton_trips_mode %>%
          Walk)
 ```
 
+Read data with travel time by car:
+```{r}
+travel_cost_car <- read_excel("travel_time_car.xlsx")
+```
+
+Prepare table for saving:
+```{r}
+travel_cost_car <- travel_cost_car %>%
+  select(-c(group, m, miles, seconds))
+```
+
 Save tables to folder `data`:
 ```{r save-processed-data}
 usethis::use_data(hamilton_taz, overwrite = TRUE)
 usethis::use_data(hamilton_trips_purpose, overwrite = TRUE)
 usethis::use_data(hamilton_trips_mode, overwrite = TRUE)
 usethis::use_data(hamilton_demo_taz, overwrite = TRUE)
+usethis::use_data(travel_cost_car, overwrite = TRUE)
 ```
 
 

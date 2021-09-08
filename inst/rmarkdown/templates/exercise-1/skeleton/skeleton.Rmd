@@ -49,15 +49,14 @@ When you are done working on this exercise, _knit_ the file to create the pdf fi
 # Preliminaries
 
 Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
-
 ```{r}
 rm(list = ls())
 ```
 
-Begin by loading the datasets that you will need for this exercise. They are available from the Readings section. Note that you also need the package `readxl`. Make sure that it is installed before loading it with `library()`. 
+Begin by loading the packages that you will need for this exercise. Make sure that the packages are installed before trying to load them with `library()`. 
 ```{r}
 library(envsocty3LT3) # Course package
-library(ggplot2)
+library(tidyverse) # Package for data carpentry and data analysis
 ```
 
 Load the data frame for this exercise:
@@ -94,18 +93,12 @@ Words go here.
 
 2.	What proportion of the world's oil is consumed by Canada and the US? Do these two countries have the same per capita levels of demand for energy use? Why do you think this is so? (10)
 
-3.	Calculate the consumption of oil in barrels per day per 1000 people for the countries listed in the data frame. What type of pattern do you observe? Try to explain the pattern. (15)
+3.	Calculate the consumption of oil in barrels per day per 1,000 people for the countries listed in the data frame. What type of pattern do you observe? Please explain the pattern. Hint: rank countries according to their oil consumption per 1,000 people. You can use the `order()` function to do this. (15)
 
-Hint: rank countries according to their oil consumption per 1000 people. You can use the `order()` function to do this. A good explanation is at the following link:
+4. Use simple regression analysis to assess the relationship in the dataset between a country's per-capita CO2 emissions (for 2015) and per-capita oil consumption. Start by creating a scatterplot of these two variables; then add labels to your plot (try changing the `size` of the text for clarity). What does a linear regression say is the relationship between per-capita CO2 emissions and per-capita oil consumption? How significant is the relationship, according to the regression model? Which countries are cleaner and which countries are less clean in their use of energy? (25)
 
-http://www.statmethods.net/management/sorting.html.
+5. How much CO2 would be produced, if every person in the world produced CO2 equal to that produced typically by one Canadian? What if every person in the world produced CO2 equal to that produced by a Chinese citizen in 2015? Compare both results to the actual CO2 production of the world in 2015. Hint: refer to your linear regression model to discuss this. (15)
 
-4. Use simple regression analysis to assess the relationship in the dataset between a country's per-capita CO2 emissions (for 2015) and per-capita oil consumption. Start by creating a scatterplot of these two variables; then add labels to your plot (try changing the `size` of the text for clarity). 
-
-What does a linear regression say is the relationship between per-capita CO2 emissions and per-capita oil consumption? How significant is the relationship, according to a regression? Which countries are cleaner and which countries are less clean in their use of energy? (25)
-
-5. How much CO2 would be produced, if every person in the world produced CO2 equal to that produced by a Canadian? What if every person in the world produced CO2 equal to that produced by a Chinese citizen in 2015? Compare both results to the actual CO2 production of the world in 2015 and use a linear regression to explain the relationship. (15)
-
-6.	Using the data in the data frame, find the six largest CO2 emitters in 1995, and then calculate the increase or decrease in the amount of generated CO2 emissions for each of them in the time period 1995 to 2015. Compare the size of the numbers. Which of these countries saw the largest increase in emissions since 1995? Why do you think so? (10)
+6.	Using the data in the data frame, find the six largest CO2 emitters in 1995, and then calculate the increase or decrease in the amount of generated CO2 emissions for each of them in the time period 1995 to 2015. Compare the size of the numbers. Which of these countries saw the largest increase in emissions since 1995? What could explain the changes? (10)
 
 7.	Which country in the world had the highest CO2 emissions per square kilometer of land area in 2015? Which country has the lowest? (5) 

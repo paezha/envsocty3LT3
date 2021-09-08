@@ -22,7 +22,7 @@ In the previous notebook you practiced some basic data analysis and visualizatio
 
 In this notebook, you will learn how to conduct simple regression analysis in R.
 
-## Preliminaries
+# Preliminaries
 
 As usual, it is good practice to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the workspace is `rm` (for "remove"), followed by a list of items to be removed. To clear the workspace from _all_ objects, do the following:
 ```{r}
@@ -112,7 +112,7 @@ summary(results)
 
 The summary includes the estimated values of the coefficients (corresponding to $a$ and $b$ in the regression model), but also some important model diagnostics. 
 
-## Interpreting the regression results
+# Interpreting the regression results
 
 The $t$-values in the summary are used to assess the statistical _significance_ of the coefficients (how probable it is that they are _not_ zero). Their associated probability values (or $p$-values) indicate the probability that the coefficient is indistinguishable of zero. For instance, the $p$-value 0.0000133, above, indicates that the probability of the coefficient being close to zero is 0.00133% or less. Smaller $p$-values increase our confidence when making a statement such as "the coefficient $a$ is different from zero". More accurately, we would state "the coefficient $a$ is _significantly_ different from zero, at the 0.01% (or whatever) _level of confidence_".
 
@@ -126,7 +126,7 @@ A companion to $R$-squared is the _Adjusted_ R-squared. The adjusted $R$-squared
 
 The $F$-statistic is a joint test that all the coefficients are different from zero (it also comes with its own $p$-value). When the $p$-value of this statistic is low, we are more confident that at least _some_ of the coefficients are different from zero. Unfortunately, $F$ does not indicate which one or ones might be. The $t$-values are much more useful in this sense.
 
-## A note on 'independent' and 'dependent' variables
+# A note on 'independent' and 'dependent' variables
 
 Note: you need to remember an important distinction between 'independent' and 'dependent' variables. 
 
@@ -139,7 +139,7 @@ summary(a)
 
 then we would be saying that we think the number of people in a country depends on its number of cars! This idea does not really make much sense. This regression will get the exact same $F$-stat and $p$-value, meaning the relationship is significant, but our expectation of the relationship is completely backwards. It is important to be careful, when doing regressions, to select the proper dependent variable.
 
-## More on linear regressions
+# More on linear regressions
 
 It is important to note that the term "linear regression" is somewhat misleading. The model belongs to a family of models that are linear-in-parameters. This means that the coefficients of the model are strictly linear. A non-linear model would be, for example:
 $$
@@ -221,7 +221,7 @@ $$
 
 What this represent is that, for example, if country A's population is 5% higher than country B's, we predict that it is going to have 5 * 1.168 (or 5.84) percent more cars than country B.
 
-## Visualization
+# Visualization
 
 Now, we can visualize our models using `ggplot`. We'll begin by creating a scatterplot, as follows:
 
@@ -261,36 +261,32 @@ p + geom_smooth(method = 'lm',
 
 The figure indicates that Germany, with the largest population, also has the largest vehicle fleet. The simple linear model slightly underestimates the number of cars for Germany given its population, but not unusually so: the observation still falls within the confidence bands for predictions.
 
-<!--
-## Choosing whether to use a semilog or log-log regression
+# When to use variable transformations
 
-In the dataset above, we did get a slightly better fit with the linear regression. However, sometimes you're better off with a logarithmic regression like
-
+In the dataset above, we did get a slightly better fit with the linear regression than when we tried the logarithmic transformation. However, sometimes you're better off with a logarithmic regression like:
 $$
 log(Y)= a + b*log(X)
 $$
 
-and sometimes you're better off with a semilog regression like
-
+Other times you might be better off with a semilog regression like:
 $$
 log(Y)= a + bX
 $$
 
-There are two different reasons why log or semilog regression is used instead of simple linear regression. 
-One has to do with important concepts in statistical analysis, which are too complex to cover outside of a math class. Basically, a triangle pattern to your data points is bad for legitimate statistical inference, and a tight globular pattern is better; a log transformation can turn a triangle into a globule. If you want to learn more, the stats department at Mac would like to meet you.
+Or with a polynomial transformation such as:
+$$
+Y = a + bX^2
+$$
 
-The second reason to use a log model is that when your data measures societies, populations, living things or things changing over time, a log regression will often be a better fit because the world really works that way. 
+There are different reasons why a variable transformation might be useful. The log or semilog regressions ensure that predictions, when transformed back to their original scale (i.e., by taking the exponential of the predicted value), are never negative. For instance, we would not want to predict a negative number of cars! These transformations, like the polynomial transformation using the square of $X$, also account for _more than proportional_ growth, unlike the linear line, which is for proportional growth.
 
-For example, economic growth is definitely semilogarithmic: every year you add a few percent to an economy, and as the years go on the yearly increment in dollar value gets larger. The same with human population: every year the population increases by a few percent, and so every year more babies are born than in the previous year. These are all examples of exponential growth, and exponential growth needs a semilog regression. 
+More then proportional growth is observed in transportation and economic processes, because of economies of scale and economies of agglomeration. Economic growth is an example of more than proportional growth: every year you add a few percent to an economy, and as the years go on the yearly increment in dollar value gets larger. The same with human population: every year the population increases by a few percent, and so every year more babies are born than in the previous year. These are examples of exponential growth, and exponential growth needs a semilog regression. 
 
-The exciting thing in economic geography is when we find exponential relationships where we _shouldn't_ find them: usually in things that vary by scale, not time. 
+Another example, which you may have learned in economic geography, is that as the population of a city increases, its labour productivity goes up by a slightly higher rate: [Rudiger Ahrend](https://ideas.repec.org/a/sls/ipmsls/v32y20179.html) estimates a 1% increase in city growth tends to increase labour productivity by 1.02% to 1.05%, everything else held equal. So, larger cities are more productive with labour (and thus generate more wealth) than smaller cities. This is a significant reason for why wages are higher in cities, and also why job losses are particularly damaging for smaller towns, which is why we see a constant movement of people from the smaller populated places to bigger population centers.
 
-For example, you may have learned in economic geography that as the population of a city increases, its labour productivity goes up by a slightly higher rate: Rudiger Ahrend (see https://ideas.repec.org/a/sls/ipmsls/v32y20179.html) estimates a 1% increase in city growth will increase labour productivity by 1.02% to 1.05%, everything else held equal. So, larger cities are more productive with labour (and thus generate more wealth) than smaller cities. This is a significant reason for why wages are higher in cities, why secular job loss overwhelmingly affects smaller towns, and thus why we see a constant movement of people from the countryside to the city.
+The greater-than-normal increase in productivity is generally attributed to positive 'agglomeration effects'. These are just a kind of multiplicative, positive feedback effect: my very existence as a co-worker makes you 2% more productive, and your existence makes your next-door neighbour 2% more productive - but then their improvement improves me more, and then I improve you more, and so on. 
 
-The greater-than-normal increase in productivity is generally attributed to positive "agglomeration effects". These are just a kind of multiplicative, positive feedback effect: my very existence as a co-worker makes you 2% more productive, and your existence makes your next-door neighbour 2% more productive - but then their improvement improves me more, and then I improve you more, and so on. 
-
-These sorts of multiplicative positive feedback effects are everywhere in societies - as are negative feedback effects too - and discovering them is the first step into the fantastic science of Complexity Theory. If you want to learn more on that topic, there are entire courses and video series online on Complexity Theory: one example is the Santa Fe Institute's Complexity Explorer channel on YouTube (https://www.youtube.com/channel/UC6s-1TYa-1fBrUUIGijshCQ). Another channel is the Systems Innovation channel (https://www.youtube.com/channel/UCutCcajxhR33k9UR-DdLsAQ).
--->
+These sorts of multiplicative positive feedback effects are everywhere in societies - as are negative feedback effects too - and discovering them is the first step into the fantastic science of complexity. If you want to learn more on that topic, there are entire courses and video series online on Complexity Theory: one example is the Santa Fe Institute's Complexity Explorer channel on [YouTube](https://www.youtube.com/channel/UC6s-1TYa-1fBrUUIGijshCQ). Another channel is by [Systems Innovation](https://www.youtube.com/channel/UCutCcajxhR33k9UR-DdLsAQ).
 
 # Conclusion
 
