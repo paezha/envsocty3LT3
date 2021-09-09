@@ -114,14 +114,8 @@ consists of a window with toolbars and several panes. Some panes include
 in addition several tabs. There are the usual drop-down menus for common
 operations. See Figure 1 below.
 
-<div class="figure">
-
-<img src="images/01-RStudio-Window-Anatomy.png" alt="Figure 1. RStudio IDE" width="100%" />
-<p class="caption">
-Figure 1. RStudio IDE
-</p>
-
-</div>
+<img src="images/01-RStudio-Window-Anatomy.png" width="100%" /> **Figure
+1.** *RStudio IDE*
 
 The editor pane allows you to open and work with text and other files.
 In these files you can write instructions that can be passed on to `R`
@@ -177,54 +171,26 @@ way to keep your work in this course nicely organized.
 
 You can create a new project using the buttons in the toolbar. Figure 2
 shows one way of doing this:
-
-<div class="figure">
-
-<img src="images/02-Create-Project-1.gif" alt="Figure 2. Create new project - option 1" width="100%" />
-<p class="caption">
-Figure 2. Create new project - option 1
-</p>
-
-</div>
+<img src="images/02-Create-Project-1.gif" width="100%" /> **Figure 2.**
+*Create new project - option 1*
 
 Figure 3 shows an alternative way of doing the same, using the button
 for managing projects in the R Studio interface:
-
-<div class="figure">
-
-<img src="images/03-Create-Project-2.gif" alt="Figure 3. Create new project - option 2" width="100%" />
-<p class="caption">
-Figure 3. Create new project - option 2
-</p>
-
-</div>
+<img src="images/03-Create-Project-2.gif" width="100%" /> **Figure 3.**
+*Create new project - option 2*
 
 You then need to select a new directory to store your new project. Give
 the new directory a name, and save it in a place that you can easily
 find (for instance, the folder where you keep your academic work).
 Figure 4 illustrates the steps to do this:
+<img src="images/04-Create-Project-Directory.gif" width="100%" />
+**Figure 4.** *Choose to store the project in a new directory*
 
-<div class="figure">
-
-<img src="images/04-Create-Project-Directory.gif" alt="Figure 4. Choose to store the project in a new directory" width="100%" />
-<p class="caption">
-Figure 4. Choose to store the project in a new directory
-</p>
-
-</div>
-
-After you click ‘Create New Project’, R Studio will restart the session,
-and you will be in your new project. This will look like the image in
-Figure 5.
-
-<div class="figure">
-
-<img src="images/05-New-Project.png" alt="Figure 5. Your project keeps all your files nicely organized" width="100%" />
-<p class="caption">
-Figure 5. Your project keeps all your files nicely organized
-</p>
-
-</div>
+After you click ‘Create Project’, R Studio will restart the session, and
+you will have an `R` session in your new project. This will look like
+the image in Figure 5.
+<img src="images/05-New-Project.png" width="100%" /> **Figure 5.** *Your
+project keeps all your files nicely organized*
 
 ### Working with your preliminary reading in the course package
 
@@ -237,15 +203,8 @@ file and choosing R Markdown from a template. Select template
 ‘OK’, a new R Markdown file will open in your editor. Also, notice that
 a new folder appears in your project to keep this file. The process is
 illustrated in Figure 6.
-
-<div class="figure">
-
-<img src="images/06-New-File-Reading.gif" alt="Figure 6. Creating a new file from a template" width="100%" />
-<p class="caption">
-Figure 6. Creating a new file from a template
-</p>
-
-</div>
+<img src="images/06-New-File-Reading.gif" width="100%" /> **Figure 6.**
+*Creating a new file from a template*
 
 Your new file is an R Markdown document. This is a text file with
 *chunks* of code that can be executed. Reading 0 will introduce you to
@@ -261,41 +220,19 @@ the text using this format:
     :::
 
 Figure 7 illustrates these steps.
-
-<div class="figure">
-
-<img src="images/07-Working-with-Reading.gif" alt="Figure 7. Working with your reading" width="100%" />
-<p class="caption">
-Figure 7. Working with your reading
-</p>
-
-</div>
+<img src="images/07-Working-with-Reading.gif" width="100%" /> **Figure
+7.** *Working with your reading*
 
 Once you are happy with your work using this file, you can create a pdf
 file to study by *knitting* the document. Knitting will convert the R
 Markdown to a pdf file. You can do this at any time, and as many times
 as you want. See Figure 8.
-
-<div class="figure">
-
-<img src="images/08-Knitting.gif" alt="Figure 8. Click 'Knit' on the toolbar to convert your R Markdown into a pdf file" width="100%" />
-<p class="caption">
-Figure 8. Click ‘Knit’ on the toolbar to convert your R Markdown into a
-pdf file
-</p>
-
-</div>
+<img src="images/08-Knitting.gif" width="100%" /> **Figure 8.** *Click
+‘Knit’ on the toolbar to convert your R Markdown into a pdf file*
 
 Figure 9 shows the result of knitting your R Markdown file.
-
-<div class="figure">
-
-<img src="images/09-Knitted-Reading.png" alt="Figure 9. The result of knitting is a pdf file with your reading" width="100%" />
-<p class="caption">
-Figure 9. The result of knitting is a pdf file with your reading
-</p>
-
-</div>
+<img src="images/09-Knitted-Reading.png" width="100%" /> **Figure 9.**
+*The result of knitting is a pdf file with your reading*
 
 Since you can edit and annotate the text, you can essentially
 *customize* the chapter so that it is a unique reflection of your
@@ -312,53 +249,24 @@ the template for `Exercise-1`. Figure 10 illustrates the steps. Use the
 following naming convention for your exercise files:
 `exercise-number-studentnumber`. Once you click ‘OK’ a new R Markdown
 file will appear in your editor, as well as a new folder where this file
-resides.
-
-<div class="figure">
-
-<img src="images/10-Start-New-Exercise.gif" alt="Figure 10. Creating a new file to work on an exercise" width="100%" />
-<p class="caption">
-Figure 10. Creating a new file to work on an exercise
-</p>
-
-</div>
+resides. <img src="images/10-Start-New-Exercise.gif" width="100%" />
+**Figure 10.** *Creating a new file to work on an exercise*
 
 To begin, you can edit the header of the document with your personal
 information, like name and student number (see Figure 11).
-
-<div class="figure">
-
-<img src="images/11-Working-on-an-Exercise-YAML.gif" alt="Figure 11. Entering your personal information in the header of the R Markdown document" width="100%" />
-<p class="caption">
-Figure 11. Entering your personal information in the header of the R
-Markdown document
-</p>
-
-</div>
+<img src="images/11-Working-on-an-Exercise-YAML.gif" width="100%" />
+**Figure 11.** *Entering your personal information in the header of the
+R Markdown document*
 
 You can also run chunks of code (see Figure 12).
-
-<div class="figure">
-
-<img src="images/12-Working-on-an-Exercise-Chunks.gif" alt="Figure 12. Running chunks of code in your exercise" width="100%" />
-<p class="caption">
-Figure 12. Running chunks of code in your exercise
-</p>
-
-</div>
+<img src="images/12-Working-on-an-Exercise-Chunks.gif" width="100%" />
+**Figure 12.** *Running chunks of code in your exercise*
 
 And importantly, to work on your exercise, you can enter your answers as
 text and create new chunks of code to do any calculations you need for
 your answers, as shown in Figure 13.
-
-<div class="figure">
-
-<img src="images/13-Working-on-an-Exercise-Answers.gif" alt="Figure 13. Working to answer the questions in your exercise" width="100%" />
-<p class="caption">
-Figure 13. Working to answer the questions in your exercise
-</p>
-
-</div>
+<img src="images/13-Working-on-an-Exercise-Answers.gif" width="100%" />
+**Figure 13.** *Working to answer the questions in your exercise*
 
 After you complete your exercise, you will need to return to the header
 and complete two sections: `highlights` and `threshold_concepts`. The
@@ -368,28 +276,14 @@ threshold concepts are key ideas that once you grasp them they change
 your understanding of a topic, phenomenon, subject, method, etc. Write
 between three and five threshold concepts that apply to your learning
 experience working on this exercise. Figure 14 illustrates this step.
-
-<div class="figure">
-
-<img src="images/14-Working-on-an-Exercise-Highlights.gif" alt="Figure 14. Writing the highlights of the exercise" width="100%" />
-<p class="caption">
-Figure 14. Writing the highlights of the exercise
-</p>
-
-</div>
+<img src="images/14-Working-on-an-Exercise-Highlights.gif" width="100%" />
+**Figure 14.** *Writing the highlights of the exercise*
 
 The highlights and threshold concepts are the last element of your
 exercise, and after writing them you can knit the document to generate
 the pdf file for submission (see Figure 15).
-
-<div class="figure">
-
-<img src="images/15-Knitting-the-Exercise.gif" alt="Figure 14. Writing the highlights of the exercise" width="100%" />
-<p class="caption">
-Figure 14. Writing the highlights of the exercise
-</p>
-
-</div>
+<img src="images/15-Knitting-the-Exercise.gif" width="100%" /> **Figure
+14.** *Writing the highlights of the exercise*
 
 You are now ready to submit the exercise following the instructions in
 the course outline.
