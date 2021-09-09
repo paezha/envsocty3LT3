@@ -2,8 +2,12 @@
 title: "Reading 2: Geospatial Visualization for Transportation Trends using R"
 author: 
 - name: Antonio Páez
+  # Enter your name here:
 - name: My Name 
 subject: "ENVSOCTY 3LT3 Transportation Geography"
+
+# Do not edit below this line unless you know what you are doing
+# --------------------------------------------------------------
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document:

@@ -1,20 +1,26 @@
 ---
 title: "Exercise 1: Energy consumption trends"
 author:
+  # Enter your name and student number here:
 - name: My Name
   student_number: 123456789
 subject: "ENVSOCTY 3LT3 Transportation Geography"
+
 # In the highlights you are asked to reflect about your learning experience while working on this exercise. This section is worth 10 marks.
 highlights: |
     After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
     
     You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words.
+    
 # Write the concepts that in your opinion are threshold concepts in this exercise. A threshold concept is a key idea that once you grasp it, it changes your understanding of a topic, phenomenon, subject, method, etc. Write between three and five threshold concepts that apply to your learning experience working on this exercise. This section is worth 5 marks.
 threshold_concepts: 
 - threshold concept 1
 - threshold concept 2 
 - threshold concept 3
 - threshold concept 4
+
+# Do not edit below this line unless you know what you are doing
+# --------------------------------------------------------------
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   pdf_document:
