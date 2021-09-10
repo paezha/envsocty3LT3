@@ -84,7 +84,7 @@ Words go here.
 
 # Questions
 
-## Transportation Trends in Hamilton (100 marks)
+## Transportation Trends in Hamilton (85 marks)
 
 1.	How many Traffic Analysis Zones comprise the Hamilton CMA? (10 marks)
 

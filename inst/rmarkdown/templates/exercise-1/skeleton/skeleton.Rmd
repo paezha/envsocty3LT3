@@ -93,7 +93,7 @@ Words go here.
 
 # Questions
 
-## Energy Use and Emission Trends (100 marks)
+## Energy Use and Emission Trends (85 marks)
 
 1.	What was the approximate population of Earth circa 2016? How many barrels of oil per day did this population consume? (5)
 
