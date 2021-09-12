@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Energy and emissions data for world countries. — energy_and_emissions • envsocty3LT3</title>
+<title>Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA. — hamilton_taz_employment • envsocty3LT3</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,11 @@
 
 
 
-<meta property="og:title" content="Energy and emissions data for world countries. — energy_and_emissions" />
-<meta property="og:description" content="A dataset containing information about 188 world countries, including
-population estimates, GDP per capita, energy consumption estimates,
-and CO_2 emissions." />
+<meta property="og:title" content="Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA. — hamilton_taz_employment" />
+<meta property="og:description" content="A table with statistics about jobs by traffic analysis zones in the Hamilton CMA.
+The zoning system is GTA06, and employment statistics are number of jobs in the
+traffic analysis zone. This file is a portion of the system used by the Transportation
+Tomorrow Survey in the Greater Toronto and Hamilton Area." />
 
 
 
@@ -110,46 +111,54 @@ and CO_2 emissions." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Energy and emissions data for world countries.</h1>
+    <h1>Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA.</h1>
     <small class="dont-index">Source: <a href='https://github.com/paezha/envsocty3LT3/blob/master/R/envsocty3LT3-package.R'><code>R/envsocty3LT3-package.R</code></a></small>
-    <div class="hidden name"><code>energy_and_emissions.Rd</code></div>
+    <div class="hidden name"><code>hamilton_taz_employment.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A dataset containing information about 188 world countries, including
-population estimates, GDP per capita, energy consumption estimates,
-and CO_2 emissions.</p>
+    <p>A table with statistics about jobs by traffic analysis zones in the Hamilton CMA.
+The zoning system is GTA06, and employment statistics are number of jobs in the
+traffic analysis zone. This file is a portion of the system used by the Transportation
+Tomorrow Survey in the Greater Toronto and Hamilton Area.</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>energy_and_emissions</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_employment</span><span class='op'>)</span></pre>
 
 
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 188 rows and 11 variables:</p><dl>
-<dt>Country</dt><dd><p>Names of countries as factor</p></dd>
-<dt>Area</dt><dd><p>Surface land area of country in sq.km</p></dd>
-<dt>Population</dt><dd><p>Population estimates</p></dd>
-<dt>PYear</dt><dd><p>Year of the population estimate</p></dd>
-<dt>GDPPC</dt><dd><p>Nominal GDP per capita in US dollars</p></dd>
-<dt>bblpd</dt><dd><p>Estimated energy consumption in barrels of oil per day</p></dd>
-<dt>EYear</dt><dd><p>Year of the energy consumption estimate</p></dd>
-<dt>CO2_1995</dt><dd><p>CO_2 emissions in kilotonnes per year - 1995 estimates</p></dd>
-<dt>CO2_2005</dt><dd><p>CO_2 emissions in kilotonnes per year - 2005 estimates</p></dd>
-<dt>CO2_2015</dt><dd><p>CO_2 emissions in kilotonnes per year - 2015 estimates</p></dd>
+    <p>A simple features object with 297 rows and 5 variables:</p><dl>
+<dt>GTA06</dt><dd><p>Unique identifier of zone in the GTA06 system</p></dd>
+<dt>Jobs_Manufacturing_Construction_Trades</dt><dd><p>Number of jobs in the traffic analysis zone of type Manufacturing/Construction/Trades</p></dd>
+<dt>Jobs_Retail</dt><dd><p>Number of jobs in the traffic analysis zone of type Retail, Sales and Service</p></dd>
+<dt>Jobs_Office_Clerical</dt><dd><p>Number of jobs in the traffic analysis zone of type Manufacturing/Construction/Trades</p></dd>
+<dt>Jobs_Professional</dt><dd><p>Number of jobs in the traffic analysis zone of type Professional/Management/Technical</p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
 
-    <p>Energy Consumption Data Source: CIA Factbook, Refined Oil Products Consumption (<a href='https://www.cia.gov/library/publications/the-world-factbook/rankorder/2246rank.html'>https://www.cia.gov/library/publications/the-world-factbook/rankorder/2246rank.html</a>) Accessed: September 5, 2017</p>
-<p>CO2 Emissions Data Source: EC Emissions Database for Global Atmospheric Research (<a href='http://edgar.jrc.ec.europa.eu/overview.php?v=CO2ts1990-2015'>http://edgar.jrc.ec.europa.eu/overview.php?v=CO2ts1990-2015</a>) Accessed: September 5, 2017</p>
-<p>GDP Data Source: Wikipedia (<a href='https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)_per_capita'>https://en.wikipedia.org/wiki/List_of_countries_by_GDP_(nominal)_per_capita</a>) Accessed: September 5, 2017</p>
+    <p>Transportation Tomorrow Survey (<a href='http://dmg.utoronto.ca/transportation-tomorrow-survey/tts-introduction'>http://dmg.utoronto.ca/transportation-tomorrow-survey/tts-introduction</a>)</p>
+<p>Data Guide available (<a href='http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf'>http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>energy_and_emissions</span><span class='op'>)</span>
- <span class='va'>GDPPC</span> <span class='op'>&lt;-</span> <span class='va'>energy_and_emissions</span><span class='op'>$</span><span class='va'>GDPPC</span>
-</div></pre>
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_employment</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>hamilton_taz_employment</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     GTA06           Jobs_Manufacturing_Construction_Trades  Jobs_Retail    
+#&gt;  Length:297         Min.   :   0.00                        Min.   :   0.0  
+#&gt;  Class :character   1st Qu.:   0.00                        1st Qu.:   0.0  
+#&gt;  Mode  :character   Median :   0.00                        Median :  64.0  
+#&gt;                     Mean   :  64.29                        Mean   : 170.1  
+#&gt;                     3rd Qu.:  49.00                        3rd Qu.: 255.0  
+#&gt;                     Max.   :3732.00                        Max.   :2092.0  
+#&gt;  Jobs_Office_Clerical Jobs_Professional
+#&gt;  Min.   :   0.00      Min.   :   0.0   
+#&gt;  1st Qu.:   0.00      1st Qu.:   0.0   
+#&gt;  Median :   0.00      Median :  73.0   
+#&gt;  Mean   :  69.07      Mean   : 215.9   
+#&gt;  3rd Qu.:  82.00      3rd Qu.: 234.0   
+#&gt;  Max.   :1398.00      Max.   :6598.0   </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
