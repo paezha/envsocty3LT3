@@ -1,0 +1,1090 @@
+---
+title: "03-Data-Preparation-Traffic-Analysis-Zones"
+---
+
+In this notebook we prepare data related to traffic analysis zones, including persona/household, travel, and job statistics.
+
+For this, we use the following raw files, all obtained from the Transportation Tomorrow Survey:
+
+- Hamilton-CMA-tts06.shp: boundaries of the traffic analysis zones, obtained from the Transportation Tomorrow Survey
+- ttsCross_2016_work_trips.txt: cross tabulation of work-related trips by traffic analysis zones
+- ttsCross_2016_shop_trips.txt: cross tabulation of shopping trips by traffic analysis zones
+- ttsCross_2016_trips_mode.txt
+- ttsCross_2016_dwelling_type.txt
+- ttsCross_2016_number_person_household.txt
+- ttsCross_2016_number_person_household.txt
+- ttsCross_2016_income_range_household.txt
+- ttsCross_2016_number_driver_household.txt
+- ttsCross_2016_age_person.txt
+- ttsCross_2016_number_ft_worker_household.txt
+- ttsCross_2016_number_pt_worker_household.txt
+- ttsCross_2016_number_vehicle_household.txt
+- ttsCross_2016_occupation_by_od.txt
+
+In addition, the following table includes travel times and distances from every traffic analysis zone centroid to Hamilton's CBD (Jackson Square):
+
+- travel_time_car.xlsx
+
+## Preliminaries
+
+Load packages:
+```{r load-packages}
+library(readxl)
+library(sf)
+library(tidyverse)
+library(units)
+```
+
+## Traffic Analysis Zones
+
+Read the boundaries of the traffic analysis zones:
+```{r}
+hamilton_taz <- st_read("Hamilton-CMA-tts06.shp")
+```
+
+Project object:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  st_transform(crs = 32617)
+```
+
+Prepare traffic analysis zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  transmute(ID,
+            AREA = st_area(geometry) %>% set_units(km^2) %>% drop_units(),
+            GTA06 = as.character(GTA06))
+```
+
+## Origin destination matrices for work and shop
+
+Read trip tables. The query was for "trips" by zone of residence, zone of work, and trip purpose (Work):
+```{r}
+od_work <- read_delim(file = "ttsCross_2016_work_trips.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+
+od_shop <- read_delim(file = "ttsCross_2016_shop_trips.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on work trips begins:
+```{r}
+idx <- which(od_work$X1 == "TABLE    : purp_dest (Work)")
+```
+
+Slice the table to obtain the work trips (remove heading information):
+```{r}
+od_work <- od_work %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifiers and the trips, and convert to numeric:
+```{r}
+od_work <- od_work %>%
+  separate(X1, into = c("Zones", "Trips"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "Destination"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         Destination = str_trim(Destination),
+         Trips = as.numeric(Trips))
+```
+
+Find the position in the table where the information on shop trips begins:
+```{r}
+idx <- which(od_shop$X1 == "TABLE    : purp_dest (Market/Shop)")
+```
+
+Slice the table to obtain the shop trips (remove heading information):
+```{r}
+od_shop <- od_shop %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifiers and the trips, and convert to numeric:
+```{r}
+od_shop <- od_shop %>%
+  separate(X1, into = c("Zones", "Trips"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "Destination"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         Destination = str_trim(Destination),
+         Trips = as.numeric(Trips))
+```
+
+Shopping and work trips were retrieved for Hamilton and Burlington to give the Hamilton CMA [data guide](http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf). Check the numbers of zones of origin and destination:
+```{r}
+od_work %>%
+  transmute(Origin = as.numeric(Origin), 
+            Destination = as.numeric(Destination)) %>%
+  summary()
+
+od_shop %>%
+  transmute(Origin = as.numeric(Origin), 
+            Destination = as.numeric(Destination)) %>%
+  summary()
+```
+
+The zones of origin (as expected) are all within the Hamilton CMA (this is by design, since the query selected those regions/municipalities). But the zones of destination include many zones outside of the Hamilton CMA. We need to filter to consider only destination zones in the Hamilton CMA. Obtain a list of identifiers:
+```{r}
+cma_taz_id <- hamilton_taz$GTA06
+```
+
+Filter the destinations to include only those in the CMA:
+```{r}
+od_work <- od_work %>%
+  filter(Destination %in% cma_taz_id)
+
+od_shop <- od_shop %>%
+  filter(Destination %in% cma_taz_id)
+```
+
+## Create a full origin-destination table, including zone pairs without trips
+
+Create a full origin-destination table and remove same zone pairs:
+```{r}
+od_full <- expand.grid(Origin = cma_taz_id, 
+                       Destination = cma_taz_id) %>%
+  filter(Origin != Destination)
+```
+
+Extract the coordinates of the zones from the boundary file:
+```{r}
+taz_coordinates <-  hamilton_taz %>% #boundaries %>% 
+  st_centroid() %>%
+  st_coordinates()
+
+taz_coordinates <- data.frame(GTA06 = as.character(hamilton_taz$GTA06), #boundaries$GTA06, 
+                              taz_coordinates)
+```
+
+Join the coordinates to the origin-destination table:
+```{r}
+od_full <- od_full %>%
+  left_join(taz_coordinates, by = c("Origin" = "GTA06")) %>%
+  rename(x_origin = X, y_origin = Y) %>%
+  left_join(taz_coordinates, by = c("Destination" = "GTA06")) %>%
+  rename(x_destination = X, y_destination = Y)
+```
+
+Create a unique id for each origin-destination pair:
+```{r}
+od_full <- od_full %>%
+  mutate(pairID = 1:n())
+```
+
+Pivot longer to create point features:
+```{r}
+od_full_long <- od_full %>%
+  select(x_origin:pairID) %>%
+  pivot_longer(cols = x_origin:y_destination, 
+               names_to = c(".value", 
+                            "type"), 
+               names_sep = "_")
+```
+
+Convert to simple features:
+```{r}
+od_full_long <- od_full_long %>%
+  st_as_sf(coords = c("x", "y"), 
+           crs = st_crs(hamilton_taz))
+```
+
+This creates a simple features object with lines for the flows between zones:
+```{r cache=TRUE}
+od_lines <- od_full_long %>% 
+  group_by(pairID) %>% 
+  summarize()  %>% st_cast("MULTIPOINT") %>% 
+  st_cast("LINESTRING")
+```
+
+Join lines to origin-destination table:
+```{r}
+od_full <- od_full %>%
+  left_join(od_lines, by = "pairID") %>%
+  st_as_sf()
+```
+
+Join the table with trips to the full origin-destination table:
+```{r}
+od_full <- od_full %>%
+  left_join(od_work %>% 
+              select(Origin, 
+                     Destination, 
+                     Trips), 
+            by = c("Origin" = "Origin", 
+                   "Destination" = "Destination")) %>%
+  rename(Trips_work = Trips) %>%
+  left_join(od_shop %>% 
+              select(Origin, 
+                     Destination, 
+                     Trips), 
+            by = c("Origin" = "Origin", 
+                   "Destination" = "Destination")) %>%
+  rename(Trips_shop = Trips)
+```
+
+Convert NAs to zeros in table:
+```{r}
+od_full <- od_full %>%
+  mutate(Trips_work = ifelse(is.na(Trips_work), 0, Trips_work),
+         Trips_shop = ifelse(is.na(Trips_shop), 0, Trips_shop))
+```
+
+## Travel information 
+
+Calculate trip totals by origin and destination for work and shopping purposes:
+```{r}
+work_trips_produced <- od_work %>% 
+  group_by(Origin) %>% 
+  summarize(work_trips_produced = sum(Trips), 
+            .groups = "drop")
+
+shop_trips_produced <- od_shop %>% 
+  group_by(Origin) %>% 
+  summarize(shop_trips_produced = sum(Trips), 
+            .groups = "drop")
+
+
+work_trips_attracted <- od_work %>% 
+  group_by(Destination) %>% 
+  summarize(work_trips_attracted = sum(Trips), 
+            .groups = "drop")
+
+shop_trips_attracted <- od_shop %>% 
+  group_by(Destination) %>% 
+  summarize(shop_trips_attracted = sum(Trips), 
+            .groups = "drop")
+```
+
+Add to taz_hamilton:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(work_trips_produced, 
+            by = c("GTA06" = "Origin")) %>%
+  left_join(work_trips_attracted, 
+            by = c("GTA06" = "Destination")) %>%
+  left_join(shop_trips_produced, 
+            by = c("GTA06" = "Origin")) %>%
+  left_join(shop_trips_attracted, 
+            by = c("GTA06" = "Destination"))
+```
+
+Convert NAs to zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  mutate(work_trips_produced = ifelse(is.na(work_trips_produced), 0, work_trips_produced),
+         work_trips_attracted = ifelse(is.na(work_trips_attracted), 0, work_trips_attracted),
+         shop_trips_produced = ifelse(is.na(shop_trips_produced), 0, shop_trips_produced),
+         shop_trips_attracted = ifelse(is.na(shop_trips_attracted), 0, shop_trips_attracted))
+```
+
+Read attributes of zones (mode of trips):
+```{r}
+trips_mode <- read_delim(file = "ttsCross_2016_trips_mode.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on dwellings begins:
+```{r}
+idx <- which(trips_mode$X1 == "COLUMN : mode_prime")
+```
+
+Slice the table to obtain the dwelling types (remove heading information):
+```{r}
+trips_mode <- trips_mode %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the type of dwelling, and the number of dwellings, and convert to numeric:
+```{r}
+trips_mode <- trips_mode %>%
+  separate(X1, into = c("Zones", "trips"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "Mode"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         Mode = str_trim(Mode),
+         trips = as.numeric(trips))
+```
+
+Code trip modes:
+```{r}
+trips_mode <- trips_mode %>% 
+  mutate(Mode = factor(Mode,
+                       levels = c("B", "C", "D", "G", "J", "M", "O", "P", "S", "T", "U", "W"),
+                       labels = c("Transit_excluding_GO_rail", 
+                                  "Cycle",
+                                  "Auto_driver",
+                                  "GO_rail_only",
+                                  "GO_rail_and_transit",
+                                  "Motorcycle",
+                                  "Other",
+                                  "Auto_passenger",
+                                  "School_bus",
+                                  "Taxi_passenger",
+                                  "Paid_rideshare",
+                                  "Walk")))
+```
+
+Pivot wider so that each row is one zone:
+```{r}
+trips_mode <- trips_mode %>%
+  pivot_wider(names_from = Mode,
+              values_from = trips,
+              values_fill = 0)
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(trips_mode,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(Transit_excluding_GO_rail = replace_na(Transit_excluding_GO_rail, 0),
+         Cycle = replace_na(Cycle, 0),
+         Auto_driver = replace_na(Auto_driver, 0),
+         GO_rail_only = replace_na(GO_rail_only, 0),
+         GO_rail_and_transit = replace_na(GO_rail_and_transit, 0),
+         Motorcycle = replace_na(Motorcycle, 0),
+         Other = replace_na(Other, 0),
+         Auto_passenger = replace_na(Auto_passenger, 0),
+         School_bus = replace_na(School_bus, 0),
+         Taxi_passenger = replace_na(Taxi_passenger, 0),
+         Paid_rideshare = replace_na(Paid_rideshare, 0),
+         Walk = replace_na(Walk, 0))
+```
+
+## Person and household information
+
+Read attributes of zones (dwelling types):
+```{r}
+dwelling_type <- read_delim(file = "ttsCross_2016_dwelling_type.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on dwellings begins:
+```{r}
+idx <- which(dwelling_type$X1 == "COLUMN : dwell_type")
+```
+
+Slice the table to obtain the dwelling types (remove heading information):
+```{r}
+dwelling_type <- dwelling_type %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the type of dwelling, and the number of dwellings, and convert to numeric:
+```{r}
+dwelling_type <- dwelling_type %>%
+  separate(X1, into = c("Zones", "dwellings"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "Type"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         Type = str_trim(Type),
+         dwellings = as.numeric(dwellings))
+```
+
+Code dwelling types:
+```{r}
+dwelling_type <- dwelling_type %>% 
+  mutate(Type = factor(Type,
+                       levels = c(1, 2, 3),
+                       labels = c("House", "Apartment", "Townhouse")))
+```
+
+Pivot wider so that each row is one zone:
+```{r}
+dwelling_type <- dwelling_type %>%
+  pivot_wider(names_from = Type,
+              values_from = dwellings,
+              values_fill = 0)
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(dwelling_type,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(House = replace_na(House, 0),
+         Apartment = replace_na(Apartment, 0),
+         Townhouse = replace_na(Townhouse, 0))
+```
+
+Read attributes of zones (number of persons per household):
+```{r}
+population <- read_delim(file = "ttsCross_2016_number_person_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on persons per household begins:
+```{r}
+idx <- which(population$X1 == "COLUMN : n_person")
+```
+
+Slice the table to obtain the work trips (remove heading information):
+```{r}
+population <- population %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the size of household, and the number of households, and convert to numeric:
+```{r}
+population <- population %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "people"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         people = as.numeric(people),
+         households = as.numeric(households))
+```
+
+Summarize persons per household to obtain total zonal population:
+```{r}
+population <- population %>% 
+  group_by(Origin) %>%
+  summarize(population = sum(people * households),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(population,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(population = replace_na(population, 0))
+```
+
+Read attributes of zones (number of persons per household):
+```{r}
+household_size <- read_delim(file = "ttsCross_2016_number_person_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on persons per household begins:
+```{r}
+idx <- which(household_size$X1 == "COLUMN : n_person")
+```
+
+Slice the table to obtain the work trips (remove heading information):
+```{r}
+household_size <- household_size %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the size of household, and the number of households, and convert to numeric:
+```{r}
+household_size <- household_size %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "people"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         people = as.numeric(people),
+         households = as.numeric(households))
+```
+
+Expand to calculate the median household size by zone:
+```{r}
+household_size <- household_size %>% 
+  uncount(households)
+```
+Summarize median household size by zone:
+```{r}
+household_size <- household_size %>% 
+  group_by(Origin) %>%
+  summarize(median_household_size = median(people),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(household_size,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(population = replace_na(population, 0))
+```
+
+Read attributes of zones (income range of households):
+```{r}
+income_range <- read_delim(file = "ttsCross_2016_income_range_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on income begins:
+```{r}
+idx <- which(income_range$X1 == "COLUMN : income")
+```
+
+Slice the table to obtain the income levels (remove heading information):
+```{r}
+income_range <- income_range %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the income range, and the number of number of households, and convert to numeric:
+```{r}
+income_range <- income_range %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "income"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         income = as.numeric(income),
+         households = as.numeric(households))
+```
+
+Code income ranges:
+```{r}
+income_range <- income_range %>% 
+  mutate(income = factor(income,
+                       levels = c(1, 2, 3, 4, 5, 6, 7),
+                       labels = c("Inc_less_15k", "Inc_15k_to_40k", "Inc_40k_to_60k", "Inc_60k_to_100k", "Inc_100k_to_125k", "Inc_more_125k", "Inc_decline_dk")))
+```
+
+Pivot wider so that each row is one zone:
+```{r}
+income_range <- income_range %>%
+  pivot_wider(names_from = income,
+              values_from = households,
+              values_fill = 0) %>%
+  select(Origin, Inc_less_15k, Inc_15k_to_40k, Inc_40k_to_60k, Inc_60k_to_100k, Inc_100k_to_125k, Inc_more_125k, Inc_decline_dk)
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(income_range,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(Inc_less_15k = replace_na(Inc_less_15k, 0),
+         Inc_15k_to_40k = replace_na(Inc_15k_to_40k, 0),
+         Inc_40k_to_60k = replace_na(Inc_40k_to_60k, 0),
+         Inc_60k_to_100k = replace_na(Inc_60k_to_100k, 0),
+         Inc_100k_to_125k = replace_na(Inc_100k_to_125k, 0),
+         Inc_more_125k = replace_na(Inc_more_125k, 0),
+         Inc_decline_dk = replace_na(Inc_decline_dk, 0))
+```
+
+Read attributes of zones (number of drivers per household):
+```{r}
+drivers <- read_delim(file = "ttsCross_2016_number_driver_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on income begins:
+```{r}
+idx <- which(drivers$X1 == "COLUMN : n_licence")
+```
+
+Slice the table to obtain the number of drivers (remove heading information):
+```{r}
+drivers <- drivers %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the number of drivers per household, and the number of households, and convert to numeric:
+```{r}
+drivers <- drivers %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "drivers"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         drivers = as.numeric(drivers),
+         households = as.numeric(households))
+```
+
+Summarize persons per household to obtain total number of drivers per zone, but filter out "Unknown":
+```{r}
+drivers <- drivers %>% 
+  filter(drivers != 99) %>% # filter out "99 - Unknown"
+  group_by(Origin) %>%
+  summarize(drivers = sum(drivers * households),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(drivers,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(drivers = replace_na(drivers, 0))
+```
+
+Read attributes of zones (age of person):
+```{r}
+age <- read_delim(file = "ttsCross_2016_age_person.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on part-time workers begins:
+```{r}
+idx <- which(age$X1 == "COLUMN : age")
+```
+
+Slice the table to obtain the number of part time workers (remove heading information):
+```{r}
+age <- age %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the number of persons, and their ages:
+```{r}
+age <- age %>%
+  separate(X1, into = c("Zones", "persons"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "age"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         age = as.numeric(age),
+         persons = as.numeric(persons))
+```
+
+Expand the number of persons per age by origin taz:
+```{r}
+age <- age %>%
+  uncount(persons)
+```
+
+Calculate median age of population per zone:
+```{r}
+age <- age %>% 
+  group_by(Origin) %>%
+  summarize(median_age = median(age),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(age,
+            by = c("GTA06" = "Origin"))
+```
+
+Read attributes of zones (number of full time workers per household):
+```{r}
+ft_workers <- read_delim(file = "ttsCross_2016_number_ft_worker_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on number of workers begins:
+```{r}
+idx <- which(ft_workers$X1 == "COLUMN : n_emp_ft")
+```
+
+Slice the table to obtain the number of workers (remove heading information):
+```{r}
+ft_workers <- ft_workers %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the number of workers per household, and the number of households, and convert to numeric:
+```{r}
+ft_workers <- ft_workers %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "ft_workers"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         ft_workers = as.numeric(ft_workers),
+         households = as.numeric(households))
+```
+
+Summarize ft workers per household to obtain total number of workers per zone:
+```{r}
+ft_workers <- ft_workers %>% 
+  group_by(Origin) %>%
+  summarize(ft_workers = sum(ft_workers * households),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(ft_workers,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(ft_workers = replace_na(ft_workers, 0))
+```
+
+Read attributes of zones (number of part time workers per household):
+```{r}
+pt_workers <- read_delim(file = "ttsCross_2016_number_pt_worker_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on part-time workers begins:
+```{r}
+idx <- which(pt_workers$X1 == "COLUMN : n_emp_pt")
+```
+
+Slice the table to obtain the number of part time workers (remove heading information):
+```{r}
+pt_workers <- pt_workers %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the number of part time workers, and the number of households:
+```{r}
+pt_workers <- pt_workers %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "pt_workers"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         pt_workers = as.numeric(pt_workers),
+         households = as.numeric(households))
+```
+
+Summarize part-time workers per household to obtain total number of workers per zone:
+```{r}
+pt_workers <- pt_workers %>% 
+  group_by(Origin) %>%
+  summarize(pt_workers = sum(pt_workers * households),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(pt_workers,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(pt_workers = replace_na(pt_workers, 0))
+```
+
+Read attributes of zones (number of vehicles per household):
+```{r}
+vehicles <- read_delim(file = "ttsCross_2016_number_vehicle_household.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on vehicles begins:
+```{r}
+idx <- which(vehicles$X1 == "COLUMN : n_vehicle")
+```
+
+Slice the table to obtain the number of vehicles (remove heading information):
+```{r}
+vehicles <- vehicles %>% 
+  slice((idx+2):n())
+```
+
+Separate the zone identifier, the number of vehicles, and the number of households:
+```{r}
+vehicles <- vehicles %>%
+  separate(X1, into = c("Zones", "households"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "vehicles"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         vehicles = as.numeric(vehicles),
+         households = as.numeric(households))
+```
+
+Summarize vehicles per household to obtain total number of vehicles per zone:
+```{r}
+vehicles <- vehicles %>% 
+  filter(vehicles != 99) %>% # Remove "99 - Unknown"
+  group_by(Origin) %>%
+  summarize(vehicles = sum(vehicles * households),
+            .groups = "drop")
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(vehicles,
+            by = c("GTA06" = "Origin"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(vehicles = replace_na(vehicles, 0))
+```
+
+## Emploment information
+
+Read attributes of zones (number of people by occupation by place of employment). This needs to be limited to Hamilton residents working in Hamilton. I used all people working in Hamilton irrespective of their place of residence (which could have been Brantford, etc.) but the model cannot explain the flows too well, since it seems to require a lot more workers than it has on the origin side:
+```{r}
+jobs <- read_delim(file = "ttsCross_2016_occupation_by_od.txt", 
+                      delim = "\t", 
+                      col_names = FALSE)
+```
+
+Find the position in the table where the information on occupation "Unknown" is:
+```{r}
+idx <- which(jobs$X1 == "TABLE    : occupation (Unknown)")
+idx2 <- which(jobs$X1 == "TABLE    : occupation (General Office/Clerical)")
+```
+
+Slice the table to obtain the occupation classes (remove heading information):
+```{r}
+jobs_9 <- jobs %>% 
+  slice((idx + 2):(idx2 - 1)) %>% 
+  mutate(type = "9")
+```
+
+Find the position in the table where the information on "General Office/Clerical" occupation is:
+```{r}
+idx <- which(jobs$X1 == "TABLE    : occupation (General Office/Clerical)")
+idx2 <- which(jobs$X1 == "TABLE    : occupation (Manufacturing/Construction/Trades)")
+```
+
+Slice the table to obtain the occupation classes (remove heading information):
+```{r}
+jobs_G <- jobs %>% 
+  slice((idx+2):(idx2 - 1))  %>% 
+  mutate(type = "G")
+```
+
+Find the position in the table where the information on "Manufacturing/Construction/Trades" occupation is:
+```{r}
+idx <- which(jobs$X1 == "TABLE    : occupation (Manufacturing/Construction/Trades)")
+idx2 <- which(jobs$X1 == "TABLE    : occupation (Professional/Management/Technical)")
+```
+
+Slice the table to obtain the occupation classes (remove heading information):
+```{r}
+jobs_M <- jobs %>% 
+  slice((idx + 2):(idx2 - 1)) %>% 
+  mutate(type = "M")
+```
+
+Find the position in the table where the information on "Professional/Management/Technical" occupation is:
+```{r}
+idx <- which(jobs$X1 == "TABLE    : occupation (Professional/Management/Technical)")
+idx2 <- which(jobs$X1 == "TABLE    : occupation (Retail Sales and Service)")
+```
+
+Slice the table to obtain the occupation classes (remove heading information):
+```{r}
+jobs_P <- jobs %>% 
+  slice((idx+2):(idx2 - 1)) %>% 
+  mutate(type = "P")
+```
+
+Find the position in the table where the information on "Retail Sales and Service" occupation is:
+```{r}
+idx <- which(jobs$X1 == "TABLE    : occupation (Retail Sales and Service)")
+```
+
+Slice the table to obtain the occupation classes (remove heading information):
+```{r}
+jobs_S <- jobs %>% 
+  slice((idx+2):n()) %>%
+  mutate(type = "S")
+```
+
+Bind all job types:
+```{r}
+jobs2 <- rbind(jobs_9, 
+               jobs_G, 
+               jobs_M, 
+               jobs_P, 
+               jobs_S)
+```
+
+Separate the zone identifier, the occupation type, and the number of employees:
+```{r}
+jobs2 <- jobs2 %>%
+  separate(X1, into = c("Zones", "number"), sep = " (?=[^ ]+$)") %>%
+  mutate(Zones = str_trim(Zones, side = "both")) %>%
+  separate(Zones, into = c("Origin", "Destination"), sep = " (?=[^ ]+$)") %>%
+  mutate(Origin = str_trim(Origin),
+         Destination = str_trim(Destination),
+         number = as.numeric(number),
+         type = type)
+```
+
+Code job types:
+```{r}
+jobs2 <- jobs2 %>% 
+  mutate(type = factor(type,
+                       levels = c("G", "M", "P", "S", "9"),
+                       labels = c("Jobs_Office_Clerical",
+                                  "Jobs_Manufacturing_Construction_Trades", 
+                                  "Jobs_Professional",
+                                  "Jobs_Retail", 
+                                  "Unknown")))
+```
+
+Summarize by destination and type:
+```{r}
+jobs2 <- jobs2 %>% 
+  group_by(Destination, type) %>% 
+  summarize(number = sum(number), 
+            .groups = "drop")
+```
+
+Pivot wider so that each row is one zone:
+```{r}
+ jobs2 <- jobs2 %>%
+   pivot_wider(names_from = type,
+               values_from = number,
+               values_fill = 0) %>%
+   select(Destination, 
+          Jobs_Office_Clerical, 
+          Jobs_Manufacturing_Construction_Trades,
+          Jobs_Professional, 
+          Jobs_Retail)
+```
+
+Join to zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  left_join(jobs2,
+            by = c("GTA06" = "Destination"))
+```
+
+Replace NAs with zeros:
+```{r}
+hamilton_taz <- hamilton_taz %>% 
+  mutate(Jobs_Office_Clerical = replace_na(Jobs_Office_Clerical, 0), 
+          Jobs_Manufacturing_Construction_Trades = replace_na(Jobs_Manufacturing_Construction_Trades, 0),
+          Jobs_Professional = replace_na(Jobs_Professional, 0), 
+          Jobs_Retail = replace_na(Jobs_Retail, 0))
+```
+
+## Prepare tables for saving
+
+Extract person/household information:
+```{r}
+hamilton_taz_ph <- hamilton_taz %>%
+  st_drop_geometry() %>%
+  transmute(GTA06,
+            population,
+            drivers,
+            vehicles,
+            ft_workers,
+            pt_workers,
+            median_age,
+            pop_density = population/AREA,
+            House,
+            Apartment,
+            Townhouse,
+            total_dwellings = sum(House, Apartment, Townhouse),
+            median_household_size,
+            Inc_less_15k,
+            Inc_15k_to_40k,
+            Inc_40k_to_60k,
+            Inc_60k_to_100k,
+            Inc_100k_to_125k,
+            Inc_more_125k,
+            Inc_decline_dk)
+```
+
+Extract travel information:
+```{r}
+hamilton_taz_travel <- hamilton_taz %>%
+  st_drop_geometry() %>%
+  transmute(GTA06,
+            work_trips_produced,
+            work_trips_attracted,
+            shop_trips_produced,
+            shop_trips_attracted,
+            Walk,
+            Cycle,
+            Auto_driver,
+            Auto_passenger,
+            Motorcycle,
+            Taxi_passenger,
+            Paid_rideshare,
+            School_bus,
+            Transit_excluding_GO_rail,
+            GO_rail_and_transit,
+            GO_rail_only,
+            Other)
+```
+
+Extract employment by work locations:
+```{r}
+hamilton_taz_employment <- hamilton_taz %>%
+  st_drop_geometry() %>%
+  transmute(GTA06,
+            Jobs_Manufacturing_Construction_Trades,
+            Jobs_Retail,
+            Jobs_Office_Clerical,
+            Jobs_Professional)
+
+```
+
+Clean `hamilton_taz`:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  transmute(ID,
+            Area = AREA,
+            GTA06)
+```
+
+Read data with travel time by car:
+```{r}
+travel_cost_car <- read_excel("travel_time_car.xlsx")
+```
+
+Prepare table for saving:
+```{r}
+travel_cost_car <- travel_cost_car %>%
+  select(-c(group, m, miles, seconds))
+```
+
+## Save processed data
+
+Save tables to folder `data`:
+```{r save-processed-data}
+usethis::use_data(hamilton_taz,
+                  overwrite = TRUE)
+usethis::use_data(hamilton_taz_ph, 
+                  overwrite = TRUE)
+usethis::use_data(hamilton_taz_travel, 
+                  overwrite = TRUE)
+usethis::use_data(hamilton_taz_employment, 
+                  overwrite = TRUE)
+usethis::use_data(travel_cost_car, 
+                  overwrite = TRUE)
+usethis::use_data(od_full, 
+                  overwrite = TRUE)
+```
+
+

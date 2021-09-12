@@ -1,0 +1,130 @@
+---
+title: "05-Data-Preparation-OSM-Opportunities"
+---
+
+In this notebook I pre-process data for urban opportunities (e.g., restaurants/eateries).
+
+The notebook downloads Open Street Maps information about the network.
+
+## Preliminaries
+
+Load the packages used in this notebook:
+```{r message=FALSE}
+library(osmdata)
+library(sf)
+library(tidyverse)
+library(units)
+```
+
+## Traffic Analysis Zones
+
+Read the boundaries of the traffic analysis zones:
+```{r}
+hamilton_taz <- st_read("Hamilton-CMA-tts06.shp")
+```
+
+Project object:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  st_transform(crs = 32617)
+```
+
+Prepare traffic analysis zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  transmute(ID,
+            AREA = st_area(geometry) %>% set_units(km^2) %>% drop_units(),
+            GTA06 = as.character(GTA06))
+```
+
+## OSM - eateries
+
+Obtain a bounding box for Hamilton:
+```{r}
+#gtha_bb <- st_bbox(taz_boundaries)
+hamilton_bb <- hamilton_taz %>%
+  st_transform(4326) %>%
+  st_bbox()
+```
+
+Use the bounding box to retrieve OSM _restaurant_ data for Hamilton:
+```{r}
+hamilton_bar_osm <- osmdata::opq(bbox =  hamilton_bb) %>% 
+  osmdata::add_osm_feature(key = "amenity",
+                           value = "bar") %>% 
+  osmdata::osmdata_sf()
+
+hamilton_bars <- hamilton_bar_osm$osm_points %>% 
+  transmute(osm_id, name, amenity, type = "Bar") %>%
+  st_transform(crs= 32617)
+
+hamilton_cafe_osm <- osmdata::opq(bbox =  hamilton_bb) %>% 
+  osmdata::add_osm_feature(key = "amenity",
+                           value = "cafe") %>% 
+  osmdata::osmdata_sf()
+
+hamilton_cafes <- hamilton_cafe_osm$osm_points %>% 
+  transmute(osm_id, name, amenity, type = "Cafe") %>%
+  st_transform(crs= 32617)
+
+hamilton_fast_food_osm <- osmdata::opq(bbox =  hamilton_bb) %>% 
+  osmdata::add_osm_feature(key = "amenity",
+                           value = "fast_food") %>% 
+  osmdata::osmdata_sf()
+
+hamilton_fast_food <- hamilton_fast_food_osm$osm_points %>% 
+  transmute(osm_id, name, amenity, type = "Fast Food") %>%
+  st_transform(crs= 32617)
+
+hamilton_food_court_osm <- osmdata::opq(bbox =  hamilton_bb) %>% 
+  osmdata::add_osm_feature(key = "amenity",
+                           value = "food_court") %>% 
+  osmdata::osmdata_sf()
+
+hamilton_food_court <- hamilton_food_court_osm$osm_points %>% 
+  transmute(osm_id, name, amenity, type = "Food Court") %>%
+  st_transform(crs= 32617)
+
+hamilton_pub_osm <- osmdata::opq(bbox =  hamilton_bb) %>% 
+  osmdata::add_osm_feature(key = "amenity",
+                           value = "pub") %>% 
+  osmdata::osmdata_sf()
+
+hamilton_pubs <- hamilton_pub_osm$osm_points %>% 
+  transmute(osm_id, name, amenity, type = "Pub") %>%
+  st_transform(crs= 32617)
+
+hamilton_restaurant_osm <- osmdata::opq(bbox =  hamilton_bb) %>% 
+  osmdata::add_osm_feature(key = "amenity",
+                           value = "restaurant") %>% 
+  osmdata::osmdata_sf()
+
+hamilton_restaurants <- hamilton_restaurant_osm$osm_points %>% 
+  transmute(osm_id, name, amenity, type = "Restaurant") %>%
+  st_transform(crs= 32617)
+```
+
+Join all types of eateries:
+```{r}
+hamilton_sustenance <- rbind(hamilton_bars, 
+                           hamilton_cafes,
+                           hamilton_fast_food,
+                           hamilton_food_court,
+                           hamilton_pubs,
+                           hamilton_restaurants)
+```
+
+Plot eateries:
+```{r}
+ggplot(hamilton_sustenance) +
+  geom_sf(aes(color = type))
+```
+
+## Save processed data
+
+Save Hamilton eateries:
+```{r}
+usethis::use_data(hamilton_sustenance,
+                  overwrite = TRUE)
+```
+

@@ -1,0 +1,516 @@
+---
+title: "03-Data-Preparation-Network-Data"
+---
+
+In this notebook I pre-process the network data.
+
+I downloaded the following data from GTHA's Transportation Tomorrow Survey:
+
+- A shape file with the 2006 GTA zoning system
+
+Further, the notebook downloads Open Street Maps information about the network.
+
+## Preliminaries
+
+Load the packages used in this notebook:
+```{r message=FALSE}
+library(igraph)
+library(osmdata)
+library(rgrass7)
+library(sf)
+library(stars)
+library(tidygraph)
+library(tidyverse)
+library(units)
+```
+
+## Traffic Analysis Zones
+
+Read the boundaries of the traffic analysis zones:
+```{r}
+hamilton_taz <- st_read("Hamilton-CMA-tts06.shp")
+```
+
+Project object:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  st_transform(crs = 32617)
+```
+
+Prepare traffic analysis zones:
+```{r}
+hamilton_taz <- hamilton_taz %>%
+  transmute(ID,
+            AREA = st_area(geometry) %>% set_units(km^2) %>% drop_units(),
+            GTA06 = as.character(GTA06))
+```
+
+## OSM - road network
+
+Obtain a bounding box for Hamilton:
+```{r}
+#gtha_bb <- st_bbox(taz_boundaries)
+hamilton_bb <- hamilton_taz %>%
+  st_transform(4326) %>%
+  st_bbox()
+```
+
+<!---
+Use the bounding box to retrieve OSM _highway_ data for Hamilton:
+```{r eval=FALSE}
+hamilton_osm <- osmdata::opq(bbox =  hamilton_bb, 
+                             timeout = 60) %>% 
+  osmdata::add_osm_feature(key = 'highway') %>% 
+  osmdata::osmdata_sf() %>% 
+  osmdata::osm_poly2line()
+```
+
+Save file:
+```{r eval = FALSE}
+save(hamilton_osm, 
+     file ="hamilton_osm.RData")
+```
+--->
+
+Load the clean file:
+```{r}
+load("hamilton_osm.RData")
+```
+
+Extract roads from the `hamilton_osm` list:
+```{r}
+hamilton_road <- hamilton_osm$osm_lines %>% 
+  select(highway)
+```
+
+There are different classes of highways in the OSM classification system. Check [here](https://wiki.openstreetmap.org/wiki/Key:highway) for details.
+
+Plot motorways; in Ontario these would be highways like the 403, the Linc, etc. (I use `str_detect()` to extract motorway and motorway_link, which includes ramps, and so on):
+```{r eval=FALSE}
+ggplot(hamilton_road %>% 
+         filter(str_detect(highway, "motorway"))) + 
+  geom_sf(aes(color = highway))
+```
+
+Plot primary roads; in Ontario these would be highways like the 403, the Linc, etc.:
+```{r eval=FALSE}
+ggplot(hamilton_road %>%
+         filter(str_detect(highway, "primary"))) + 
+  geom_sf(aes(color = highway))
+```
+
+Plot secondary roads; in Hamilton these would be major avenues like Main, King, etc.:
+```{r eval=FALSE}
+ggplot(hamilton_road %>% 
+         filter(str_detect(highway, "secondary"))) + 
+  geom_sf(aes(color = highway))
+```
+
+Plot tertiary roads; these are other relatively important streets:
+```{r eval=FALSE}
+ggplot(hamilton_road %>% 
+         filter(str_detect(highway, "tertiary"))) + 
+  geom_sf(aes(color = highway))
+```
+
+Plot residential streets:
+```{r eval=FALSE}
+ggplot(hamilton_road %>% 
+         filter(str_detect(highway, "residential"))) + 
+  geom_sf(aes(color = highway))
+```
+
+Now plot the road network, but exclude other elements such as bridleways, cycleways, etc. (note that the expression to detect strings uses "|" to indicate "or", and no spaces between strings):
+```{r eval=FALSE}
+ggplot(hamilton_road %>% 
+         filter(str_detect(highway, "motorway|primary|secondary|tertiary|residential"))) + 
+  geom_sf(aes(color = highway))
+```
+
+Extract this network:
+```{r}
+hamilton_road <- hamilton_road %>% 
+  filter(str_detect(highway,
+                    "motorway|primary|secondary|tertiary|residential"))
+```
+
+The coordinate reference system of this object can be retrieved with `st_crs()`:
+```{r eval=FALSE}
+st_crs(hamilton_road)
+```
+
+Notice the EPSG value of 4326. We need this information to link to GRASS.
+
+Link to GRASS GIS for cleaning the topology of the network (GRASS needs to be installed for this to work; see [here](https://grass.osgeo.org/download/)):
+```{r echo=FALSE, message=FALSE, results='hide'}
+# Link to GRASS GIS
+gisBase = ifelse(Sys.info()[["sysname"]] == "Linux", "/usr/lib/grass78/", "C://Program Files//GRASS GIS 7.6")
+location <- basename(tempfile())
+gisdbase <- tempdir()
+corner <- st_bbox(hamilton_road) # The `sf` object that we will work with 
+xmax <- corner[3]
+xmin <- corner[1]
+ymax <- corner[4]
+ymin <- corner[2]
+resolution <- "1"
+gisBase = ifelse(Sys.info()[["sysname"]] == "Linux", "/usr/lib/grass78/", "C://Program Files//GRASS GIS 7.8")
+initGRASS(
+  gisBase = gisBase,
+  home = tempdir(), 
+  gisDbase = gisdbase, 
+  mapset = "PERMANENT", 
+  location = location,
+  override = TRUE,
+)
+execGRASS("g.proj", flags = "c", epsg = 4326) # The epsg code must match the one for the map that we will be working with
+execGRASS("g.region", flags = c("quiet"), 
+          n = as.character(ymax), s = as.character(ymin), 
+          e = as.character(xmax), w = as.character(xmin), 
+          res = as.character(resolution))
+```
+
+Use GRASS to clean the topology of network:
+```{r}
+# Add data to GRASS spatial database  
+writeVECT(
+  SDF = hamilton_road, 
+  vname = "hamilton_road", 
+  v.in.ogr_flags = 'overwrite',
+  
+)
+
+# Execute the v.clean tool
+#execGRASS("g.proj", flags = c("c", "quiet"), proj4 = proj4)
+execGRASS("g.proj", flags = "c", epsg = 4326)# epsg = 26917)
+# Tool: Break lines (documentation is here: https://grass.osgeo.org/grass78/manuals/v.clean.html)
+execGRASS(
+  cmd = 'v.clean', 
+  input = 'hamilton_road', 
+  output = 'hamilton_road_cleaned',        
+  tool = 'break', 
+  threshold = 2,
+  flags = c('overwrite', 'c')
+)
+
+# Read back into R
+use_sf()
+hamilton_road <- readVECT('hamilton_road_cleaned') %>%
+  rename(geometry = geom) %>%
+  select(-cat)
+```
+
+Transform coordinates to UTM (crs code is 26917):
+```{r}
+hamilton_road <- hamilton_road 
+
+st_crs(hamilton_road) <- 4326
+
+hamilton_road <- hamilton_road %>%
+  st_transform(crs= 32617)
+```
+
+Create a function to convert the `sf` objects to `tbl_graph`:
+```{r}
+sf_to_tidygraph = function(x, directed = TRUE) {
+  # I copied this function from https://www.r-spatial.org/r/2019/09/26/spatial-networks.html
+  
+  # To convert to a tbl_graph object we need to get the edges of the network, and give them unique identifiers:
+  edges <- x %>%
+    mutate(edgeID = c(1:n()))
+  
+  # The nodes of the network are also needed; these are generated from the edges and need to be linked to the ID of the edge:
+  nodes <- edges %>%
+    st_cast("LINESTRING") %>%
+    st_coordinates() %>%
+    as_tibble() %>%
+    rename(edgeID = L1) %>%
+    group_by(edgeID) %>%
+    slice(c(1, n())) %>%
+    ungroup() %>%
+    mutate(start_end = rep(c('start', 'end'), times = n()/2)) %>%
+    mutate(xy = paste(.$X, .$Y)) %>% 
+    mutate(nodeID = group_indices(., factor(xy, levels = unique(xy)))) %>%
+    select(-xy)
+  
+  # Give the nodes their own unique IDs:
+  source_nodes <- nodes %>%
+    filter(start_end == 'start') %>%
+    pull(nodeID)
+  
+  # We see that nodes 1 and 2 define the endpoints of edge 1, nodes 3 and 4 the endpoints of edge 2, and so on. Now we need to add the node identifiers to the edges. Notice that we are calling the "start" as the source node and the "end" as the target node. Here we pull the vectors with the identifiers. Those are then added to the edges:
+  target_nodes <- nodes %>%
+    filter(start_end == 'end') %>%
+    pull(nodeID)
+  
+  edges <- edges %>%
+    mutate(from = source_nodes, to = target_nodes)
+  
+  # There are duplicated nodes in the `nodes` table, naturally, since many starting nodes for an edge are also ending nodes for another. Remove duplicate nodes and convert to `sf` so that the coordinates become the geometry of the nodes:
+  nodes <- nodes %>%
+    distinct(nodeID, .keep_all = TRUE) %>%
+    select(-c(edgeID, start_end)) %>%
+    st_as_sf(coords = c('X', 'Y')) %>%
+    st_set_crs(st_crs(edges))
+  
+  # We can now convert the table of nodes and the table of edges to `tbl_graph`, an object that combines the two:
+  tbl_graph(nodes = nodes, edges = as_tibble(edges), directed = directed)
+}
+```
+
+Convert Hamilton's road network to tbl_graph:
+```{r}
+hamilton_graph <- sf_to_tidygraph(hamilton_road, 
+                                  directed = FALSE)
+```
+
+Now the tbl_graph object combines the relevant information about the network: the edges and the nodes. What class of object is this?
+```{r}
+class(hamilton_graph)
+```
+
+The objects are both a `tbl_graph` and an `igraph`. Neato. This combines the best of both worlds. In addition, since we have geometry columns for both the edges and the nodes, they can also act as `sf` objects. A key function to work with the two elements of the graph (edges and nodes) is the `activate()` function, which specifies the part of the tbl_graph that we wish to work with. 
+
+```{r}
+hamilton_graph
+```
+
+## Augment the network with the identifiers of the zones for nodes that act as zonal centroids
+
+I want to identify in the network the nodes that will be proxies for zones, so the centroids of the zones. I can use `st_nearest()`, but before I need to convert the zonal centroids to simple features.
+
+Extract the coordinates of the zones from the boundary file:
+```{r}
+taz_coordinates <-  hamilton_taz %>% #boundaries %>% 
+  st_centroid() %>%
+  st_coordinates()
+
+taz_coordinates <- data.frame(GTA06 = as.character(hamilton_taz$GTA06), #boundaries$GTA06, 
+                              taz_coordinates)
+```
+
+Convert to simple features: 
+```{r}
+taz_coordinates <- taz_coordinates %>%
+  st_as_sf(coords = c("X", "Y"), 
+           crs = st_crs(hamilton_taz))
+```
+
+Now I can find the nodes in the network that are nearest to the zonal centroids:
+```{r}
+centroid_nodes <- st_nearest_feature(taz_coordinates, # The first argument of the function `st_nearest_feature()` is the object `my_addresses()`
+                                     hamilton_graph %>% # The second argument of the function `st_nearest_feature()` is the nodes of the network, so we need to activate them
+                                       activate(nodes) %>% # Activate the nodes
+                                       as_tibble() %>% # Convert to data frame
+                                       st_as_sf()) # Convert to simple features for use with `sf` functions
+centroid_nodes
+```
+
+This is the list of nodes in the graph that are nearest to a zone centroid. I need to join this to the zonal ids:
+```{r}
+centroid_nodes <- data.frame(nodeID = centroid_nodes, 
+                             GTA06 = taz_coordinates$GTA06)
+```
+
+Check for duplicated nodes assigned to separate zones:
+```{r}
+which(duplicated(centroid_nodes$nodeID))
+```
+
+```{r}
+centroid_nodes %>% filter(nodeID == centroid_nodes$nodeID[96])
+```
+
+Plot those zones:
+```{r}
+ggplot(data = hamilton_taz) + 
+  geom_sf(color = "darkgray") +
+  geom_sf(data = hamilton_taz %>%
+            filter(GTA06 == 5023 | GTA06 == 5031),
+          color = "red",
+          size = 2) +
+  geom_sf_label(data = hamilton_taz %>%
+            filter(GTA06 == 5023 | GTA06 == 5031),
+            aes(label = GTA06))
+```
+
+Check the network there:
+```{r}
+ggplot(data = hamilton_taz %>%
+            filter(GTA06 == 5023 | GTA06 == 5031)) +
+  geom_sf(color = "red",
+          size = 2) + 
+  geom_sf(data = hamilton_graph %>%
+            activate(edges) %>%
+            as_tibble() %>%
+            st_as_sf()) +
+  geom_sf(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf(),
+          shape = 5) +
+  geom_sf_label(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf(),
+          aes(label = nodeID)) +
+  coord_sf(xlim = c(593524.7, 595780.6), ylim = c(4779466.0, 4782065.7))
+```
+
+Manually change the node associated with repeated zone (5023) to a neighboring node (from 16275 to 25139):
+```{r}
+centroid_nodes <- centroid_nodes %>%
+  mutate(nodeID = ifelse(GTA06 == 5023, 25139, nodeID))
+```
+
+Check that there are no more duplicated nodes assigned to separate zones:
+```{r}
+which(duplicated(centroid_nodes$nodeID))
+```
+
+Label nodes in the network that are zonal centroids:
+```{r}
+hamilton_graph <- hamilton_graph %>% # Pass the object to next function
+  activate(nodes) %>% # Activate nodes of graph
+  mutate(GTA06 = hamilton_graph %>% # Mutate to add the zonal identifiers; to do this we need to match the node IDs to the list of centroid nodes
+           activate(nodes) %>% # Activiate nodes
+           as_tibble() %>% # Convert to table
+           left_join(centroid_nodes, # Join the network nodes to the centroid nodes
+                     by = "nodeID") %>%
+           #distinct(nodeID, .keep_all = TRUE) %>% # Remove duplicates
+           pull(GTA06)) # Extract zonal identifier for new column
+```
+
+Plot network:
+```{r}
+ggplot() + 
+  geom_sf(data = hamilton_taz,
+          size = 2) +
+  geom_sf(data = hamilton_graph %>%
+            activate(edges) %>%
+            as_tibble() %>%
+            st_as_sf(),
+          size = 0.5,
+          color = "darkgray") +
+  #geom_sf(data = hamilton_graph %>%
+  #          activate(nodes) %>%
+  #          as_tibble() %>%
+  #          st_as_sf(),
+  #        color = "red",
+  #        size = 0.1) +
+  geom_sf(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf() %>%
+            filter(!is.na(GTA06)),
+          color = "blue",
+          shape = 5,
+          size = 2)
+```
+
+Add length to Hamilton road network links:
+```{r}
+hamilton_graph <- hamilton_graph %>%
+  activate(edges) %>%
+  mutate(length = st_length(geometry))
+```
+
+Caculate the inter-centroid shortest path distances:
+```{r}
+centroid_distances <- distances(hamilton_graph,
+                  v = centroid_nodes %>%
+                    pull(nodeID),
+                  to = centroid_nodes %>%
+                    pull(nodeID),
+                  weights = hamilton_graph %>% 
+                           activate(edges) %>% 
+                           pull(length))
+```
+
+Summary of distances:
+```{r}
+centroid_distances %>% 
+  as.vector() %>% 
+  summary()
+```
+
+<!---
+
+*IMPORTANT:* if you notice a value of Inf: this means that some node (or nodes) lack connectivity to the rest of the network. Check which: 
+```{r}
+which(centroid_distances == Inf, arr.ind = TRUE) %>% head()
+```
+
+Find nodes not connected to the network. Check the network there:
+```{r}
+ggplot(data = taz_hamilton) +
+  geom_sf() + 
+  geom_sf(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf(),
+          shape = 1,
+          color = "darkgray") +
+  geom_sf_label(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf() %>%
+              filter(nodeID == centroid_nodes$nodeID[165]),
+          aes(label = nodeID))
+```
+
+Which zone is it?
+```{r}
+centroid_nodes %>% filter(nodeID == centroid_nodes$nodeID[165])
+```
+
+Check the network there:
+```{r}
+ggplot(data = taz_hamilton %>%
+            filter(GTA06 == 5177)) +
+  geom_sf(color = "red",
+          size = 2) + 
+  geom_sf(data = hamilton_graph %>%
+            activate(edges) %>%
+            as_tibble() %>%
+            st_as_sf()) +
+  geom_sf(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf(),
+          shape = 5) +
+  geom_sf_label(data = hamilton_graph %>%
+            activate(nodes) %>%
+            as_tibble() %>%
+            st_as_sf(),
+          aes(label = nodeID)) +
+  coord_sf(xlim = c(563306.2, 579003.5), ylim = c(4785367.2, 4793681.7))      
+```
+
+Manually change the node associated with zone 5177 from 8691 to 23437:
+```{r}
+centroid_nodes <- centroid_nodes %>%
+  mutate(nodeID = ifelse(GTA06 == 5177, 23437, nodeID))
+```
+
+Recreate the zoned network with labeled nodes:
+```{r}
+hamilton_graph <- hamilton_graph %>% # Pass the object to next function
+  activate(nodes) %>% # Activate nodes of graph
+  mutate(GTA06 = hamilton_graph %>% # Mutate to add the zonal identifiers; to do this we need to match the node IDs to the list of centroid nodes
+           activate(nodes) %>% # Activiate nodes
+           as_tibble() %>% # Convert to table
+           left_join(centroid_nodes, # Join the network nodes to the centroid nodes
+                     by = "nodeID") %>%
+           #distinct(nodeID, .keep_all = TRUE) %>% # Remove duplicates
+           pull(GTA06)) # Extract zonal identifier for new column
+```
+
+--->
+
+## Save processed data
+
+Save tables to folder `data`:
+```{r save-processed-data}
+usethis::use_data(hamilton_graph,
+                  overwrite = TRUE)
+```

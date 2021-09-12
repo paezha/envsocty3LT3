@@ -1,0 +1,57 @@
+---
+title: "03-Data-Preparation-Network-Data"
+---
+
+In this notebook I pre-process the network data.
+
+I downloaded the following data from [Hamilton Open Data Portal](https://open.hamilton.ca/datasets/370a19ad2e1543989e6dcb00254b3eb4_3):
+
+- A shape file with the neighborhood boundaries: Neighbourhood_Boundaries.shp
+
+Further, the notebook downloads Open Street Maps information about the network.
+
+## Preliminaries
+
+Load the packages used in this notebook:
+```{r message=FALSE}
+library(sf)
+library(tidyverse)
+library(units)
+```
+
+## Neighborhoods
+
+Read neighborhoods file:
+```{r}
+hamilton_neighborhoods <- st_read("Neighbourhood_Boundaries.shp")
+```
+
+Check that the projection matches the taz boundaries:
+```{r}
+st_crs(hamilton_neighborhoods)
+```
+
+Change projection of object:
+```{r}
+hamilton_neighborhoods <- hamilton_neighborhoods %>%
+  st_transform(crs = 32617)
+```
+
+Plot neighborhoods:
+```{r}
+ggplot(data = hamilton_neighborhoods) + geom_sf() + geom_sf_text(aes(label = NH_NAME), size = 2)
+```
+
+Rename columns:
+```{r}
+hamilton_neighborhoods <- hamilton_neighborhoods %>%
+  rename(Name = NH_NAME, Number = NH_NUMBER)
+```
+
+## Save processed data
+
+Save neighborhoods:
+```{r}
+usethis::use_data(hamilton_neighborhoods, 
+                  overwrite = TRUE)
+```

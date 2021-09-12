@@ -31,4 +31,6 @@ BugReports: https://github.com/paezha/envsocty3LT3/issues
 Depends: 
     R (>= 2.10)
 Imports: 
+    sf,
+    tidygraph,
     tinytex

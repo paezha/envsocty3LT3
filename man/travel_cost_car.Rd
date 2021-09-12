@@ -5,7 +5,7 @@
 \alias{travel_cost_car}
 \title{Travel cost by car in the Hamilton CMA.}
 \format{
-A data frame with 297 rows and 10 variables:
+A data frame with 297 rows and 6 variables:
 \describe{
 \item{GTA06}{Unique identifier of zone in the GTA06 system}
 \item{from}{Address in the traffic analysis zone used for routing}

@@ -5,16 +5,18 @@
 \alias{hamilton_taz}
 \title{Traffic analysis zones in the Hamilton CMA.}
 \format{
-A simple features object with 297 rows and 8 variables:
+A simple features object with 297 rows and 4 variables:
 \describe{
-\item{ID}{Unique identifier for traffic analysis zones}
+\item{ID}{Unique identifier for traffic analysis zone}
 \item{Area}{Surface area of zone in sq.km}
 \item{GTA06}{Unique identifier of zone in the GTA06 system}
 \item{geometry}{Geometry column}
 }
 }
 \source{
-Transportation Tomorrow Survey (http://dmg.utoronto.ca/transportation-tomorrow-survey/tts-introduction)
+Transportation Tomorrow Survey (\url{http://dmg.utoronto.ca/transportation-tomorrow-survey/tts-introduction})
+
+Data Guide available (\url{http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf})
 }
 \usage{
 data(hamilton_taz)

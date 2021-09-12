@@ -1,0 +1,20 @@
+---
+title: "01-Data-Preparation-Energy-and-Emissions"
+---
+
+# Code to prepare `energy-and-emissions` dataset
+
+```{r load-packages}
+library(readxl)
+```
+
+```{r read-raw-data}
+energy_and_emissions <- read_excel("energy-and-emissions.xlsx")
+```
+
+```{r save-processed-data}
+usethis::use_data(energy_and_emissions, 
+                  overwrite = TRUE)
+```
+
+

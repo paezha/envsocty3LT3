@@ -142,7 +142,6 @@ summary(CO)
 ```
 
 We can turn the character variable into a _factor_. What is a factor? Factors are a class of data used to store variables that are _categories_ (e.g., labels, names, classes). Typically, this means that the variable has two or more _levels_. In the present case, the factor variable has six levels, corresponding to one of six unique countries. If we had information for multiple years, each country might appear more than once, for each year that information was available. To convert `Country` to a factor, we can use the function `mutate` from the `tidyverse` package (more on packages later):
-
 ```{r}
 CO <- mutate(CO,
              Country = factor(Country))
