@@ -63,6 +63,7 @@ Once the package is part of your _library_, it becomes available for use in your
 library(tidyverse)
 ```
 
+
 # Dataframes in `R`
 
 `R` can work with different data types, including scalars (essentially matrices with only one element), vectors (matrices of one dimension), and full matrices. Here's an illustration of the difference between these types of data:

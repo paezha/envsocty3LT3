@@ -85,11 +85,13 @@ CO2_1995 | CO2 emissions in kilotonnes per year (1995)
 CO2_2005 | CO2 emissions in kilotonnes per year (2005)
 CO2_2015 | CO2 emissions in kilotonnes per year (2015)
 
-You can also check the documentation of this data object by running `?energy_and_emissions`.
+You can also check the documentation of this data object by running `??energy_and_emissions`.
 
 # Context
 
-Words go here.
+Undoubtedly, one of the most talked about world concerns is climate change and its negative consequences on the natural environment and human life. As stated in many scientific studies, the main reason behind climate-related problems is humans' fossil fuel-based energy consumption. Over the last few decades, the relationship between economic growth, energy consumption, and environmental damage due to CO2 emission has been intensively debated. If the country is dependent on fossil fuels such as oil, having a higher number of population will cause higher energy consumption, thus higher CO2 emission . 
+
+It has been seen that economic growth is highly likely to be flourished with higher energy consumption with the cost of greater environmental damage. At the national level, countries focus more on economic growth than environmental damage in most cases. Depending on their policy focus, some countries with higher economic growth emit more CO2 than the rest of the world. Although in recent years, many countries have adopted clean energy policies at the national level, it is yet not clear whether they have become successful in reducing their per-capita CO2 emission. Therefore, it would be very interesting to understand how the economic growth, oil consumption and CO2 emission in different countries have evolved over the last few decades and how these variables link to each other. In addition, we can also check which country has become successful in reducing CO2 emission and which one is performing worst in the case of energy consumption/ CO2 emission.
 
 # Questions
 
