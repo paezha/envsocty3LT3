@@ -38,7 +38,7 @@ To use this note you will need the following:
     + `hamilton_taz`
     + `hamilton_taz_travel`
     
-The data used for this tutorial were retrieved from the 2016 Transportation Tomorrow Survey [TTS](http://www.transportationtomorrow.on.ca/), the periodic travel survey of the Greater Toronto and Hamilton Area.
+The data used for this tutorial were retrieved from the 2016 Transportation Tomorrow Survey [TTS](http://www.transportationtomorrow.on.ca/), the periodic travel survey of the Greater Toronto and Hamilton Area completed every 5 years since 1986.
 
 # Preliminaries
 
@@ -71,7 +71,7 @@ For this example, you will use a simple features object that contains the Traffi
 data("hamilton_taz")
 ```
 
-This assignment will create an `sf` table, an `R` object used to store geographical information (in this example spatial polygons; other types of spatial data are points, lines). Objects of the class `sf` use the Simple Features standard for representing geometry.
+This assignment will create an `sf` table, which is an `R` object that is used to store geographical information (in this example: spatial polygons; other types of spatial data are points or lines). Objects of the class `sf` use the Simple Features standard for representing geometry.
 
 You can verify that the object is indeed a simple features table:
 ```{r}
@@ -80,29 +80,29 @@ class(hamilton_taz)
 
 # Visualizing a simple features object using `ggplot2`
 
-Traffic Analysis Zones (or TAZ) are a form of zoning system typically used for the analysis of transportation systems. TAZs are typically designed to contain a relatively small number of households, hopefully with relatively homogenous socio-economic and/or demographic characteristics. Currently, the table includes just some identifiers and the geometry of the zones. You can verify this by means of the `head` function:
+Traffic Analysis Zones (or TAZ) are a form of zoning system typically used for the analysis of transportation systems. TAZs are typically designed to contain a relatively small number of households, hopefully with relatively homogenous socio-economic and/or demographic characteristics. Currently, the table includes some identifiers and the geometry of the zones. You can verify this by means of the `head` function:
 ```{r}
 head(hamilton_taz)
 ```
 
 The full documentation of the data object is available; run `?hamilton_taz` in your console after loading the course package.
 
-You can quickly plot this object using `ggplot2`. :
+You can quickly plot this object using `ggplot2`:
 ```{r}
 ggplot() + # Create a blank ggplot object
   geom_sf(data = hamilton_taz) # Overlay a simple features object
 ```
 
-The command `geom_sf()`, by default, will plot the geometry of the simple features with some default values; for instance the color of the lines is black, and the fill color of the polygons is grey. We can use other variables avaible in the table to modify other features of the map. For example, we can choose the `Area` column and use it for the fill color of the polygons, by means of the `aes` (for aesthetic) value `fill`:
+The command `geom_sf()`, by default, will plot the geometry of the simple features object with some default values; for instance, the colour of the lines is black and the fill colour of the polygons is grey. We can use other variables available in the table to modify other features of the map. For example, we can choose the `Area` column and use it for the fill colour of the polygons, by means of the `aes` (for aesthetic) value called `fill`:
 ```{r}
 ggplot() + # Create a blank ggplot objects
   geom_sf(data = hamilton_taz, # Overlay a simple features object
-          aes(fill = Area)) # Use the variable `Area` for the `fill` color of the polygons
+          aes(fill = AREA)) # Use the variable `Area` for the `fill` color of the polygons
 ```
 
-As you saw above, the `hamilton_taz` `sf` dataframe contains some identifiers, including "GTA06", which is the unique identifier for the traffic analysis zones. There is not much information in this table, and the table therefore is not particularly interesting. If more data are available, they can be _joined_ to the table for further analysis, as you will see next.
+As you saw above, the `hamilton_taz` `sf` dataframe contains some identifiers, including "GTA06", which is the unique identifier for the Traffic Analysis Zones. There is not much information in this table, and the table therefore is not particularly interesting. If more data are available, they can be _joined_ to the table for further analysis, as you will see next.
 
-Before proceeding, it is important to note there are many packages in `R` that can be used to visualize geospatial information, each with strengths and weaknesses. Such packages are:
+Before proceeding, it is important to note that there are many packages in `R` that can be used to visualize geospatial information, each with strengths and weaknesses. Such packages are:
 
 * `ggplot2`: used for 2 dimensional plots; you used it before in your readings 0 and 1.
 * `tmap`: used to create thematic maps.
@@ -111,33 +111,33 @@ Before proceeding, it is important to note there are many packages in `R` that c
 
 # Joining data to an `sf` object
 
-The geographical file, and map, that we produced above are not terribly interesting, since they contain little more than the geometry of the zones. Fortunately, there is additional information in a separate table that can help us make this map more interesting. The following data object contains information about travel and trips in the Hamilton CMA:
+The geographical file and associated map that we produced above are not terribly interesting since they contain little more than the geometry of the zones. Fortunately, there is additional information in a separate table that can help us make this map more interesting. The following data object contains information about travel and trips in the Hamilton CMA:
 ```{r}
 data("hamilton_taz_travel")
 ```
 
-The above loads a data frame called `hamilton_taz_travel`. This data frame includes information drawn from the 2016 Transportation Tomorrow Survey (TTS). The full documentation of this object can be seen by running `?hamilton_taz_travel` in your console. You can quickly inspect the table:
+The above loads a dataframe called `hamilton_taz_travel`. This dataframe includes information drawn from the 2016 TTS. The full documentation of this object can be seen by running `?hamilton_taz_travel` in your console. You can quickly inspect the table:
 ```{r}
 summary(hamilton_taz_travel)
 ```
 
-The table has a column with  variable called `GTA06`. This variable is identical to the one in the `sf` object `hamilton_taz`, which means that there is a one-to-one correspondence between rows in `hamilton_taz` and rows in `hamilton_taz_travel`. In addition, there are columns with information about trips _produced_ (that begin at a zone) and _attracted_ (that end at a zone) for two different purposes, work and shopping. The rest of the columns include the number of trips produced by zones for all purposes, but by different modes of transportation (Walk, Cycle, etc.)
+The table has a column with a variable called `GTA06`. This variable is identical to the one in the `sf` object `hamilton_taz`, which means that there is a one-to-one correspondence between rows in `hamilton_taz` and rows in `hamilton_taz_travel`. In addition, there are columns with information about trips _produced_ (that begin at a particular TAZ) and _attracted_ (that end at a TAZ) for two different purposes, work and shopping. The rest of the columns include the number of trips produced by zones for all purposes, but by different modes of transportation (Walk, Cycle, etc.)
 
-Another useful table includes information about persons and households by traffic analysis zone. You can call this table by running the following chunk:
+Another useful table includes information about persons and households by TAZ. You can call this table by running the following chunk:
 ```{r}
 data("hamilton_taz_ph")
 ```
 
-This table also includes the same `GTA06` column, and information about the population and households in the traffic analysis zones (e.g., number of people, number of full-time workers, number of vehicles, etc.) Run a summary of this table to become familiar with its contents.
+This table also includes the same `GTA06` column, and information about the population and households in the TAZs (e.g., number of people, number of full-time workers, number of vehicles, etc.). Run a summary of this table to become familiar with its contents.
 
-Information about trips and travel, as well as that about people and households, can be joined to the traffic analysis zones for geospatial visualization. To join two tables, the set of `join_` commands from the `dplyr` package are useful. In this case, we want to execute a _left_join_. A _left_join_ takes all the rows from table x (to the left), and adds to that all the columns of table y for those rows. You can join the data frame `travel_data` to `taz` as follows:
+Information about trips and travel, as well as that about people and households, can be joined to the Traffic Analysis Zones for geospatial visualization. To join two tables, the set of `join_` commands from the `dplyr` package are useful. In this case, we want to execute a _left_join_. A _left_join_ takes all the rows from table x (to the left) and adds to that all the columns of table y for those rows. You can join the data frame `travel_data` to `taz` as follows:
 ```{r}
 hamilton_taz <- left_join(hamilton_taz, # Left table
                           hamilton_taz_travel, # Right table
                           by = "GTA06") # Key for joining the two tables
 ```
 
-As you can see, _left_join_ looks for a matches in the key variable that exists in both files, so that it can join the data of matching rows. In this case, we use the variable `GTA06` as the key.
+As you can see, _left_join_ looks for a match in the key variable that exists in both files, so that it can join the data of matching rows. In this case, we use the variable `GTA06` as the key.
 
 We can similarly join the person and household information:
 ```{r}
@@ -146,13 +146,13 @@ hamilton_taz <- left_join(hamilton_taz, # Left table
                           by = "GTA06") # Key for joining the two tables
 ```
 
-Our table `hamilton_taz` now is information-rich! It still includes the geometry, but also a fair amount of information about the characteristics of traffic analysis zones.
+Our table `hamilton_taz` now is information-rich! It still includes the geometry, but also a fair amount of information about the characteristics of Traffic Analysis Zones.
 
 # Creating thematic maps
 
 Once a `sf` dataframe has interesting information, it is possible to create thematic maps. 
 
-As you probably intuited by now, When working with the package `ggplot2` objects are created by layering. We begin by creating an empty `ggplot2` object as follows:
+As you probably intuited by now when working with the package `ggplot2`, objects are created by layering. We begin by creating an empty `ggplot2` object as follows:
 ```{r}
 ggplot()
 ```
@@ -163,14 +163,14 @@ ggplot() +
   geom_sf(data = hamilton_taz)
 ```
 
-The default settings use a gray style for the polygons and add a frame to the map. Thematic maps are created by mapping some aesthetic value of the plot to a variable. For instance, we can map the aesthetic `fill` to `population_density`:
+The default settings use a grey style for the polygons and add a frame to the map. Thematic maps are created by mapping some aesthetic value of the plot to a variable. For instance, we can map the aesthetic `fill` to `population_density`:
 ```{r}
 ggplot() +
   geom_sf(data = hamilton_taz,
           aes(fill = pop_density))
 ```
 
-We can also change other aesthetics without mapping them to a variable (so we put them outside of `aes()`). For example, we can change the color of the lines to "white":
+We can also change other aesthetics without mapping them to a variable (so we put them outside of `aes()`). For example, we can change the colour of the lines to "white":
 
 ```{r}
 ggplot() +
@@ -179,9 +179,9 @@ ggplot() +
           color = "white")
 ```
 
-When we use a variable to fill the polygons, like the above population density maps, we are creating a choropleth map (a map where the colors are selected based on the values of an underlying variable). This creates a _statistical map_. The map also includes a legend that can be used to interpret the coloring of the map.
+When we use a variable to fill the polygons, like the above population density maps, we are creating a choropleth map (a map where the colors are selected based on the values of an underlying variable). This creates a _statistical map_. The map also includes a legend that can be used to interpret the colouring of the map.
 
-The default coloring scheme was for a continuous variable. As you can see above, the presence of a few zones with a large number of trips obscures somewhat the distribution of values elsewhwere. This reduces the usefulness of the map, and you might want to change this by using a different coloring scheme. For instance, using the `scale_fill_fermenter()` function it is possible to color the choropleth map using the quantiles of the variable. The simplest quantile is when we divide the sample in two. For this we would use the `quantile()` function and indicate that the cuts are done at _breaks_ 0, 0.5, and 1, or in other words at 0%, 50%, and 100% of the sample:
+The default colour scheme was for a continuous variable. As you can see above, the presence of a few zones with a large number of trips obscures somewhat the distribution of values elsewhere. This reduces the usefulness of the map, and you might want to change this by using a different colour scheme. For instance, by using the `scale_fill_fermenter()` function it is possible to colour the choropleth map using the quantiles of the variable. The simplest quantile is when we divide the sample in two. For this, we would use the `quantile()` function and indicate that the cuts are done at _breaks_ 0, 0.5, and 1, or in other words at 0%, 50%, and 100% of the sample:
 ```{r}
 # Calculate the quantiles of the distribution 
 pop_density_q <- quantile(hamilton_taz$pop_density, # Obtain the quantiles of the distribution of 
@@ -194,7 +194,7 @@ ggplot() + # Create blank `ggplot2` object
   scale_fill_fermenter(breaks = pop_density_q) # Change the scale for the fill using the breaks in the quantiles
 ```
 
-This thematic map shows that half of all traffic analysis zones have a population density lower than 388.13 persons per sq.km, and half higher than that. High population density is generally seen in the urban parts of the Hamilton CMA, and low in the suburban and rural parts of the CMA.
+This thematic map shows that half of all Traffic Analysis Zones have a population density lower than 388.13 persons per sq.km, and half higher than that. High population density is generally seen in the urban parts of the Hamilton CMA, and low in the suburban and rural parts of the CMA.
 
 Of course, we could use a finer set of breaks, say at 0%, 20%, 40%, 60%, 80%, 100% (these are called _quintiles_, they divide the sample in five equal parts):
 ```{r}
@@ -209,7 +209,7 @@ ggplot() + # Create blank `ggplot2` object
   scale_fill_fermenter(breaks = pop_density_q) # Change the scale for the fill using the breaks in the quantiles
 ```
 
-We can improve the map above in many ways, but for the moment, it is useful to change the coloring scheme, so that higher values of population density are colored darker. We do this by changing the `direction` of the fill scale:
+We can improve the map above in many ways, but for the moment, it is useful to change the coloring scheme, so that higher values of population density are coloured darker. We do this by changing the `direction` of the fill scale:
 ```{r}
 ggplot() + # Create blank `ggplot2` object
   geom_sf(data = hamilton_taz, # Plot the simple features in `hamilton_taz` 
@@ -228,7 +228,7 @@ ggplot() + # Create blank `ggplot2` object
                        breaks = pop_density_q) # Change the scale for the fill using the breaks in the quantiles
 ```
 
-The maps with quantiles are easier to interpret from a statistical standpoint, because they show the places where, say, the traffic analysis zones in the bottom 20% of population density are. 
+The maps with quantiles are easier to interpret from a statistical standpoint, because they show the places where, say, the Traffic Analysis Zones in the bottom 20% of population density are. 
 
 # Working with data in tables
 
@@ -237,7 +237,7 @@ The thematic maps above show how maps can help us understand the spatial distrib
 It is possible to do more sophisticated analysis by generating information based on the variables available. For instance, suppose that we would like to calculate a per capita measure of mobility, say trips per capita, for a specific purpose. This can be done using the number of work trips and the number of full time workers, and the function `mutate`:
 ```{r}
 hamilton_taz <- mutate(hamilton_taz, # Mutate the `hamilton_taz` table and store the results in `hamilton_taz`
-                       work.pc = work_trips_produced / ft_workers) # The mutation will add a new column that is calculated
+                       work.pc = work_trips_produced / ft_workers) # The mutation will add a new column that calculates trips per capita for each TAZ
 ```
 
 More complex formulas can be used too. For instance, for each zone we can find the proportion of trips by mode relative to the total number of trips by all modes produced by each zone:
@@ -246,7 +246,7 @@ hamilton_taz <- mutate(hamilton_taz,
                        Auto_driver.prop = Auto_driver/(Walk + Cycle + Auto_driver + Auto_passenger + Motorcycle + Taxi_passenger + Paid_rideshare + School_bus + Transit_excluding_GO_rail + GO_rail_and_transit + GO_rail_only + Other))
 ```
 
-And we can query this table. As an example, we can find how many zones had a large proportion of all their trips made by a person driving an auto. We can do this by using the `filter()` function from package `dplyer` (in `tidyverse`). The function extracts the rows in the table that meet a logical condition (i.e., `Auto_driver.prop >= 0.85`. Let us save the result of this operation in a separate table that we will call `auto_dependent`:
+And we can query this table. As an example, we can find how many zones had a large proportion of all their trips made by a person driving an auto. We can do this by using the `filter()` function from package `dplyr` (in `tidyverse`). The function extracts the rows in the table that meet a logical condition (i.e., `Auto_driver.prop >= 0.85`). Let us save the result of this operation in a separate table that we will call `auto_dependent`:
 ```{r}
 auto_dependent <- filter(hamilton_taz, # Filter `hamilton_taz`
                          Auto_driver.prop >= 0.85) # Logical condition for filtering
@@ -254,7 +254,7 @@ auto_dependent <- filter(hamilton_taz, # Filter `hamilton_taz`
 
 How many zones are there with a very high proportion of trips made by auto drivers? 
 
-Another interesting question is, where are those traffic analysis zones that are probably auto-dependent (i.e., more than 85% of all trips made by person driving a car)? We can map this:
+Another interesting question is, where are traffic analysis zones that are probably auto-dependent (i.e., more than 85% of all trips made by person driving a car)? We can map this:
 ```{r}
 ggplot() + # Create a blank `ggplot2` object
   geom_sf(data = hamilton_taz) + # Overlay the traffic analysis zones
@@ -276,9 +276,9 @@ ggplot(hamilton_taz, # Create a `ggplot2` object using data in the table `hamilt
   geom_point() # Add points to the plot
 ```
 
-The above chart is a scatterplot, a visualization typically used to explore whether there is a statistical relationship between two variables. In this case, it plots the population density for every TAZ in the dataset on the x-axis, and the proportion of trips made by auto driver on the y-axis. The result is a chart that shows how traffic analysis zones with low population density tend to have more trips made by auto drivers. 
+The above chart is a scatterplot, a visualization typically used to explore whether there is a statistical relationship between two variables. In this case, it plots the population density for every TAZ in the dataset on the x-axis and the proportion of trips made by auto drivers on the y-axis. The result is a chart that shows how Traffic Analysis Zones with low population density tend to have more trips made by auto drivers. 
 
-When you see a chart like this, it suggests a relationship between population density and travel by car. You could study this relationship by meand of regression analysis:
+When you see a chart like this, it suggests a relationship between population density and travel by car. You could study this relationship by means of regression analysis:
 ```{r}
 model1 <- lm(formula = Auto_driver.prop ~ pop_density,
              data = hamilton_taz)
@@ -296,13 +296,13 @@ model2 <- lm(formula = Auto_driver.prop ~ pop_density + median_age,
 summary(model2)
 ```
 
-Both coefficients for population density and median age of population in the traffic analysis zone have very small $p$-values, which means the relationships are unlikely random. The coefficient for `pop_density` is negative but the effect is a little smaller after introducing `median_age`. The coefficient for `median_age` is positive, which suggests that as the population trends older, the proportion of trips by auto driver tends to increase. In fact, since the coefficient is 0.00508, this means that as the median age of the population goes up by one year, the proportion of trips by auto driver goes up by 0.508%.
+Both coefficients for population density and median age of population in the Traffic Analysis Zone have very small $p$-values, which means the relationships are unlikely to be random. The coefficient for `pop_density` is negative but the effect is a little smaller after introducing `median_age`. The coefficient for `median_age` is positive, which suggests that as the population trends older, the proportion of trips by auto driver tends to increase. In fact, since the coefficient is 0.00508, this means that as the median age of the population goes up by one year, the proportion of trips by auto driver goes up by 0.508%.
 
 This illustrates how you can do a regression on multiple variables, not just on one.
 
 # Bonus Material
 
-After completing this reading you are equipped to do some basic thematic mapping using `R`.
+After completing this reading, you are equipped to do some basic thematic mapping using `R`.
 
 The advantage of using a programmatic approach to visualization (i.e., programming your maps) is that everything is documented, it makes it easy to reproduce the maps, and it also gives you very fine control over the aspect of your maps. An advanced example is below (do not worry about understanding the code below, it is just to illustrate the possibilities):
 ```{r}
