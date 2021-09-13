@@ -97,7 +97,7 @@ The command `geom_sf()`, by default, will plot the geometry of the simple featur
 ```{r}
 ggplot() + # Create a blank ggplot objects
   geom_sf(data = hamilton_taz, # Overlay a simple features object
-          aes(fill = AREA)) # Use the variable `Area` for the `fill` color of the polygons
+          aes(fill = AREA)) # Use the variable `AREA` for the `fill` color of the polygons
 ```
 
 As you saw above, the `hamilton_taz` `sf` dataframe contains some identifiers, including "GTA06", which is the unique identifier for the Traffic Analysis Zones. There is not much information in this table, and the table therefore is not particularly interesting. If more data are available, they can be _joined_ to the table for further analysis, as you will see next.
