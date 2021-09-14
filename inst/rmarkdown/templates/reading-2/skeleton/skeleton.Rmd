@@ -46,12 +46,6 @@ The most basic task when doing digital mapping is working with geographical file
 
 There are many different formats for geographic files, depending on whether they are vectors (i.e., line-based) or raster (i.e., pixel-based), and also by different developers. A library (`rgdal`) has been developed to support reading and working with many different types of geospatial files.
 
-<!--
-A common type of file, which has to some extent become the de-facto universal format is ESRI's shape. A shape "file" is in fact a collection of files that include geospatial as well as alphanumeric information.
-
-We'll begin this tutorial by loading and visualizing a shape file.
--->
-
 Before starting, it is useful to make sure that you have a clean Environment. The following command will remove all data and values currently in the Environment.
 ```{r}
 rm(list = ls())
@@ -97,7 +91,7 @@ The command `geom_sf()`, by default, will plot the geometry of the simple featur
 ```{r}
 ggplot() + # Create a blank ggplot objects
   geom_sf(data = hamilton_taz, # Overlay a simple features object
-          aes(fill = AREA)) # Use the variable `AREA` for the `fill` color of the polygons
+          aes(fill = Area)) # Use the variable `Area` for the `fill` color of the polygons
 ```
 
 As you saw above, the `hamilton_taz` `sf` dataframe contains some identifiers, including "GTA06", which is the unique identifier for the Traffic Analysis Zones. There is not much information in this table, and the table therefore is not particularly interesting. If more data are available, they can be _joined_ to the table for further analysis, as you will see next.
