@@ -54,8 +54,8 @@ rm(list = ls())
 Next, you must load the libraries needed for analysis (you may need to install them before they are available for loading):
 ```{r message = FALSE}
 library(envsocty3LT3) # Course package
-library(sf)
-library(tidyverse)
+library(sf) # Package to work with geospatial information in simple features format
+library(tidyverse) # Family of packages for data manipulation, analysis, and visualization
 ```
 
 We now proceed to see how a geo-spatial file can be read. 

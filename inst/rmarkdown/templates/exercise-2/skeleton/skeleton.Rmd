@@ -54,7 +54,7 @@ When you are done working on this exercise, _knit_ the file to create the pdf fi
 
 # Preliminaries
 
-Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the work space is `rm` (for "remove"), followed by a list of items to be removed. To clear the work space from _all_ objects, do the following:
+Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in `R` to clear the work space is `rm` (for "remove"), followed by a list of items to be removed. To clear the work space from _all_ objects, do the following:
 ```{r}
 rm(list = ls())
 ```
@@ -102,7 +102,7 @@ In this exercise, you will have the opportunity to learn about socioeconomic, de
 2.	Were there any zones that did not produce any trips by that mode according to the TTS? (5 marks)
 
 
-3.	Create a thematic map to show the proportion of trips by your chosen mode across TAZ in the Hamilton CMA, and discuss the pattern in the resulting map. (20 marks)
+3.	Create a thematic map to show the proportion of trips by your chosen mode across TAZ in the Hamilton CMA, and discuss the pattern in the resulting map. Does the pattern surprise you or challenge your understanding of travel by the mode you chose? (20 marks)
 
 
 4.  Create a thematic map showing population density in the Hamilton CMA. (10 marks)
@@ -111,7 +111,7 @@ In this exercise, you will have the opportunity to learn about socioeconomic, de
 5.	Create a scatterplot to visualize the relationship between population density and the proportion of trips by the mode you chose. What relationship do you see? (10 marks)
 
 
-6. Do a simple linear regression between the proportion of trips by your chosen mode across TAZ and population density. Discuss the results of your model. (25 marks)
+6. Do a simple linear regression between the proportion of trips by your chosen mode across TAZ and population density. Discuss the results of your model. Based on your model, what would be the implications for transportation planning of the relationship between trip-making and population density? (25 marks)
 
 
 7. What other attributes of a TAZ do you think might correlate with proportion of trips by the mode you chose? Explain. (5 marks)

@@ -1,18 +1,185 @@
 ---
-title: "Template Title"
-author: "Your Name"
-date: "The Date"
-output: output_format
+title: "Exercise 3: Network analysis and the potential for walking mobility and accessibility in neighborhoods"
+author:
+  # Enter your name and student number here:
+- name: My Name
+  student_number: 123456789
+subject: "ENVSOCTY 3LT3 Transportation Geography"
+
+# In the highlights you are asked to reflect about your learning experience while working on this exercise. This section is worth 10 marks.
+highlights: |
+    After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
+    
+    You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words.
+    
+# Write the concepts that in your opinion are threshold concepts in this exercise. A threshold concept is a key idea that once you grasp it, it changes your understanding of a topic, phenomenon, subject, method, etc. Write between three and five threshold concepts that apply to your learning experience working on this exercise. This section is worth 5 marks.
+threshold_concepts: 
+- threshold concept 1
+- threshold concept 2 
+- threshold concept 3
+- threshold concept 4
+
+# Do not edit below this line unless you know what you are doing
+# --------------------------------------------------------------
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
+    # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+    # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
+    template: exercise-template-default.tex
+always_allow_html: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# Introduction
+
+In this exercise, you will build on the geo-spatial analysis skills that you developed working on Exercise 2, and will add network analysis capabilities to your set of tools. The objective of the exercise will be to compare the potential of different neighborhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.
+
+* Before working on this exercise, it is strongly recommended that you have completed the following reading.
+    + Reading-3 ('Network Analysis in R', available as a template in your course package)
+* Due date:	See course outline for due date.
+* Materials: the following data objects are used in this exercise (available in your course package)
+    + `hamilton_graoh`
+    + `hamilton_neighborhoods`
+    + `hamilton_sustenance`
+
+# Instructions
+
+Change the name of the file to `exercise-3-studentnumber.Rmd`. 
+
+Provide your answers by typing them in this R Markdown document. Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. Remember to write the highlights of this exercise and the threshold concepts in the header section where you entered your personal information!
+
+When you are done working on this exercise, _knit_ the file to create the pdf file for submission.
+
+# Preliminaries
+
+As usual, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in `R` to clear the work space is `rm` (for "remove"), followed by a list of items to be removed. To clear the work space from _all_ objects, do the following:
+```{r}
+rm(list = ls())
 ```
 
-## Adding an RMarkdown Template
+Begin by loading the packages that you will need for this exercise. Make sure that the packages are installed before trying to load them with `library()`. After clearing the workspace you need to load the packages that you will use for this exercise. For instance, you will need the `igraph` package to do network analysis. Make sure all packages that you need are installed before loading them with `library()`. 
+```{r message=FALSE}
+library(envsocty3LT3) # Course package
+library(igraph) # Package for network analysis
+library(sf) # Package for working with geospatial information
+library(tidygraph) # Package to work with spatial networks
+library(tidyverse) # Package for data carpentry and data analysis
+library(tmaptools) # Tools for working with geospatial information
+library(units) # Package for working with units in `R`
+```
 
-This file is what a user will see when they select your template. Make sure that you update the fields in the yaml header. In particular you will want to update the `output` field to whatever format your template requires.
+Load the data objects that you will need for this exercise:
+```{r}
+data("hamilton_graph")
+data("hamilton_neighborhoods")
+data("hamilton_sustenance")
+```
 
-This is a good place to demonstrate special features that your template provides. Ideally it should knit out-of-the-box, or at least contain clear instructions as to what needs changing.
+You can consult the documentation of these data objects by going to their help file (e.g., `?hamilton_graph`).
 
-Finally, be sure to remove this message!
+For the exercise, you will need to filter _out_ the highways in the network to keep only city and local streets:
+```{r}
+hamilton_graph_local <- hamilton_graph %>%
+  filter(highway != "motorway" | highway != "motorway_link")
+```
+
+Add travel time to the network, assuming a walking speed of walking speed of 5.0 km/h = 84 m/min):
+```{r}
+hamilton_graph_local <- hamilton_graph_local %>% # Pass the object `hamilton_graph_local` to the following function
+    activate(edges) %>% # Activate the edges of the `tbl_graph` object
+    mutate(length = st_length(geometry),  # Use function `st_length()` and the geometry of the edges to calculate the length of the link, and use `mutate()` to create a new column in the table to store this information
+           time = length/set_units(84, "m/min"))
+```
+
+Extract Westdale from the neighborhood boundaries:
+```{r}
+westdale <- hamilton_neighborhoods %>%
+    filter(str_detect(Name, "Westdale"))
+```
+
+The area of Westdale is:
+```{r}
+westdale %>% # Pass the object `my_neighborhood` to the next function
+    st_combine() %>% # Combine polygons
+    st_area() # The function `st_area()` returns the areas of polygons
+```
+
+Extract and clean the segment of the road network for Westdale:
+```{r}
+westdale_nodes <- hamilton_graph_local %>% # Pass the hamilton_graph_local object to the next function
+  activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object
+  as_tibble() %>% # Convert to data frame
+  st_as_sf() %>% # Convert to simple features
+  st_crop(westdale) #%>% # Crop using `my_neighborhood`
+
+westdale_graph <- hamilton_graph_local %>% # Pass the object `hamilton_graph_local` to the next function
+  induced_subgraph(v = westdale_nodes$nodeID, impl = "copy_and_delete") %>% # Induced subgraph will take the input graph (that is `hamilton_graph_local`) and induce a subgraph that includes only the vertices (i.e., nodes) indicated in the argument; notice that we are passing the `nodeID` (the unique identifiers of the nodes) of our cropped list of nodes. The method for inducing the subgraph is to copy the elements that will be retained, and then deleting the rest.
+  as_tbl_graph() # Convert the graph to a `tbl_graph` object
+```
+
+Remove isolates:
+```{r}
+westdale_components <- components(westdale_graph)
+
+westdale_graph <- westdale_graph %>% # Pass object `my_graph` to next function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  mutate(component = factor(westdale_components$membership)) # Use `mutate()` to create a new column with the component membership of the nodes. The membership is a number, but in reality a label, so we will convert it to a factor
+
+westdale_graph <- westdale_graph %>% # Pass the object `my_graph` to the following function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  filter(component == 1) # Filter by matching to the component that we wish to retain
+```
+
+Re-label nodes:
+```{r}
+westdale_graph <- westdale_graph %>% # Pass the object `my_graph` to the following function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  mutate(nodeID = 1:n()) # Use the function `mutate()` to modify the contents of the column `nodeID`: the new values will be from 1 to the number of rows
+```
+
+Plot the road network in Westdale:
+```{r}
+ggplot() +
+    geom_sf(data = westdale_graph %>%
+                activate(edges) %>%
+                as_tibble() %>%
+                st_as_sf()) + 
+    geom_sf(data = westdale_graph %>%
+                activate(nodes) %>%
+                as_tibble() %>%
+                st_as_sf(),
+            color = "red")
+```
+
+# Context
+
+Words go here.
+
+# Questions
+
+## Network analysis in neighborhoods of Hamilton (85 marks)
+
+1. What is the density of nodes in Westdale? (5)
+
+2. What is the density of the network in Westdale? (5)
+
+3. Calculate the degree of the nodes for the network in Westdale and plot the network showing the degree of the nodes. (5)
+
+4. Plot the degree distribution for the network. (5)
+
+5. Calculate the betweenness of the nodes and links of the network in Westdale and plot. (10)
+
+6. Plot the eateries in Westdale along with the betweenness of the links. Discuss the pattern observed. (10)
+
+7. Select a different neighborhood in Hamilton. Extract and prepare its network for analysis. (15)
+
+8. What is the density of the nodes and links in your chosen neighborhood? (5)
+
+9. Plot the degree distribution of the nodes in your chosen neighborhood. How does it compare to Westdale? (10)
+
+10. Calculate the betweenness of the nodes and links in your chosen neighborhood and plot. How do these compare to Westdale? (10)
+
+11. Plot the eateries in your chosen neighborhood along with the betweenness of the links. Discuss the pattern observed. (10)
+
+12. Based on your analyses above, discuss Westdale and your chosen neighborhood in terms of their potential for supporting walking. (10)

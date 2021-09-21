@@ -1,18 +1,814 @@
 ---
-title: "Template Title"
-author: "Your Name"
-date: "The Date"
-output: output_format
+title: "Reading 3: Network Analysis in `R`"
+author: 
+- name: Antonio Páez
+  # Enter your name here:
+- name: My Name 
+subject: "ENVSOCTY 3LT3 Transportation Geography"
+
+# Do not edit below this line unless you know what you are doing
+# --------------------------------------------------------------
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
+    # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+    # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
+    template: reading-template-default.tex
+always_allow_html: true
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Adding an RMarkdown Template
+# Introduction
 
-This file is what a user will see when they select your template. Make sure that you update the fields in the yaml header. In particular you will want to update the `output` field to whatever format your template requires.
+NOTE: This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
-This is a good place to demonstrate special features that your template provides. Ideally it should knit out-of-the-box, or at least contain clear instructions as to what needs changing.
+Transportation is a networked phenomenon. Network analysis provides a set of tools to investigate transportation systems as networks. Network analytical issues include location analysis, spatial interaction, accessibility, and connectivity. 
 
-Finally, be sure to remove this message!
+In this tutorial, we will introduce some elements of network analysis using the `R` statistical computing language.
+
+To use this note you will need the following:
+
+To use this note you will need the following:
+
+* The following data objects (available in your course package)
+    + `hamilton_graph`
+    + `hamilton_neighborhoods`
+    + `hamilton_sustenance`
+
+The `hamilton_graph` data object includes a portion of the road network in the Hamilton Census Metropolitan Area (CMA), sourced from OpenStreetMaps. The network includes highway links of various types, from motorway (e.g., the equivalent of provincial highways and other major roads such as the Linc) down to tertiary roads (low capacity neighborhood streets). The neighborhoods file includes the boundaries of traditional neighborhood definitions for the City of Hamilton. These boundaries were sourced from [Hamilton Open Data Portal](https://open.hamilton.ca/datasets/370a19ad2e1543989e6dcb00254b3eb4_3). Lastly, the `hamilton_sustenance` data object includes several types of food-serving establishments, including restaurants and bars. These were also sourced from OpenStreetMaps.
+
+## Preliminaries
+
+We will begin this reading by loading and inspecting the data objects. Remember, you can always access the help file which includes the documentation by executing `?` and the name of the object you wish to consult, for example `?hamilton_graph`.
+
+Before starting, however, it is useful to make sure that you have a clean Environment. The following command will remove all data and values currently in the Environment.
+```{r}
+rm(list = ls())
+```
+
+Next, you must load the libraries needed for analysis. You may need to install them before they are available for loading; use `install.packages()` or the Packages tab in your R Studio app:
+```{r message=FALSE}
+library(envsocty3LT3) # Course package
+library(igraph) # Package for network analysis
+library(sf) # Package to work with geospatial information in simple features format
+library(tidygraph) # Package to work with spatial networks
+library(tidyverse) # Family of packages for data manipulation, analysis, and visualization
+library(tmaptools) # Tools for working with geospatial information
+library(units) # Package for working with units in `R`
+```
+
+Load the object with the road network:
+```{r}
+data("hamilton_graph")
+```
+
+Load neighborhood boundaries:
+```{r}
+data("hamilton_neighborhoods")
+```
+
+Load restaurants and other food establishments:
+```{r}
+data("hamilton_sustenance")
+```
+
+The three chunks above read the data files. We will now proceed to inspect the data objects that we loaded. We will begin with the object `hamilton_graphl`:
+```{r}
+hamilton_graph
+```
+
+This object is a `tbl_graph`; this is a type of object in `R` used to store geo-spatial networks, and it contains some important information about the network, in addition to the required information to generate the network.
+
+At the top of the table we see some summary information. For instance, we see that the network is composed of 25,816 nodes and 35,142 edges (also called links). We can see that it is an undirected multigraph and that it has 47 components.
+
+Networks can be _undirected_, which means that movement is allowed to happen in any direction along a link. This is not completely accurate for the Hamilton CMA, where some links are actually directed (think Main Street and King Street, that for large segments allow only vehicular traffic in one direction). The alternative is a _directed_ network, where at least some links allow movement in only one direction, or flows are not symmetric.
+
+For the present reading we will ignore the slight complication of directed links and will assume that movement can happen in either direction on all links.
+
+Secondly, there are 47 components: a component is a part of the network where every element is connected, but not connected to elements in other components. For example, the following graph has two components:
+```{r}
+plot(graph.atlas(82))
+```
+
+Components identify segments of the network that do _not_ communicate between them.
+
+In addition to the information about the network, the following information that defines the network itself is available: Node Data (or vertices) and Edge Data (or links). As you can see, the nodes, in addition to unique identifiers, also include geometry in the form of coordinates (the points are projected as UTM). Finally, there is a column called `GTA06`. This column identifies nodes that are closest to the centroid of one of the traffic analysis zones in the GTA06 system (you used this zoning system in Reading 2 and Exercise 2). The edges of the graph include information corresponding to two endpoints, that is, the nodes that define the total length of the link, as well as unique identifiers (`edgeID`), road classification (in column `highway`), and the geometry of the edges (also in UTM coordinates). The length of links (in m) is also included in column `length`.
+
+We can check the class of this object in this way:
+```{r}
+class(hamilton_graph)
+```
+
+Objects of class `tbl_graph` are also of class `igraph` which is very handy, because this means that we can use package `igraph` to conduct many different types of network analyses. In summary, a `tbl_graph` object is actually two tables that contain the main elements of a graph: nodes and edges. Each of these elements can be _activated_ using the function `tidygraph::activate()` as needed.
+
+To illustrate the workflow with `tbl_graph` object, we will show below how we can plot the network by _activating_ the edges and converting to a simple features `sf` object (a data object with geographical information). The sequence of instructions in the next chunk demonstrates an aspect of working with `tbl_graph` objects: when we activate the edges or nodes, the object behaves as a network; we can convert the network into a data frame by means of `as_tibble()`; and the data frame into a geo-spatial object by means of `st_as_sf()`. This gives us the power to work with the graph as a network and also as a geo-spatial object. Here we use `ggplot2` to map the edges:
+```{r}
+ggplot() + # Create blank ggplot object
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph`
+            activate(edges) %>%  # Activate the edges of the `tbl_graph` object; After activating the edges, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf(), # Convert the table into a simple features object
+          aes(color = highway)) # Map the color of the lines to the type of the highway
+```
+
+The types of edges (primary, residential, etc.) are defined by OpenStreetMaps. You can find more details about these definitions [here](https://wiki.openstreetmap.org/wiki/Key:highway).
+
+We can also activate and plot the nodes:
+```{r}
+ggplot() + # Create blank ggplot object
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+            activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object; After activating the nodes, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf()) # Convert the table into a simple features object
+```
+
+Putting it all together, the following chunk plots the edges and the nodes together (remember that `ggplot2` as a grammar of graphics approach to creating plots allows us to add layers to a plot):
+```{r}
+ggplot() + # Create blank ggplot object
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+            activate(edges) %>%  # Activate the edges of the `tbl_graph` object; After activating the edges, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf(), # Convert the table into a simple features object
+          aes(color = highway)) + # Map the color of the lines to the type of the highway
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+            activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object; After activating the nodes, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf(), # Convert the table into a simple features object
+          shape = 15, # shape = 15 plots points as solid squares
+          size = 0.1, # change the size of the nodes to reduce over-plotting
+          color = "red") # make the nodes red
+```
+
+Another advantage of having the elements of the network stored as simple features is that we can use all the data analysis functionality of `R` as well as the spatial analysis functionality of the package `sf`. Suppose, for example, that we are interested in examining the right-of-way of motorways, and that this right-of-way is 500 m. First, we need to extract edges of type `motorway` from our graph, and then we need to find a buffer of the appropriate size.
+
+The next chunk uses the `tidyverse::filter()` function to extract edges of a certain type (i.e., `motorway` and `motorway_link`). The logical statement reads "filter all highways that are motorway OR motorway links; the symbol `|` means OR): 
+```{r}
+hamilton_motorways <- hamilton_graph %>%
+  filter(highway == "motorway" | highway == "motorway_link")
+```
+
+We can verify that the graph is much smallerr, since it includes only major highways:
+```{r}
+hamilton_motorways
+```
+Then, we use this  creates a buffer around motorways. The resulting object, which we call `motorway_buffers` is no longer a graph, but a simple features object:
+```{r}
+motorway_buffers <- hamilton_motorways %>% # Take object `hamilton_motorways` and pass it to the next function
+  activate(edges) %>% # Activate the edges of the `tbl_graph` object
+  as_tibble() %>% # Convert to table
+  st_as_sf() %>% # Convert to simple features
+  st_buffer(dist = 500) # Create a buffer of size 500 m around hamilton motorways
+```
+
+Plot the 500 m right-of-way areas:
+```{r}
+ggplot() + # Create a blank `ggplot` object
+  geom_sf(data = motorway_buffers, # Use `geom_sf` to plot simple features object `motorways_buffers` 
+          color = NA, # Do not color the boundaries of the polygons
+          fill = "green") + # The fill color of the polygons is green
+  geom_sf(data = hamilton_motorways %>% # Use `geom_sf` to plot object `hamilton_motorways`. This object is a `tbl_graph` object, so we need to convert to `sf`
+            activate(edges) %>% # Activate the edges of the graph 
+            as_tibble() %>% # Convert to table
+            st_as_sf) # Convert to simple features
+```
+
+The next object that we will inspect is the neighborhoods. The `hamilton_neighborhoods` is also a simple features object with the boundaries of the traditional neighborhoods in Hamilton. We can plot these boundaries as follows:
+```{r}
+ggplot() + # Create blank ggplot object
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+            activate(edges) %>%  # Activate the edges of the `tbl_graph` object; After activating the edges, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf(), # Convert the table into a simple features object
+          aes(color = highway)) + # Map the color of the lines to the type of the highway
+  geom_sf(data = hamilton_neighborhoods, # Plot the `sf` object; here we want to use `hamilton_neighborhoods`
+          size = 1, # Change the thickness of the neighborhood boundaries for ease of visualization
+          fill = NA) # Do not fill the polygons with color; alternatively, transparent polygons 
+```
+
+You can see that the neighborhood boundaries define traditional areas in parts of Hamilton, but by no means of all it. This is sufficient for the purpose of this reading. The only attributes in this data frame (in addition to the geometry) are the names of the neighborhoods and their unique identifiers:
+```{r}
+head(hamilton_neighborhoods)
+```
+
+The last data object, `hamilton_sustenance`, is also a simple features object that contains the coordinates of various types of amenities that correspond to places to eat in Hamilton, retrieved from Open Street Maps:
+```{r}
+head(hamilton_sustenance)
+```
+
+The different types of amenities (bar, cafe, etc.) are defined by OpenStreetMaps. You can find more details about these definitions [here](https://wiki.openstreetmap.org/wiki/Key:amenity).
+
+Since `hamilton_sustenance` is a simple features object we can also plot them as geo-spatial information:
+```{r}
+ggplot() + # Create blank ggplot object
+  geom_sf(data = hamilton_sustenance, # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_eateries`
+          aes(color = type, # Map the color of the points to their type
+              shape = type)) # Map the shape of the points to their type
+```
+
+## Data preparation
+
+To illustrate the analysis of networks we will extract a segment of the road network in Hamilton (you can if you wish do the analysis for the whole network, but be aware that some of the calculations might take some time). 
+
+First we will extract a subset of roads in the network to represent the kind of roads used for local travel. We can use the `dplyr::filter()` function again, but now we are going to select _out_ the highways (note that `!=` means "different from", so filter will select all edges that are different from `motorway` and `motorway_link`)
+```{r}
+hamilton_graph_local <- hamilton_graph %>%
+  filter(highway != "motorway" | highway != "motorway_link")
+```
+
+Next, we will retrieve a neighborhood (or several adjacent neighborhoods) to subset the network (for your information, the neighborhoods in Hamilton can be seen [here](http://map.hamilton.ca/Static/PDFs/General%20Interest%20maps/Overall%20City/NeighbourhoodBoundaries%20-%20ALL%20Named.pdf)):
+```{r}
+my_neighborhood <- hamilton_neighborhoods %>% # Here we pass the object `hamilton_neighborhoods` to the next function
+  filter(str_detect(Name, "Jerome|Kernighan|Crerar|Mewburn|Ryckmans|Barnstown")) # The function `filter()` is used to select rows in a data frame based on some condition. The condition here is that the `Name` column matches some names; this is implemented with `str_detect()` to detect strings. If `Name` includes the designated strings, they will be filtered and saved in a new object called `my_neighborhood`. Note that you can select just one or several neighborhoods by separating the names with `|`. This reads "Jerome" OR "Kernighan" OR "Crerar" OR "Mewburn" OR "Ryckmans" OR "Barnstown". Any rows one of these names will be filtered.
+```
+
+The neighborhood that we retrieved is also a simple features object, and can be plotted as such:
+```{r}
+ggplot() + # Create blank ggplot object
+  geom_sf(data = my_neighborhood) # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_neighborhood`
+```
+
+Since `my_neighborhood` is a simple features object, we can use many kinds of spatial analysis functions implemented in the `sf` package. For instance, the areas of polygons:
+```{r}
+my_neighborhood %>% # Pass the object `my_neighborhood` to the next function
+  st_area() # The function `st_area()` returns the areas of polygons
+```
+
+The areas of the six polygons are reported. We could combine the polygons and calculate the total area: 
+```{r}
+my_neighborhood %>% # Pass the object `my_neighborhood` to the next function
+  st_combine() %>% # The function `st_combine()` returns a single combined geometry without resolved internal boundaries
+  st_area() # The function `st_area()` returns the areas of polygons
+```
+
+We could even give ourselves a small buffer to extend our neighborhood just beyond the strict boundaries:
+```{r}
+my_neighborhood <- my_neighborhood %>% # Pass the object `my_neighborhood` to the next function
+  st_combine() %>% # The function `st_combine()` returns a single combined geometry without resolved internal boundaries
+  st_buffer(dist = 20) # The function `st_buffer()` creates a buffer of size determined by the argument dist, in this case 20 m
+```
+
+Now that we have selected a neighborhood for our example, we will filter the eateries based on the selected boundaries:
+```{r}
+my_eateries <- hamilton_sustenance %>% # Pass the object `hamilton_sustenance` to the next function
+  st_crop(my_neighborhood) # The function `st_crop()` crops a simple features object based on a second object, in this case `my_neighborhood`
+```
+
+We receive a message that "attribute variables are assumed to be spatially constant throughout all geometries". This is just a friendly reminder of how the function works, and has no impact on what we are doing here. Let us compare the number of eateries in `my_neighborhood` to the number of eateries in the full data set:
+```{r}
+nrow(my_eateries) # Return the number of rows in a table
+nrow(hamilton_sustenance) # Return the number of rows in a table
+```
+
+We have extracted just over two hundred eateries out of more than three thousand. We can plot them, along with the boundaries of the selected neighborhood:
+```{r}
+ggplot() +
+  geom_sf(data = my_neighborhood) + # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_neighborhood
+  geom_sf(data = my_eateries, # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_eateries`
+          aes(color = type, # Map the color of the points to their type
+              shape = type)) # Map the shape of the points to their type
+```
+
+Next, we wish to identify the nodes of the network that are in the selected neighborhood. We will save them in a new object called `my_nodes`:
+```{r}
+my_nodes <- hamilton_graph_local %>% # Pass the hamilton_graph_local object to the next function
+  activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object
+  as_tibble() %>% # Convert to data frame
+  st_as_sf() %>% # Convert to simple features
+  st_crop(my_neighborhood) #%>% # Crop using `my_neighborhood`
+#st_drop_geometry()
+```
+
+We can use these nodes to subset the network, in essence to obtain a sub-graph. We will call this object `my_graph`:
+```{r}
+my_graph <- hamilton_graph_local %>% # Pass the object `hamilton_graph_local` to the next function
+  induced_subgraph(v = my_nodes$nodeID, impl = "copy_and_delete") %>% # Induced subgraph will take the input graph (that is `hamilton_graph_local`) and induce a subgraph that includes only the vertices (i.e., nodes) indicated in the argument; notice that we are passing the `nodeID` (the unique identifiers of the nodes) of our cropped list of nodes. The method for inducing the subgraph is to copy the elements that will be retained, and then deleting the rest.
+  as_tbl_graph() # Convert the graph to a `tbl_graph` object
+```
+
+The following plot shows the different data that we have so far selected: the neighborhood, the network (edges and nodes), and the local eateries:
+```{r}
+ggplot() + 
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(edges) %>%  # Activate the edges of the `tbl_graph` object; After activating the edges, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf()) +
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object; After activating the nodes, the object will behave as an `igraph` or network object
+            as_tibble() %>% # Convert the `igraph` object into a data frame
+            st_as_sf(), # Convert the table into a simple features object
+          shape = 15, # shape = 15 plots points as solid squares
+          size = 1, # Adjust the size of the nodes to reduce over-plotting
+          color = "black") + # make the nodes black
+  geom_sf(data = my_eateries, # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_eateries`
+          aes(color = type, # Map the color of the points to their type
+              shape = type)) # Map the shape of the points to their type
+```
+
+We can see in the preceding figure that, after cropping, there are some isolated nodes and edges that do not connect to the rest of the network. Before going further, we would like to clean up my network to remove those elements. We are helped in this task by the function `components()` from the `igraph` package. A component of a network is a set of elements connected to each other, but not to elements in other sets. Here, we identify the components of `my_graph`:
+```{r}
+my_components <- components(my_graph)
+```
+
+The components are an attribute of the nodes. We see that there are four components:
+```{r}
+my_components$no
+```
+
+To add the information about component membership to our nodes we need to activate them. The function `mutate()` allows us to create new columns to the table:
+```{r}
+my_graph <- my_graph %>% # Pass object `my_graph` to next function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  mutate(component = factor(my_components$membership)) # Use `mutate()` to create a new column with the component membership of the nodes. The membership is a number, but in reality a label, so we will convert it to a factor
+```
+
+Check that the component membership is now in the table:
+```{r}
+my_graph %>% # Pass object `my_graph` to next function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  as_tibble() %>% # Convert to data frame
+  summary() # Obtain a summary of the table
+```
+
+We see that there is a giant component with 448 nodes, and three smaller isolates: one with nine nodes, and two with only one node. Visually inspect the components of `my_graph`:
+```{r}
+ggplot() + # Create a blank ggplot object
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(edges) %>% # Activate the edges of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf()) + # Convert to simple features
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features
+          aes(color = component)) # Map the color of the nodes to the component
+```
+
+We see component two is a small group of nodes and links to the east in the map, and then two isolated nodes at the top. We can filter these isolates:
+```{r}
+my_graph <- my_graph %>% # Pass the object `my_graph` to the following function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  filter(component == 1) # Filter by matching to the component that we wish to retain
+```
+
+If we repeat the plot, it is possible to check that the network now includes only component 1:
+```{r}
+ggplot() + # Create a blank ggplot object
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(edges) %>% # Activate the edges of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf()) + # Convert to simple features
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features
+          aes(color = component)) # Map the color of the nodes to the component
+```
+
+One last item before the network is ready for analysis. We can see that the node IDs and the values in the "from" and "to" columns in the table for the edges do not match - this is a consequence of having removed some elements when we extracted the sub-graph and removed components: 
+```{r}
+my_graph
+```
+
+For example, edge 352 goes from nodes "1" to "2", but the first node in the node table has an ID of "670". To ensure that the values match, we will relabel the nodes starting from 1 again:
+```{r}
+my_graph <- my_graph %>% # Pass the object `my_graph` to the following function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  mutate(nodeID = 1:n()) # Use the function `mutate()` to modify the contents of the column `nodeID`: the new values will be from 1 to the number of rows
+```
+
+Check that the nodes now have their new IDs:
+```{r}
+my_graph
+```
+
+All the preceding data pre-processing is essential to ensure that any analysis done on the network is valid. We can now proceed to investigate some key attributes of the network.
+
+## Degree of nodes and mean degree of a network
+
+An important property of the nodes in a network is their _degree_. The degree is defined as the number of adjacent edges of a node. For undirected graphs, the degree is basically the number of links that connect with the node. For directed graphs, the degree can be the "in" degree (the incoming links), the "out" degree (the outgoing links), or the total degree (the sum of in and out). The degree is calculated using the function `degree()`, and we can add the degree to the nodes portion of our `tbl_graph` object by means of the `mutate()` function:
+```{r}
+my_graph <- my_graph %>% # Pass the object `my_graph` to the following function
+  activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+  mutate(degree = degree(my_graph)) # Use `mutate()` to create a new column for the nodes that will contain the output of the function `degree()`
+```
+
+We can check that property of degree has been added to the nodes:
+```{r}
+my_graph
+```
+
+We can further explore the characteristics of the network, for instance by plotting the degree of the nodes as follows (here it is convenient, although not essential, to convert the degree to a factor for visualization purposes):
+```{r}
+ggplot() + # Create a blank ggplot object
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(edges) %>% # Activate the edges of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf()) + # Convert to simple features
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features
+          aes(color = factor(degree))) # Map the color of the nodes to their degree
+```
+
+Perhaps not surprisingly, given the shape of the network at this more or less suburban location, there are many nodes with degree of 1 (meaning dead ends), many nodes that are three-way intersections (degree = 3), but relatively few four-way intersections. We can gain further insights by exploring the _degree distribution_. For this we can use `ggplot` and `geom_bar()`. Remember to activate the nodes, since the variable that we wish to plot is one of their attributes (but we do not need to convert to `sf` because we will not plot geo-spatial information):
+```{r}
+ggplot() + # Create a blank `ggplot` object
+  geom_bar(data = my_graph %>% # Pass the object `my_graph` to the next function
+             activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+             as_tibble(), # Convert to data frame
+           aes(x = degree)) # Map the degree to the x-axis; the y-axis will be the count of cases
+```
+
+We see that there are almost one hundred dead-ends in this neighborhood, and that most nodes are three-way intersections, whereas there are only about 60 or so four-way intersections.
+
+## Transitivity
+
+Transitivity is a measure of the probability that adjacent nodes of a node are connected. In social network analysis this is described as the probability that my friends are friends between them. In essence, this measures the probability that the smallest possible closed circuits (three nodes that are connected between them) exist. For instance, in the figure below, the network on the left does not form a closed circuit, whereas the network on the right does (i.e., the two "friends" of Node 1 are "friends" between them):
+```{r}
+par(mfrow = c(1, 2))
+plot(graph.atlas(6))
+plot(graph.atlas(7))
+```
+
+Transitivity is a property of the network that influences how well it can withstand disruption. For example, in reference to the network on the left in the figure above, if the link between nodes 1 and 2 is lost, node 2 can no longer reach node 3. On the right, in contrast, even if the link between nodes 1 and 2 is lost, the nodes can still communicate through node 3. 
+
+Put in different terms, transitivity captures a measure of _redundancy_ in the network. If a node is shut down in the actual network (due to a snowstorm, or a computer breakdown, or something else) redundancy means that the probability that the network can still function is higher. Think, by way of contrast, about a hub-and-spoke network: if the hub shuts down then the network loses _all_ connectivity.
+
+To calculate the transitivity of the nodes, we can use the `transitivity()` function. Notice that in the chunk of code below we calculate the _local_ transitivity, which is an attribute of the nodes:
+```{r}
+my_graph <- my_graph %>% # Pass the object `my_graph` to the next function
+  activate(nodes) %>% # Activate the nodes
+  mutate(transitivity = transitivity(my_graph, type = "local")) # Use `mutate()` to create a new column to store the local transitivity
+```
+
+Check that this information has been added to the table:
+```{r}
+my_graph
+```
+
+Plot the transitivity:
+```{r}
+ggplot() + # Create a blank ggplot object
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(edges) %>% # Activate the edges of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf()) + # Convert to simple features
+  geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`
+            activate(nodes) %>% # Activate the nodes of the `tbl_graph` object
+            as_tibble() %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features
+          aes(color = transitivity, # Map the color of the nodes to their transitivity
+              size = transitivity)) + # Map the size of the nodes to their transitivity
+  scale_color_distiller(palette = "YlOrRd", direction = 1) # Use a color palette with yellow-orange-red colors, and the direction indicates that lower values are lighter colors
+```
+
+Notice the message saying that 92 rows were removed: this is because transitivity is not defined for nodes that are dead-ends (degree = 1), since they have only one friend! We can also calculate the _global_ transitivity. The global transitivity is the proportion of closed circuits that exist in the network to the total possible of closed circuits in a fully connected network:
+```{r}
+my_graph %>% # Pass `my_graph` object to next function
+  transitivity(type = "global") # Calculate global transitivity
+```
+
+This tells us that less than 10% (9.63%) of all possible circuits are present in this network. Below, we create a fully connected network with the same number of nodes as `my_graph` and calculate the transitivity:
+```{r}
+my_graph %>% # Pass `my_graph` object to next function
+  activate(nodes) %>% # Activate the nodes
+  as_tibble() %>% # Convert to table
+  nrow() %>% # Retrieve the number of rows (i.e., number of nodes) and pass on to next function
+  make_full_graph(directed = FALSE) %>% # Create a fully connected undirected graph and pass to next function
+  transitivity(type = "global") # Calculate the global transitivity
+```
+
+As expected, the global transitivity of a fully connected graph is 1: every possible three-node circuit is present. This means that there is a _lot_ of redundancy. It is also expensive to build and maintain all the links needed for a fully connected graph!
+
+## Shortest paths
+
+As you saw before, the length of the links is one attribute in the table of edges. This is an important property of the links because it can be directly related to the cost of movement, either directly as distance, or through some transformation to time, or money, etc.
+
+In this example, we will _mutate_ the lengths to travel times by foot, assuming a walking speed of 5.0 km/h (or 84 m/min):
+```{r}
+my_graph <- my_graph %>% # Pass the object `my_graph` to the next function
+  activate(edges) %>% # Activate the nodes
+  mutate(time = length/set_units(84, "m/min")) # Use `mutate()` to create a new column to store travel time for the link as length/speed; `set_units()` specifies the units of the speed constant, and ensures that the calculation returns the appropriate units
+
+my_graph
+```
+
+The table now contains the length of the links in meters, as well as the travel time in minutes.
+
+Shortest paths are calculated using one of several algorithms that identify the cost of movement on the network. To show how this works, we need to select a node of origin for the movement, and a node of destination. Frequently these points (origin and destination) are not actual nodes in the network. With some more processing we could split a link at the desired location and create a node there. Here, we will instead identify the closest node to an address. We will define two sample addresses in `my_neighborhood`, and geocode them using `geocode_OSM()`, which uses Open Street Maps for this task:
+```{r}
+my_address_1 <- tmaptools::geocode_OSM("33 Bridgette Drive, Hamilton, Ontario")$coords # Geocode address using `geocode_OSM()` and extract the coordinates; the coordinates are latitude and longitude
+
+my_address_1 <- data.frame(x = my_address_1[1], y= my_address_1[2]) %>% # Convert the coordinates to a data frame
+  st_as_sf(coords = c("x", "y"), crs = 4326) %>% # Convert to simple features; specify the coordinate reference system (crs) as 4326, the code for latitude and longitude
+  st_transform(crs = 32617) # Transform the coordinate reference system to UTM so that the address has the same projection as our other spatial objects
+
+my_address_2 <- tmaptools::geocode_OSM("4 Tevere Pl, Hamilton, Ontario")$coords # Geocode address using `geocode_OSM()` and extract the coordinates; the coordinates are latitude and longitude
+
+my_address_2 <- data.frame(x = my_address_2[1], y= my_address_2[2]) %>% # Convert the coordinates to a data frame
+  st_as_sf(coords = c("x", "y"), crs = 4326) %>% # Convert to simple features; specify the coordinate reference system (crs) as 4326, the code for latitude and longitude
+  st_transform(crs = 32617) # Transform the coordinate reference system to UTM so that the address has the same projection as our other spatial objects
+```
+
+Bind the two addresses into a single object, and label them as "origin" and "destination":
+```{r}
+my_addresses <- rbind(my_address_1,
+                      my_address_2) %>% # Bind the two addresses and pass on to the next function
+  mutate(type = c("origin", "destination")) # Use `mutate()` to create a new column with the type of address; the first one is the origin, the second the destination
+```
+
+Plot addresses:
+```{r}
+ggplot() +
+  geom_sf(data = my_graph %>%
+            activate(edges) %>%
+            as_tibble %>%
+            st_as_sf(),
+          color = "darkgray") +
+  geom_sf(data = my_addresses, 
+          color = "red",
+          size = 2,
+          aes(shape = type))
+```
+
+Since the nodes of the network and the addresses are simple features objects, again we can use a `sf` function to match each address to their nearest node in the network, with the function `st_nearest_feature()`. We will save the output in an object called `my_nearest_nodes`: 
+```{r}
+my_nearest_nodes <- st_nearest_feature(my_addresses, # The first argument of the function `st_nearest_feature()` is the object `my_addresses()`
+                   my_graph %>% # The second argument of the function `st_nearest_feature()` is the nodes of the network, so we need to activate them
+                     activate(nodes) %>% # Activate the nodes
+                     as_tibble() %>% # Convert to data frame
+                     st_as_sf()) # Convert to simple features for use with `sf` functions
+my_nearest_nodes
+```
+
+We see that the nearest nodes to our sample addresses are nodes 100 (origin) and157 (destination).
+
+Now that we have a node of origin and a node of destination (which approximate the addresses we want), we can calculate the shortest path between them, using the `igraph` function `shortest_paths()`. The arguments (inputs) for this function are a network, a node (or nodes) of origin, a node (or nodes) of destination, the output for the shortest path(s) (nodes, edges, both), and the weights for the calculation of the shortest paths. Here we will use time as the measure of cost:
+```{r}
+my_path <- shortest_paths(graph = my_graph, # Use function `shortest_paths()` and save output to object `my_path()`; the network is `my_graph`
+                          from = my_nearest_nodes[1], # The origin is the first of `my_nearest_nodes`
+                          to = my_nearest_nodes[2], # The destination is the second of `my_nearest_nodes`
+                          output = 'both', # The output will include the nodes and the edges
+                          weights = my_graph %>% # The weights will be values stored in `my_graph`
+                            activate(edges) %>%  # Activate the edges
+                            pull(time)) # Pull the column with travel times from the table of edges
+
+my_path$vpath
+my_path$epath
+```
+
+We see that the shortest path passes through 14 out of 466 nodes in the network, beginning at node 100 and ending and node 15. It also passes through 13 of 601 edges. 
+
+The object `my_path` is a `tbl_graph` that inherits all attributes from the original network:
+```{r}
+my_path <- my_graph %>%
+  induced_subgraph(v = my_path$vpath %>% 
+                     unlist(), # Induced subgraph will take the input graph (that is `my_graph`) and induce a subgraph that includes only the vertices (i.e., nodes) indicated in the argument; notice that we are passing the nodes of our shortest path (after unlisting)
+                   impl = "copy_and_delete") %>%  # The method for inducing the subgraph is to copy the elements that will be retained, and then deleting the rest.
+  as_tbl_graph() # Convert the graph to a `tbl_graph` object
+```
+
+How long does it take to travel from the origin to the destination? We can calculate this as follows:
+```{r}
+my_path %>% # Pass object `my_path` to next function
+  activate(edges) %>% # Activate the edges
+  pull(time) %>% # Pull the column with travel times from the data frame
+  sum() # Sum the values in column time
+```
+
+We estimate that it takes almost 17 minutes to travel from 33 Bridgette Drive to 4 Tevere Pl, assuming a walking speed of 5 km/h.
+
+In the following chunk we plot the shortest path between the origin and the destination:
+```{r}
+ggplot() + # Create blank `ggplot` object
+  geom_sf(data = my_graph %>% # Plot the edges of the network
+            activate(edges) %>% 
+            as_tibble() %>% 
+            st_as_sf(), 
+          col = 'darkgrey') +
+  geom_sf(data = my_path %>% # Plot the edges of the shortest path
+            activate(edges) %>% 
+            as_tibble() %>% 
+            st_as_sf(), 
+          lwd = 1,
+          col = 'firebrick') +
+  geom_sf(data = my_addresses, # Plot the addresses
+          color = "red",
+          size = 2,
+          aes(shape = type)) # Map the shape of the points to their types
+```
+
+The algorithm ensures that no alternative path will take less time to travel between the designated origin and destination.
+
+## Diameter
+
+The shortest-path cost can be calculated between every origin and destination of a network by means of the `igraph` function `distances()`:
+```{r}
+my_distances <- distances(graph = my_graph, # Calculate shortest path costs between all origins and destinations in `my_graph`
+                         weights = my_graph %>% # The weights will be the travel times for the links; activate the edges
+                           activate(edges) %>% 
+                           pull(time)) # Pull the time column with travel times from the table of edges 
+
+my_distances[1:6, 1:6] # Print the first 6 rows and 6 columns of the resulting matrix
+```
+
+The matrix with the shortest path travel times by convention has zeros on the diagonal (i.e., node 1 to 1, node 2 to 2, and so on), because in principle the travel time needed to go from a node to itself is zero (although this may change if the node represents an area, as opposed to an intersection!). Other values are travel times between nodes. For instance, travel between node 3 and node 1 takes 14.22 minutes. The cost of travel in this network can be summarized by looking at the distribution of shortest path travel times:
+```{r}
+data.frame(time = as.vector(my_distances)) %>% # Convert `my_distances` to a vector and store as time in a data frame
+  ggplot(aes(x = time)) + # Create a `ggplot` object with time mapped to the x-axis
+  geom_histogram(binwidth = 1) # Plot a histogram; the y-axis is the count of cases by travel time, the binwidth is one minute
+```
+
+We see that in this network, there are almost 8,000 origin destination pairs with travel times between them of approximately 22 minutes. The most distant origins and destinations in this neighborhood require more than 50 minutes of travel between them. This latter quantity is of interest, and is called the _diameter_ of the network. The diameter of a network is analog to the diameter of a circle, and represents the _longest shortest path_ in a network.
+
+The diameter of a network can be readily obtained by means of the `igraph::diameter` function as follows:
+```{r}
+my_diameter <- my_graph %>%
+  diameter(weights = my_graph %>%
+             activate(edges) %>%
+             as_tibble() %>%
+             pull(time))
+my_diameter
+```
+
+The shortest travel time between the two most distant nodes in this network is 51.77 minutes, and the two nodes are 435 and 138:
+```{r}
+my_diameter_nodes <- which(my_distances == my_diameter, arr.ind = TRUE) # Which row and column values in `my_distances` are equal to `my_diameter`?
+my_diameter_nodes
+```
+
+Plot the two nodes that define the diameter of the network:
+```{r}
+ggplot() + # Create blank `ggplot` object
+  geom_sf(data = my_graph %>% # Plot the edges of the network
+            activate(edges) %>% 
+            as_tibble() %>% 
+            st_as_sf(), 
+          col = "darkgrey") +
+  geom_sf(data = my_graph %>% # Plot the nodes of the shortest path
+            activate(nodes) %>%
+            as_tibble() %>% 
+            st_as_sf() %>%
+            slice(c(my_diameter_nodes[1, 1], # Slice the table to extract only those two rows for plotting
+                    my_diameter_nodes[1, 2])),  
+          size = 2, # Size of nodes for plotting
+          col = "red") # Color of nodes for plotting
+```
+
+## Centrality: Betweenness
+
+Shortest paths and distances in a network are important to understand the concept of _betweenness_. Betweenness belongs to a family of network measures that aim at quantifying the _centrality_ of elements of the network, that is, how important the elements are. 
+
+As we saw above, the shortest path is the least expensive way of connecting two nodes in a network. Imagine now that we calculated the shortest path from node 1 to node 2, and then from node 1 to node 3, to node 4, and so on, until we have shortest paths from node 1 to every other node in the network. Many of those paths will have overlap in terms of the edges that they use, and the more frequently the edges overlap, the more important the edge will be. The more often an edge is part of a shortest path, the more it helps to reach destinations from node 1 in the more inexpensive way!
+
+Next, imagine that we do the same thing, but now starting from node 2. It is possible that some of the edges in the shortest paths from node 2 are the same used by node 1. This will increase their importance: those edges help node 1 reach destinations at the lowest possible cost, and _also_ help node 2 reach destinations at the lowest possible cost.
+
+If we do this for all nodes in the network, we can quantify the number of times an element in the network is part of a shortest path. The more frequently it is, the higher its "betweenness" (for being and element between origins and destinations).
+
+Betweenness is a property of nodes and of links, and can be calculated using the functions `centrality_betweenness()` (for nodes) and `centrality_edge_betweenness()` for links. In this chunk we calculate the betweenness of nodes and links, and use `mutate()` to add it to their respective tables:
+```{r}
+my_graph <- my_graph %>% # Pass the object `my_graph` to the next function
+  activate(nodes) %>% # Activate the nodes
+  mutate(betweenness = centrality_betweenness(weights = time)) %>% # Calculate the betweenness of nodes and use `mutate()` to create a new column to store this attribute of the nodes; use the travel time on edges as the measure of cost when calculating the shortest paths
+  activate(edges) %>% # Next activate the edges of the `tbl_graph` object
+  mutate(betweenness = centrality_edge_betweenness(weights = time)) # Calculate the betweenness of links and use `mutate()` to create a new column to store this attribute of the edges; use the travel time on edges as the measure of cost when calculating the shortest paths
+
+my_graph
+```
+
+We see that the columns for betweenness are now in the tables. We can plot the betweenness of the nodes:
+```{r}
+ggplot() + # Create a blank `ggplot` object
+  geom_sf(data = my_graph %>% # Use `geom_sf()` to plot a simple features object, in this case `my_graph`
+            activate(edges) %>% # Activate the edges for plotting
+            as_tibble %>% # Convert to data frame
+            st_as_sf(), # And convert to simple features to plot as geo-spatial information
+          color = "darkgray") + # Plot the links in dark gray
+  geom_sf(data = my_graph %>% # Add another geom
+            activate(nodes) %>% # Activate the nodes for plotting
+            as_tibble %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features to plot as geo-spatial information
+          aes(color = betweenness, # Make the color of the nodes a function of their betweenness
+              size = betweenness)) + # Make the size of the nodes a function of their betweenness
+  scale_color_distiller(palette = "YlOrRd", direction = 1) + # Use a yellow-orange-red color palette 
+  scale_size(range = c(1, 3)) # Set the range of sizes for the nodes
+```
+
+Since the network has 466 nodes in a single component (we removed the isolates), this means that there is a total of:
+```{r}
+466 * (466 - 1)
+```
+
+216,690 shortest paths in the system (connecting each 466 nodes to every other node in the network except itself). Notice that the node in the intersection near the center of the plot has a betweenness value of approximately 30,000, or to be precise:
+```{r}
+my_graph %>% # Pass `my_graph` to next function
+  activate(nodes) %>% # Activate the nodes
+  as_tibble() %>% # Convert to data frame
+  pull(betweenness) %>% # Pull the column with the betweenness values from the data frame
+  summary() # Produce a summary of the node betweenness
+```
+
+The node has a betweenness of 27,465. This means that 27,465 shortest paths pass through that node, or alternatively:
+```{r}
+27465/216690
+```
+
+Approximately 12.7% of all shortest paths in this network pass through that node; removing it would certainly lead to major changes in the way the network functions!
+
+Here, we will interdict the node with the highest betweenness (imagine for instance that the intersection is hit by a meteorite, or closed for maintenance, or taken by a protest against Hawaiian pizza). We simulate this interdiction by filtering all nodes with betweenness values _less than_ the maximum betweenness:
+```{r}
+my_interdicted_graph <- my_graph %>%
+  activate(nodes) %>%
+  filter(betweenness < 27465)
+
+my_interdicted_graph
+```
+
+Notice that this network has 465 nodes (instead of 466) and 597 links (instead of 601), since the links connected to the interdicted node are lost too. Plot the interdicted network:
+```{r}
+ggplot() + # Create blank `ggplot` object
+  geom_sf(data = my_graph %>% # Plot the edges of the original network
+            activate(edges) %>% # Activate the edges
+            as_tibble() %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features to plot geo-spatial information
+          size = 0.9, # Adjust the size of the lines in the plot
+          col = "red", # Plot the original network in red
+          linetype = "dotted") + # Plot the original network using dotted lines
+  geom_sf(data = my_interdicted_graph %>% # Plot the edges of the interdicted network
+            activate(edges) %>% # Activate the edges
+            as_tibble() %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features to plot geo-spatial information
+          size = 1, # Adjust the size of the lines in the plot 
+          col = "black") # Plot the original network in black
+```
+
+Note how we lost a chunk of the network: the red dotted lines are the links lost when the node at the intersection was interdicted. How does this affect the functioning of the network? The answer depends on how people actually _use_ the network. Without further information, we can consider the travel time that we calculated for all shortest paths as an indicator of _mobility_ (the potential for movement). Imagine that exactly one person travels from each origin to each destination in the original network. How much time would be spent traveling? That would be the sum of all travel times:
+```{r}
+my_distances %>% # Pass the matrix with shortest path travel times to the next function
+  as.vector() %>% # Convert to vector
+  set_units("min") %>% # Set units to minutes
+  set_units("h") %>% # Convert minutes to hours
+  sum() # Sum all values
+```
+
+The total travel time if one person traveled from each origin to each destination in the original network would be over 82,000 hours. How would this change in the interdicted network? To compare we need to calculate a new distance matrix, but now using the interdicted network:
+```{r}
+my_interdicted_distances <-  my_interdicted_graph %>%
+  distances(# Calculate shortest path costs between all origins and destinations in `my_graph`
+                         weights = my_interdicted_graph %>% # The weights will be the travel times for the links; activate the edges
+                           activate(edges) %>% 
+                           pull(time)) # Pull the time column with travel times from the table of edges 
+
+my_interdicted_distances[1:6, 1:6]
+```
+
+The total travel time in the interdicted network is:
+```{r}
+my_interdicted_distances %>% # Pass the matrix with shortest path travel times to the next function
+  as.vector() %>% # Convert to vector
+  set_units("min") %>% # Set units to minutes
+  set_units("h") %>% # Convert minutes to hours
+  sum() # Sum all values
+```
+
+It is clear that the network does not function as well as it did before the interdiction: the cost of reaching destinations in general has gone up, to more than 83,400 hours. This is an increase of about 6% in travel time:
+```{r}
+(87113.28 - 82112.5)/82112.5 * 100
+```
+
+Betweenness is also an attribute of the links, and the idea is analogous: the number of shortest paths that pass through a link. Here we plot the betweenness of the links:
+```{r}
+ggplot() + # Create a blank `ggplot` object
+  geom_sf(data = my_graph %>% # Use object `my_graph` and `geom_sf()` to plot the network as geo-spatial information
+            activate(edges) %>% # Activate the edges of the network
+            as_tibble %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features
+          aes(color = betweenness, # Make the color of the links a function of their betweenness
+              size = betweenness)) + # Make the size of the links a function of their betweenness
+  scale_color_distiller(palette = "YlOrRd", direction = 1) + # Use a yellow-orange-red color palette for the color of the links 
+  scale_size(range = c(1, 3))
+```
+
+The most important links in this network are the ones directly associated with the most important intersection, and other links leading to that intersection. Let us repeat the plot, but we will add the restaurants in `my_neighborhood`:
+```{r}
+ggplot() + # Create a blank `ggplot` object
+  geom_sf(data = my_graph %>% # Use object `my_graph` and `geom_sf()` to plot the network as geo-spatial information
+            activate(edges) %>% # Activate the edges of the network
+            as_tibble %>% # Convert to data frame
+            st_as_sf(), # Convert to simple features
+          aes(color = betweenness, # Make the color of the links a function of their betweenness
+              size = betweenness)) + # Make the size of the links a function of their betweenness
+  scale_color_distiller(palette = "YlOrRd", direction = 1) + # Use a yellow-orange-red color palette for the color of the links 
+  scale_size(range = c(1, 3)) + # Adjust the range of sizes of the links
+  geom_sf(data = my_eateries, # Use object `my_eateries` and `geom_sf()` to add a layer of restaurants etc., to the plot
+          size = 1, # Adjust the size of the points
+          aes(shape = type)) # Make the shape of the points a function of the type of eatery 
+```
+
+Here we see that restaurants and other types of eateries in `my_neighborhood` are not necessarily near the most important intersections or along the most important links. Remember that we calculated the betweenness of the elements of the network assuming walking. What does this tell us about walking accessibility in this neighbourhood? It is quite possible that the local accessibility by walking here is low. On the other hand, it is possible that the placement of restaurants and eateries here does not cater to people who travel by foot, but rather who drive or use transit. In this way, the regional accessibility of the restaurants and eateries on that avenue could be high, even when the local walking accessibility is low.
