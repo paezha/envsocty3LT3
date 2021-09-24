@@ -39,7 +39,7 @@ In this exercise, you will build on the geo-spatial analysis skills that you dev
     + Reading-3 ('Network Analysis in R', available as a template in your course package)
 * Due date:	See course outline for due date.
 * Materials: the following data objects are used in this exercise (available in your course package)
-    + `hamilton_graoh`
+    + `hamilton_graph`
     + `hamilton_neighborhoods`
     + `hamilton_sustenance`
 

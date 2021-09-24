@@ -121,7 +121,7 @@ The types of edges (primary, residential, etc.) are defined by OpenStreetMaps. Y
 We can also activate and plot the nodes:
 ```{r}
 ggplot() + # Create blank ggplot object
-  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph`
             activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object; After activating the nodes, the object will behave as an `igraph` or network object
             as_tibble() %>% # Convert the `igraph` object into a data frame
             st_as_sf()) # Convert the table into a simple features object
@@ -130,12 +130,12 @@ ggplot() + # Create blank ggplot object
 Putting it all together, the following chunk plots the edges and the nodes together (remember that `ggplot2` as a grammar of graphics approach to creating plots allows us to add layers to a plot):
 ```{r}
 ggplot() + # Create blank ggplot object
-  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph`
             activate(edges) %>%  # Activate the edges of the `tbl_graph` object; After activating the edges, the object will behave as an `igraph` or network object
             as_tibble() %>% # Convert the `igraph` object into a data frame
             st_as_sf(), # Convert the table into a simple features object
           aes(color = highway)) + # Map the color of the lines to the type of the highway
-  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph`
             activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object; After activating the nodes, the object will behave as an `igraph` or network object
             as_tibble() %>% # Convert the `igraph` object into a data frame
             st_as_sf(), # Convert the table into a simple features object
@@ -152,11 +152,11 @@ hamilton_motorways <- hamilton_graph %>%
   filter(highway == "motorway" | highway == "motorway_link")
 ```
 
-We can verify that the graph is much smallerr, since it includes only major highways:
+We can verify that the graph is much smaller, since it includes only major highways:
 ```{r}
 hamilton_motorways
 ```
-Then, we use this  creates a buffer around motorways. The resulting object, which we call `motorway_buffers` is no longer a graph, but a simple features object:
+Then, we use this chuck of codes that creates a buffer around motorways. The resulting object, which we call `motorway_buffers` is no longer a graph, but a simple features object:
 ```{r}
 motorway_buffers <- hamilton_motorways %>% # Take object `hamilton_motorways` and pass it to the next function
   activate(edges) %>% # Activate the edges of the `tbl_graph` object
@@ -180,7 +180,7 @@ ggplot() + # Create a blank `ggplot` object
 The next object that we will inspect is the neighborhoods. The `hamilton_neighborhoods` is also a simple features object with the boundaries of the traditional neighborhoods in Hamilton. We can plot these boundaries as follows:
 ```{r}
 ggplot() + # Create blank ggplot object
-  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph_local`
+  geom_sf(data = hamilton_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_graph`
             activate(edges) %>%  # Activate the edges of the `tbl_graph` object; After activating the edges, the object will behave as an `igraph` or network object
             as_tibble() %>% # Convert the `igraph` object into a data frame
             st_as_sf(), # Convert the table into a simple features object
@@ -205,7 +205,7 @@ The different types of amenities (bar, cafe, etc.) are defined by OpenStreetMaps
 Since `hamilton_sustenance` is a simple features object we can also plot them as geo-spatial information:
 ```{r}
 ggplot() + # Create blank ggplot object
-  geom_sf(data = hamilton_sustenance, # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_eateries`
+  geom_sf(data = hamilton_sustenance, # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `hamilton_sustenance`
           aes(color = type, # Map the color of the points to their type
               shape = type)) # Map the shape of the points to their type
 ```
@@ -334,7 +334,7 @@ my_graph %>% # Pass object `my_graph` to next function
   summary() # Obtain a summary of the table
 ```
 
-We see that there is a giant component with 448 nodes, and three smaller isolates: one with nine nodes, and two with only one node. Visually inspect the components of `my_graph`:
+We see that there is a giant component with 466 nodes, and three smaller isolates: one with nine nodes, and two with only one node. Visually inspect the components of `my_graph`:
 ```{r}
 ggplot() + # Create a blank ggplot object
   geom_sf(data = my_graph %>% # To plot a `sf` object we use `geom_sf()`, and for this plot we want to use `my_graph`

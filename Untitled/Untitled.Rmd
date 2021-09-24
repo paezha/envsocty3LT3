@@ -1,0 +1,116 @@
+---
+title: "Exercise 2: Geographic information for transportation analysis"
+author:
+  # Enter your name and student number here:
+- name: My Name
+  student_number: 123456789
+subject: "ENVSOCTY 3LT3 Transportation Geography"
+
+# In the highlights you are asked to reflect about your learning experience while working on this exercise. This section is worth 10 marks.
+highlights: |
+    After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
+    
+    You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words.
+    
+# Write the concepts that in your opinion are threshold concepts in this exercise. A threshold concept is a key idea that once you grasp it, it changes your understanding of a topic, phenomenon, subject, method, etc. Write between three and five threshold concepts that apply to your learning experience working on this exercise. This section is worth 5 marks.
+threshold_concepts: 
+- threshold concept 1
+- threshold concept 2 
+- threshold concept 3
+- threshold concept 4
+
+# Do not edit below this line unless you know what you are doing
+# --------------------------------------------------------------
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
+    # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+    # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
+    template: exercise-template-default.tex
+always_allow_html: true
+---
+
+# Introduction
+
+In this exercise, you will use the geospatial visualization capabilities available in `R` to analyze trends pertaining to travel in the Hamilton Census Metropolitan Area (CMA). The objective of the exercise is to practice skills displaying and manipulating spatial information, to demonstrate the ability to analyze spatial data, and to gain a better understanding of transportation trends in this metropolitan area surrounding McMaster University. These skills will give you an opportunity to explore different ways in which data from the Transportation Tomorrow Survey can be useful for transportation decisions.
+
+* Before working on this exercise, it is strongly recommended that you have completed one reading.
+    + Reading-2 ('Geospatial Visualization for Transportation Trends using R', available as a template in your course package)
+* Due date:	See course outline for due date.
+* Materials: the following data objects are used in this exercise (available in your course package)
+    + `hamilton_demo_taz`
+    + `hamilton_taz`
+    + `hamilton_trips_mode`
+    + `hamilton_trips_purpose`
+    + `travel_cost_car`
+
+# Instructions
+
+Change the name of the file to `exercise-2-studentnumber.Rmd`. 
+
+Provide your answers by typing them in this R Markdown document. Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. Remember to write the highlights of this exercise and the threshold concepts in the header section where you entered your personal information!
+
+When you are done working on this exercise, _knit_ the file to create the pdf file for submission.
+
+# Preliminaries
+
+Again, you want to clear the working space to make sure that you do not have extraneous items there when you begin your work. The command in R to clear the work space is `rm` (for "remove"), followed by a list of items to be removed. To clear the work space from _all_ objects, do the following:
+```{r}
+rm(list = ls())
+```
+
+Begin by loading the packages that you will need for this exercise. Make sure that the packages are installed before trying to load them with `library()`. 
+```{r}
+library(envsocty3LT3) # Course package
+library(sf) # Package for working with geospatial information
+library(tidyverse) # Package for data carpentry and data analysis
+```
+
+Load the data objects that you will need for this exercise:
+```{r}
+data("hamilton_demo_taz")
+data("hamilton_taz")
+data("hamilton_trips_mode")
+data("hamilton_trips_purpose")
+data("travel_cost_car")
+```
+
+You can consult the documentation of these data objects by going to their help file (e.g., `?hamilton_demo_taz`).
+
+# Context
+
+Data about urban and rural travel are needed to inform transportation planning decisions at the local and regional levels. The survey data collected by the Transportation Tomorrow Survey (TTS) every five years include [information](http://www.tts2016.ca/en/survey-questions.php) about the household, all people living in the household, and all trips made by each person 11 years or older on the previous day. Data from the TTS are then used to forecast transportation trends and demand, and to identify future investments for transportation infrastructure.
+
+In the case of Hamilton, the [City-Wide Transportation Master Plan](https://www.hamilton.ca/sites/default/files/media/browser/2018-10-24/tmp-review-update-final-report-oct2018.pdf) highlights different ways in which data from the TTS have been used to inform transportation planning decisions. As an example, look at Figure 2.2. on page 149 which shows a decline in the number of people between the ages of 16 and 25 who possess a driver's license in Hamilton between 1996 and 2011. 
+
+As noted in the Plan, "Municipalities use data from the TTS to gain a better understanding of travel patterns. It also allows them to monitor these patterns temporally. Using TTS allows municipalities to monitor their modal split providing goals for multimodal diversification and identify route flow in support of target improvement" [page 149](https://www.hamilton.ca/sites/default/files/media/browser/2018-10-24/tmp-review-update-final-report-oct2018.pdf). Hamilton's 4-stage transportation model, which was used to guide the City-Wide Transportation Master Plan adopted in 2018, made use of data from the 2011 TTS.
+
+# Questions
+
+## Transportation Trends in Hamilton (85 marks)
+
+1.	What was the total population of the Hamilton CMA in 2011? What was the total number of trips by Car as driver and Car as passenger? What is the overall total number of trips made by Car? (15 marks)
+
+
+2.	How many zones did not produce any trips by bicycle according to the TTS? (10 marks)
+
+
+3.	Calculate for each Traffic Analysis Zone the proportion of trips made by Car (as passenger) with respect to the total number of trips by all modes. Next, calculate the proportion of walking trips with respect to the total number of trips. Attach the results to your data frame for further analysis. (10 marks)
+
+
+4.	Create a thematic map to show the proportion of: 1) trips by Car as driver and 2) Walking trips across TAZ in the Hamilton CMA. (20 marks)
+
+5.  Create a thematic map showing population density in the Hamilton CMA. Do a simple linear regression and explain what it says about the relationship between population density and travel by  walking. (10 marks)
+
+
+6.	Read the file with the information about travel time/distance by car from TAZ centroids to Jackson Square in downtown Hamilton, and attach it to your data frame. Create a thematic map showing travel time in minutes. How does the proportion of travel by car compare to travel time to downtown Hamilton? (10 marks)
+
+
+7A.	Create a scatterplot to visualize the relationship between the proportion of trips by car as driver versus population density. What relationship do you see? (10 marks)
+
+
+7B. Estimate a regression model with the proportion of trips as the dependent variable and population density and travel time as independent variables. What are the relationships between these variables? What would be the implications of a general increase in travel times, for instance as a consequence of congestion, for travel by car? Discuss. (10 marks)
+
+
+8. Create a scatterplot to visualize the relationship between the proportion of trips by bicycle versus population density. What relationship do you see? Does this seem related to the relationship between car driving and population density? (10 marks)
