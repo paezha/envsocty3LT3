@@ -157,45 +157,45 @@ used by the Transportation Tomorrow Survey in the Greater Toronto and Hamilton A
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_ph</span><span class='op'>)</span>
  <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>hamilton_taz_ph</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     GTA06             population      drivers        vehicles   
-#&gt;  Length:297         Min.   :   0   Min.   :   0   Min.   :   0  
-#&gt;  Class :character   1st Qu.:   0   1st Qu.:   0   1st Qu.:   0  
-#&gt;  Mode  :character   Median :1103   Median : 799   Median : 673  
-#&gt;                     Mean   :1734   Mean   :1184   Mean   :1063  
-#&gt;                     3rd Qu.:2960   3rd Qu.:2008   3rd Qu.:1780  
-#&gt;                     Max.   :8762   Max.   :5766   Max.   :5203  
-#&gt;                                                                 
-#&gt;    ft_workers       pt_workers       median_age     pop_density     
-#&gt;  Min.   :   0.0   Min.   :   0.0   Min.   :17.00   Min.   :    0.0  
-#&gt;  1st Qu.:   0.0   1st Qu.:   0.0   1st Qu.:36.75   1st Qu.:    0.0  
-#&gt;  Median : 460.0   Median :  88.0   Median :42.00   Median :  388.1  
-#&gt;  Mean   : 690.8   Mean   : 193.2   Mean   :44.18   Mean   : 1815.4  
-#&gt;  3rd Qu.:1179.0   3rd Qu.: 318.0   3rd Qu.:52.00   3rd Qu.: 2940.9  
-#&gt;  Max.   :3300.0   Max.   :1240.0   Max.   :85.00   Max.   :24390.0  
-#&gt;                                    NA's   :89                       
+</div><div class='output co'>#&gt;     GTA06             population       drivers        vehicles   
+#&gt;  Length:297         Min.   :    0   Min.   :   0   Min.   :   0  
+#&gt;  Class :character   1st Qu.:  570   1st Qu.: 427   1st Qu.: 430  
+#&gt;  Mode  :character   Median : 2063   Median :1409   Median :1279  
+#&gt;                     Mean   : 2413   Mean   :1682   Mean   :1535  
+#&gt;                     3rd Qu.: 3536   3rd Qu.:2357   3rd Qu.:2255  
+#&gt;                     Max.   :13586   Max.   :9779   Max.   :8995  
+#&gt;                                                                  
+#&gt;    ft_workers       pt_workers       median_age     pop_density      
+#&gt;  Min.   :   0.0   Min.   :   0.0   Min.   :17.00   Min.   :    0.00  
+#&gt;  1st Qu.: 212.0   1st Qu.:  44.0   1st Qu.:38.00   1st Qu.:   85.34  
+#&gt;  Median : 798.0   Median : 190.0   Median :43.00   Median : 1561.20  
+#&gt;  Mean   : 976.8   Mean   : 266.7   Mean   :44.78   Mean   : 2164.80  
+#&gt;  3rd Qu.:1407.0   3rd Qu.: 393.0   3rd Qu.:52.00   3rd Qu.: 3328.21  
+#&gt;  Max.   :6361.0   Max.   :1699.0   Max.   :85.00   Max.   :24390.05  
+#&gt;                                    NA's   :24                        
 #&gt;      House          Apartment        Townhouse      total_dwellings 
-#&gt;  Min.   :   0.0   Min.   :   0.0   Min.   :  0.00   Min.   :206955  
-#&gt;  1st Qu.:   0.0   1st Qu.:   0.0   1st Qu.:  0.00   1st Qu.:206955  
-#&gt;  Median : 227.0   Median :   0.0   Median :  0.00   Median :206955  
-#&gt;  Mean   : 422.1   Mean   : 191.9   Mean   : 82.92   Mean   :206955  
-#&gt;  3rd Qu.: 786.0   3rd Qu.: 134.0   3rd Qu.: 75.00   3rd Qu.:206955  
-#&gt;  Max.   :1899.0   Max.   :2631.0   Max.   :940.00   Max.   :206955  
+#&gt;  Min.   :   0.0   Min.   :   0.0   Min.   :   0.0   Min.   :286744  
+#&gt;  1st Qu.: 140.0   1st Qu.:   0.0   1st Qu.:   0.0   1st Qu.:286744  
+#&gt;  Median : 482.0   Median :  28.0   Median :   0.0   Median :286744  
+#&gt;  Mean   : 578.3   Mean   : 255.8   Mean   : 131.4   Mean   :286744  
+#&gt;  3rd Qu.: 873.0   3rd Qu.: 275.0   3rd Qu.: 168.0   3rd Qu.:286744  
+#&gt;  Max.   :3139.0   Max.   :2631.0   Max.   :1432.0   Max.   :286744  
 #&gt;                                                                     
 #&gt;  median_household_size  Inc_less_15k    Inc_15k_to_40k   Inc_40k_to_60k 
 #&gt;  Min.   :1.000         Min.   :  0.00   Min.   :   0.0   Min.   :  0.0  
-#&gt;  1st Qu.:2.000         1st Qu.:  0.00   1st Qu.:   0.0   1st Qu.:  0.0  
-#&gt;  Median :2.000         Median :  0.00   Median :  28.0   Median : 48.0  
-#&gt;  Mean   :2.327         Mean   : 39.48   Mean   : 121.3   Mean   :105.5  
-#&gt;  3rd Qu.:3.000         3rd Qu.: 34.00   3rd Qu.: 172.0   3rd Qu.:177.0  
-#&gt;  Max.   :5.000         Max.   :744.00   Max.   :1247.0   Max.   :638.0  
-#&gt;  NA's   :89                                                             
+#&gt;  1st Qu.:2.000         1st Qu.:  0.00   1st Qu.:  13.0   1st Qu.: 18.0  
+#&gt;  Median :2.000         Median :  0.00   Median :  83.0   Median : 96.0  
+#&gt;  Mean   :2.304         Mean   : 45.75   Mean   : 149.2   Mean   :139.5  
+#&gt;  3rd Qu.:3.000         3rd Qu.: 55.00   3rd Qu.: 214.0   3rd Qu.:208.0  
+#&gt;  Max.   :5.000         Max.   :744.00   Max.   :1247.0   Max.   :726.0  
+#&gt;  NA's   :24                                                             
 #&gt;  Inc_60k_to_100k Inc_100k_to_125k Inc_more_125k    Inc_decline_dk  
-#&gt;  Min.   :  0     Min.   :  0.00   Min.   :  0.00   Min.   :   0.0  
-#&gt;  1st Qu.:  0     1st Qu.:  0.00   1st Qu.:  0.00   1st Qu.:   0.0  
-#&gt;  Median : 78     Median : 25.00   Median : 38.00   Median :  67.0  
-#&gt;  Mean   :137     Mean   : 69.21   Mean   : 95.44   Mean   : 128.9  
-#&gt;  3rd Qu.:238     3rd Qu.:114.00   3rd Qu.:139.00   3rd Qu.: 198.0  
-#&gt;  Max.   :765     Max.   :462.00   Max.   :910.00   Max.   :1088.0  
+#&gt;  Min.   :  0.0   Min.   :  0.0    Min.   :   0.0   Min.   :   0.0  
+#&gt;  1st Qu.: 34.0   1st Qu.:  0.0    1st Qu.:  12.0   1st Qu.:  38.0  
+#&gt;  Median :141.0   Median : 75.0    Median :  85.0   Median : 121.0  
+#&gt;  Mean   :193.9   Mean   :100.8    Mean   : 156.8   Mean   : 179.5  
+#&gt;  3rd Qu.:312.0   3rd Qu.:149.0    3rd Qu.: 221.0   3rd Qu.: 256.0  
+#&gt;  Max.   :965.0   Max.   :722.0    Max.   :1468.0   Max.   :1088.0  
 #&gt;                                                                    </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
