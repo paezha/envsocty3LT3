@@ -1,5 +1,5 @@
 ---
-title: "Reading 1: Linear regression in R"
+title: "Reading 1: Linear regression in `R`"
 author: 
 - name: Antonio Páez
   # Enter your name here:

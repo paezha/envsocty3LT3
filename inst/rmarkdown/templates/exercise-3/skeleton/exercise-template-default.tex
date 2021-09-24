@@ -71,6 +71,18 @@ $if(tables)$
 \usepackage{longtable,booktabs}
 $endif$
 
+% Create an environment for notes
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tcolorbox}
+\definecolor{vlightgray}{gray}{0.8}
+\newtcolorbox{textbox}{
+  fonttitle = \bfseries,
+  colback = vlightgray,
+  colframe = black,
+  coltext = black,
+  boxsep = 5pt,
+  arc = 4pt}
+
 $if(graphics)$
 \usepackage{graphicx,grffile}
 \makeatletter

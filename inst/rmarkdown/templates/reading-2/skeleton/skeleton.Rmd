@@ -1,5 +1,5 @@
 ---
-title: "Reading 2: Geospatial Visualization for Transportation Trends using R"
+title: "Reading 2: Geospatial Visualization for Transportation Trends using `R`"
 author: 
 - name: Antonio Páez
   # Enter your name here:
@@ -188,7 +188,7 @@ ggplot() + # Create blank `ggplot2` object
   scale_fill_fermenter(breaks = pop_density_q) # Change the scale for the fill using the breaks in the quantiles
 ```
 
-This thematic map shows that half of all Traffic Analysis Zones have a population density lower than 388.13 persons per sq.km, and half higher than that. High population density is generally seen in the urban parts of the Hamilton CMA, and low in the suburban and rural parts of the CMA.
+This thematic map shows that half of all Traffic Analysis Zones have a population density lower than 1,561.2 persons per sq.km, and half higher than that. High population density is generally seen in the urban parts of the Hamilton CMA, and low in the suburban and rural parts of the CMA.
 
 Of course, we could use a finer set of breaks, say at 0%, 20%, 40%, 60%, 80%, 100% (these are called _quintiles_, they divide the sample in five equal parts):
 ```{r}
@@ -279,9 +279,9 @@ model1 <- lm(formula = Auto_driver.prop ~ pop_density,
 summary(model1)
 ```
 
-The model suggests that there is a negative relationship between `pop_density` and `Auto_driver.prop` (see the negative coefficient of `pop_density`). Furthermore, the $p$-value of the coefficient is very small, indicating that this relationship is unlikely to be random. The coefficient is interpreted as the rate of change: for every increase in population density of 1 person per sq.km, the proportion of trips by auto driver goes down _on average_ by 0.00206%.
+The model suggests that there is a negative relationship between `pop_density` and `Auto_driver.prop` (see the negative coefficient of `pop_density`). Furthermore, the $p$-value of the coefficient is very small, indicating that this relationship is unlikely to be random. The coefficient is interpreted as the rate of change: for every increase in population density of 1 person per sq.km, the proportion of trips by auto driver goes down _on average_ by 0.0019%.
 
-The R-squared of 0.18 indicates that there is still much variation left unexplained. The R-squared coefficient multiplied by 100 is interpreted as the percentage of the variance explained by the model: in this case approximately 18.6%, which means the model does _not_ explain 71.4% of the variance. 
+The R-squared of 0.216 indicates that there is still much variation left unexplained. The R-squared coefficient multiplied by 100 is interpreted as the percentage of the variance explained by the model: in this case approximately 21.6%, which means the model does _not_ explain 78.4% of the variance. 
 
 We can do a regression of a dependent variable on two or more independent variables, not just on one. For example, we may be curious about the relationship between travel by auto and the age of the population. The following regression adds the median age of the population in the traffic analysis zones to the regression:
 ```{r}
@@ -290,7 +290,7 @@ model2 <- lm(formula = Auto_driver.prop ~ pop_density + median_age,
 summary(model2)
 ```
 
-Both coefficients for population density and median age of population in the Traffic Analysis Zone have very small $p$-values, which means the relationships are unlikely to be random. The coefficient for `pop_density` is negative but the effect is a little smaller after introducing `median_age`. The coefficient for `median_age` is positive, which suggests that as the population trends older, the proportion of trips by auto driver tends to increase. In fact, since the coefficient is 0.00508, this means that as the median age of the population goes up by one year, the proportion of trips by auto driver goes up by 0.508%.
+Both coefficients for population density and median age of population in the Traffic Analysis Zone have small $p$-values, which means the relationships are unlikely to be random. The coefficient for `pop_density` is negative but the effect is a little smaller after introducing `median_age`. The coefficient for `median_age` is positive, which suggests that as the population trends older, the proportion of trips by auto driver tends to increase. In fact, since the coefficient is 0.001485, this means that as the median age of the population goes up by one year, the proportion of trips by auto driver goes up by 0.1485%.
 
 This illustrates how you can do a regression on multiple variables, not just on one.
 

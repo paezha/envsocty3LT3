@@ -1,4 +1,4 @@
-% This template was minimally adapted from Steven V. Miller's template for academic manuscripts. See:
+% This template was heavily adapted from Steven V. Miller's template for academic manuscripts. See:
 % http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{article}
 \usepackage[left=1in,top=1in,right=1in,bottom=1in]{geometry}
@@ -46,13 +46,6 @@ $endif$
 %\fi
 \makeatother
 
-
-$if(appendix)$
-\renewcommand*\thetable{$appendixletter$.\arabic{table}}
-\renewcommand*\thefigure{$appendixletter$.\arabic{figure}}
-$endif$
-
-
 \setcounter{secnumdepth}{0}
 
 $if(listings)$
@@ -95,18 +88,18 @@ $if(graphics)$
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 $endif$
 
-
+% Write title
 $if(title)$
 \title{$title$}
 $endif$
 
-
-
+% Write names of author(s)
 $if(anonymous)$$else$\author{$for(author)$\Large $author.name$\vspace{0.05in} \newline\normalsize\emph{$author.student_number$}  $sep$ \and $endfor$}$endif$
 
-
+% Write date
 \date{$date$}
 
+% Define section headers
 \usepackage{titlesec}
 
 \titleformat*{\section}{\Large\bfseries}
@@ -115,28 +108,12 @@ $if(anonymous)$$else$\author{$for(author)$\Large $author.name$\vspace{0.05in} \n
 \titleformat*{\paragraph}{\normalsize\itshape}
 \titleformat*{\subparagraph}{\normalsize\itshape}
 
-
-$if(natbib)$
-\usepackage{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-\usepackage[strings]{underscore} % protect underscores in most circumstances
-$endif$
-
-$if(biblatex)$
-\usepackage$if(biblio-style)$[style=$biblio-style$]$endif${biblatex}
-$if(biblatexoptions)$\ExecuteBibliographyOptions{$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$}$endif$
-$for(bibliography)$
-\addbibresource{$bibliography$}
-$endfor$
-$endif$
-$if(listings)$
-\usepackage{listings}
-$endif$
-
-
-\newtheorem{hypothesis}{Hypothesis}
-\usepackage{setspace}
-
+% Define page headings
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{$subject$}
+\lhead{$title$}
 
 % set default figure placement to htbp
 \makeatletter
@@ -160,10 +137,10 @@ $endfor$
 \fi
 }
 
-\@ifpackageloaded{color}{
-    \PassOptionsToPackage{usenames,dvipsnames}{color}
+\@ifpackageloaded{xcolor}{
+    \PassOptionsToPackage{usenames,dvipsnames}{xcolor}
 }{%
-    \usepackage[usenames,dvipsnames]{color}
+    \usepackage[usenames,dvipsnames]{xcolor}
 }
 \makeatother
 \hypersetup{breaklinks=true,
@@ -177,14 +154,6 @@ $endfor$
             linkcolor=$if(linkcolor)$$linkcolor$$else$magenta$endif$,
             pdfborder={0 0 0}}
 \urlstyle{same}  % don't use monospace font for urls
-
-% Add an option for endnotes. -----
-
-$if(endnotes)$
-\usepackage{endnotes}
-\renewcommand{\enotesize}{\normalsize}
-\let\footnote=\endnote
-$endif$
 
 % add tightlist ----------
 \providecommand{\tightlist}{%
@@ -242,54 +211,10 @@ $if(title)$
 
 $endif$
 
-% Begin section with highlights and threshold concepts
-
-$if(highlights)$
-
-\begin{abstract}
-
-    % Add an horizontal rule
+ % Add an horizontal rule
     \hbox{\vrule height .8pt width 39.14pc}
 
-    \vskip 8.5pt % \small
-
-    \noindent \textbf{Highlights}: \vskip 4pt
-
-    % Type highlights
-    $highlights$
-
-    % If there are threshold concepts type them
-    $if(threshold_concepts)$
-
-    \vskip 8.5pt
-    \noindent \textbf{Threshold Concepts}: \vskip 4pt
-
-    $for(threshold_concepts)$
-    $threshold_concepts$ $sep$ \par
-    $endfor$ \par
-
-    % Close the box for the highlights and threshold concepts with another rule
-    \hbox{\vrule height .8pt width 39.14pc}
-
-% If there are not highlights just create a rule
-    $else$
-    \hbox{\vrule height .8pt width 39.14pc}
-    $endif$
-
-% Finish highlights
-\end{abstract}
-
-$endif$
-
-\vskip -8.5pt
-
-$if(toc)$
-{
-\hypersetup{linkcolor=black}
-\setcounter{tocdepth}{$toc-depth$}
-\tableofcontents
-}
-$endif$
+    \vskip 12pt % \small
 
 $endif$ % removetitleabstract
 
@@ -304,27 +229,4 @@ $if(endnotes)$
 \theendnotes
 $endif$
 
-\newpage
-\singlespacing
-$if(natbib)$
-$if(bibliography)$
-$if(biblio-title)$
-$if(book-class)$
-\renewcommand\bibname{$biblio-title$}
-$else$
-\renewcommand\refname{$biblio-title$}
-$endif$
-$endif$
-\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
-
-$endif$
-$endif$
-$if(biblatex)$
-\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
-
-$endif$
-$for(include-after)$
-$include-after$
-
-$endfor$
 \end{document}

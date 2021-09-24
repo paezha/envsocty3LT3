@@ -56,6 +56,11 @@ hamilton_taz <- hamilton_taz %>%
             GTA06 = as.character(GTA06))
 ```
 
+Extract the IDs for all TAZ in the Hamilton CMA:
+```{r}
+cma_taz_id <- hamilton_taz$GTA06
+```
+
 ## Origin destination matrices for work and shop
 
 Read trip tables. The query was for "trips" by zone of residence, zone of work, and trip purpose (Work):
@@ -91,6 +96,13 @@ od_work <- od_work %>%
          Trips = as.numeric(Trips))
 ```
 
+Filter zones in Hamilton CMA:
+```{r}
+od_work <- od_work %>%
+  filter(Origin %in% cma_taz_id, 
+         Destination %in% cma_taz_id)
+```
+
 Find the position in the table where the information on shop trips begins:
 ```{r}
 idx <- which(od_shop$X1 == "TABLE    : purp_dest (Market/Shop)")
@@ -113,6 +125,13 @@ od_shop <- od_shop %>%
          Trips = as.numeric(Trips))
 ```
 
+Filter zones in Hamilton CMA:
+```{r}
+od_shop <- od_shop %>%
+  filter(Origin %in% cma_taz_id, 
+         Destination %in% cma_taz_id)
+```
+
 Shopping and work trips were retrieved for Hamilton and Burlington to give the Hamilton CMA [data guide](http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf). Check the numbers of zones of origin and destination:
 ```{r}
 od_work %>%
@@ -124,20 +143,6 @@ od_shop %>%
   transmute(Origin = as.numeric(Origin), 
             Destination = as.numeric(Destination)) %>%
   summary()
-```
-
-The zones of origin (as expected) are all within the Hamilton CMA (this is by design, since the query selected those regions/municipalities). But the zones of destination include many zones outside of the Hamilton CMA. We need to filter to consider only destination zones in the Hamilton CMA. Obtain a list of identifiers:
-```{r}
-cma_taz_id <- hamilton_taz$GTA06
-```
-
-Filter the destinations to include only those in the CMA:
-```{r}
-od_work <- od_work %>%
-  filter(Destination %in% cma_taz_id)
-
-od_shop <- od_shop %>%
-  filter(Destination %in% cma_taz_id)
 ```
 
 ## Create a full origin-destination table, including zone pairs without trips
@@ -195,14 +200,16 @@ This creates a simple features object with lines for the flows between zones:
 ```{r cache=TRUE}
 od_lines <- od_full_long %>% 
   group_by(pairID) %>% 
-  summarize()  %>% st_cast("MULTIPOINT") %>% 
+  summarize()  %>% 
+  st_cast("MULTIPOINT") %>% 
   st_cast("LINESTRING")
 ```
 
 Join lines to origin-destination table:
 ```{r}
 od_full <- od_full %>%
-  left_join(od_lines, by = "pairID") %>%
+  left_join(od_lines,
+            by = "pairID") %>%
   st_as_sf()
 ```
 
@@ -274,10 +281,18 @@ hamilton_taz <- hamilton_taz %>%
 Convert NAs to zeros:
 ```{r}
 hamilton_taz <- hamilton_taz %>%
-  mutate(work_trips_produced = ifelse(is.na(work_trips_produced), 0, work_trips_produced),
-         work_trips_attracted = ifelse(is.na(work_trips_attracted), 0, work_trips_attracted),
-         shop_trips_produced = ifelse(is.na(shop_trips_produced), 0, shop_trips_produced),
-         shop_trips_attracted = ifelse(is.na(shop_trips_attracted), 0, shop_trips_attracted))
+  mutate(work_trips_produced = ifelse(is.na(work_trips_produced), 
+                                      0, 
+                                      work_trips_produced),
+         work_trips_attracted = ifelse(is.na(work_trips_attracted), 
+                                       0, 
+                                       work_trips_attracted),
+         shop_trips_produced = ifelse(is.na(shop_trips_produced), 
+                                      0, 
+                                      shop_trips_produced),
+         shop_trips_attracted = ifelse(is.na(shop_trips_attracted), 
+                                       0, 
+                                       shop_trips_attracted))
 ```
 
 Read attributes of zones (mode of trips):
@@ -484,7 +499,7 @@ Find the position in the table where the information on persons per household be
 idx <- which(household_size$X1 == "COLUMN : n_person")
 ```
 
-Slice the table to obtain the work trips (remove heading information):
+Slice the table to obtain the household size (remove heading information):
 ```{r}
 household_size <- household_size %>% 
   slice((idx+2):n())
@@ -506,6 +521,7 @@ Expand to calculate the median household size by zone:
 household_size <- household_size %>% 
   uncount(households)
 ```
+
 Summarize median household size by zone:
 ```{r}
 household_size <- household_size %>% 
@@ -848,7 +864,7 @@ hamilton_taz <- hamilton_taz %>%
 
 Read attributes of zones (number of people by occupation by place of employment). This needs to be limited to Hamilton residents working in Hamilton. I used all people working in Hamilton irrespective of their place of residence (which could have been Brantford, etc.) but the model cannot explain the flows too well, since it seems to require a lot more workers than it has on the origin side:
 ```{r}
-jobs <- read_delim(file = "ttsCross_2016_occupation_by_od.txt", 
+jobs <- read_delim(file = "ttsCross_2016_occupation_by_destination.txt", 
                       delim = "\t", 
                       col_names = FALSE)
 ```

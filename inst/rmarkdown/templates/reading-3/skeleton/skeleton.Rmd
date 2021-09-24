@@ -27,11 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 NOTE: This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
-Transportation is a networked phenomenon. Network analysis provides a set of tools to investigate transportation systems as networks. Network analytical issues include location analysis, spatial interaction, accessibility, and connectivity. 
-
-In this tutorial, we will introduce some elements of network analysis using the `R` statistical computing language.
-
-To use this note you will need the following:
+Transportation is a networked phenomenon. Network analysis provides a set of tools to investigate transportation systems as networks. Network analytical issues include location analysis, spatial interaction, accessibility, and connectivity. In this reading, we will introduce some elements of network analysis using the `R` statistical computing language.
 
 To use this note you will need the following:
 
