@@ -152,7 +152,8 @@ We can verify that the graph is much smaller, since it includes only major highw
 ```{r}
 hamilton_motorways
 ```
-Then, we use this chuck of codes that creates a buffer around motorways. The resulting object, which we call `motorway_buffers` is no longer a graph, but a simple features object:
+
+Then, we use this chunk of code that creates a buffer around motorways. The resulting object, which we call `motorway_buffers` is no longer a graph, but a simple features object:
 ```{r}
 motorway_buffers <- hamilton_motorways %>% # Take object `hamilton_motorways` and pass it to the next function
   activate(edges) %>% # Activate the edges of the `tbl_graph` object
