@@ -38,9 +38,10 @@ To use this note you will need the following:
     + `hamilton_taz_travel`
     + `od_full`
 
-Some of these objects you have already encountered in your previous readings and exercises. You previously used the `hamilton_graph` `tbl_graph` object to learn about network analysis in Reading 3 ('Network Analysis in `R`') and to examine the potential for mobility and accessibility in Exercise 3. You will recall that this object includes a portion of the road network in the Hamilton Census Metropolitan Area (CMA), sourced from OpenStreetMaps. Table `hamilton_taz` is a simple features object with the boundaries of traffic analysis zones in the Hamilton CMA. You worked with this in Reading 2 ('Geospatial Visualization for Transportation Trends using `R`') and Exercise 2 to visualize trip-making patterns in the region. 
+Some of these objects you have already encountered in your previous readings and exercises. You previously used the `hamilton_graph` and `tbl_graph` objects to learn about network analysis in Reading 3 ('Network Analysis in `R`') and to examine the potential for mobility and accessibility in Exercise 3. You will recall that this object includes a portion of the road network in the Hamilton Census Metropolitan Area (CMA), sourced from OpenStreetMaps. Table `hamilton_taz` is a simple features object with the boundaries of traffic analysis zones in the Hamilton CMA. You worked with this in Reading 2 ('Geospatial Visualization for Transportation Trends using `R`') and Exercise 2 to visualize trip-making patterns in the region. 
 
-Table `od_full` will be new to you. This data object contains an _origin-destination_ table. An origin destination table looks  superficially similar to a table of _links_ in a network: it has identifiers for origins (from) and destinations (to), coordinates for the origins and destinations, a unique identifier for the origin-destination pair, and importantly the number of trips between the origin and destination. 
+Table `od_full` will be new to you. This data object contains an _origin-destination_ table. An origin-destination table looks  superficially similar to a table of _links_ in a network: it has identifiers for origins (from) and destinations (to), coordinates for the origins and destinations, a unique identifier for the origin-destination pair, and importantly the number of trips between the origin and destination. 
+
 In this particular instance, the table includes trips for two distinct purposes (i.e., _work_ trips and _shopping_ trips) by origin-destination pair. While this is in fact a network, unlike the road network in `hamilton_graph`, it is not a physical one; instead, it is a point-to-point notional network with all the possible origins connected to all possible destinations by means of the number of trips, which in many cases is zero, since a vast number of zones do not actually have trips between them! The origin-destination table, like the traffic analysis zones, was sourced from the Transportation Tomorrow Survey, and corresponds to the year 2016.
 
 ## Preliminaries
@@ -76,7 +77,7 @@ Remember that you can always consult the documentation for a data object in the 
 hamilton_graph
 ```
 
-This object includes the road network in `tbl_graph` format that you used in Reading 3 and Exercise 3. It is worth recalling that objects of class `tbl_graph` are also of class `igraph` which allows us to use package `igraph` to conduct many different types of network analyses - including finding shortest paths. The two main elements of a `tbl_graph` object are one table with information about the nodes nodes and another table with information about the edges. Each of these elements can be _activated_ using the function `tidygraph::activate()` as desired.
+This object includes the road network in `tbl_graph` format that you used in Reading 3 and Exercise 3. It is worth recalling that objects of class `tbl_graph` are also of class `igraph` which allows us to use package `igraph` to conduct many different types of network analyses - including finding shortest paths. The two main elements of a `tbl_graph` object are one table with information about the nodes and another table with information about the edges. Each of these elements can be _activated_ using the function `tidygraph::activate()` as desired.
 
 The next object that we will inspect is the zoning system. The object `hamilton_taz` is a simple features object with the boundaries of the traffic analysis zones in Hamilton. Traffic analysis zones are used to report travel data collected by means of travel surveys. Together with the road network, the traffic analysis zones provide the necessary geographical information to study spatial interaction. 
 
@@ -95,7 +96,7 @@ ggplot() + # Create blank ggplot object
 
 As you can see, the road network is considerably more detailed than the zoning system. Every intersection is a node in the network, but not every intersection is a meaningful destination. But even for the zones this is true: not every point in the zone can be treated as a potential origin or destination (this would soon produce an overwhelming number of origins and destinations!). To deal with the difference in level of detail, it is customary to assume a center of mass, so to speak, for each zone. This can be the geometric _centroid_ of the zone (the mean of the coordinates of the polygon), or it can be a population-weighted centroid, which would tend to displace the geometric centroid towards the center of population (the weighted mean of the coordinates, with the weights given by population counts).
 
-In this way we can consider the zoning system as a collection of representative points, with one point per zone. Then, the zoning system is connected to the road network by finding, for each zone, the node in the network that is closest to its centroid.
+In this way, we can consider the zoning system as a collection of representative points, with one point per zone. Then, the zoning system is connected to the road network by finding, for each zone, the node in the network that is closest to its centroid.
 
 Presently, the geometric centroid of the zones is considered, and there is a one-to-one identifier `GTA06` between the nodes in the network that are nearest to the centroid of a zone, and the identifier of the zone. The next chunk plots the road network and the traffic analysis zones; in this map, centroid nodes are red diamonds:
 ```{r}
@@ -124,7 +125,7 @@ The next object that we will inspect is `od_full`. This is also a simple feature
 head(od_full)
 ```
 
-The table includes columns with zone identifiers for the origin and destination zones. The identifiers are the same as the columns `GTA06` in the nodes of the road network and the traffic analysis zones. This table is special: although information about trips can be found in the table `hamilton_taz_travel` (i.e., the `work_trips_` and `shop_trips_` columns), there the trips were total produced and attracted by the zones. The origin-destination table gives more detailed information about the trips by disaggregating those totals by origin zone and destination zone! This gives much richer information than just the totals and constitutes the core of spatial interaction analysis: it tells us precisely (within the context of the zoning system) where do trips begin and where they end.
+The table includes columns with zone identifiers for the origin and destination zones. The identifiers are the same as the columns `GTA06` in the nodes of the road network and the traffic analysis zones. This table is special: although information about trips can be found in the table `hamilton_taz_travel` (i.e., the `work_trips_` and `shop_trips_` columns), there the trips were total produced and attracted by the zones. The origin-destination table gives more detailed information about the trips by disaggregating those totals by origin zone and destination zone! This gives much richer information than just the totals and constitutes the core of spatial interaction analysis: it tells us precisely (within the context of the zoning system) where trips begin and where they end.
 
 We see, for example, that zone 5077 did not _interact_ with zone 5030 (the first row in the table), since the number of work and shopping trips originating in zone 5002 and ending in zone 5001 was zero. In contrast, the following pair of zones did interact:
 ```{r}
@@ -159,7 +160,7 @@ This partial representation of Reilly's hypothesis suggests a connection to [Vor
 
 Closer approximations to the expression of Carey where obtained shortly after these works.
 
-Astrophysicist J.Q. Stewart in a series of papers published in the decades of 1940 and 1950 posited a series of principles for so-called social physics, from a rule of inverse distance variation for social influence (1941) to a principle of demographic gravitation (1948). It is this latter work that most explicitly argues for a model of human interaction based on the physical law and put the principle in the notation that we currently use.
+Astrophysicist J.Q. Stewart, in a series of papers published in the decades of 1940 and 1950, posited a series of principles for so-called social physics, from a rule of inverse distance variation for social influence (1941) to a principle of demographic gravitation (1948). It is this latter work that most explicitly argues for a model of human interaction based on the physical law and put the principle in the notation that we currently use.
 
 In Stewart's formulation, the gravity model for human interaction became:
 $$
@@ -169,7 +170,7 @@ where $F$ is the force of attraction between two population, $N_i$ is the size o
 
 Around the same time as Stewart, sociologist GK Zipf published a series of papers testing regularities in the size of settlements, including what he termed the $\frac{M_1M_2}{D}$ hypothesis. The hypothesis was that movement between two communities with populations $M_1$ and $M_2$ separated by a shortest path of length $D$ is proportional to the ratio noted above. Zipf empirically showed that this regularity held for the case of intercity personal movement (1946), for goods movement by railways (1946), and information (1946).
 
-Many elements of the social physics movement were later rejected by the social science, including the comparison to molecules and the value-laden assumptions about the molecular weight of individuals. Nonetheless, the gravity model continues to be widely used today in many applications, and the reason for this is that even if we reject the existence of "Laws" for human behavior, as a heuristic the gravity model still has remarkable power to capture regularities in behavior.
+Many elements of the social physics movement were later rejected by the social sciences, including the comparison to molecules and the value-laden assumptions about the molecular weight of individuals. Nonetheless, the gravity model continues to be widely used today in many applications, and the reason for this is that even if we reject the existence of "Laws" for human behavior, as a heuristic the gravity model still has remarkable power to capture regularities in behavior.
 
 ## Data preparation
 
@@ -190,7 +191,7 @@ hamilton_taz %>% # Pass `hamilton_taz` to the next function
   summary() # Compute the summary statistics
 ```
 
-From the summary we see that the maximum number of work trips produced by any zone (`work_trips_produced`) is 2,416, and the maximum number of work trips attracted by any zone (`work_trips_attracted`) is 7,085. In addition to summary statistics, we can explore these variables by means of thematic maps (as you did in Exercise 2); here, the map is of `work_trips_produced`:
+From the summary, we see that the maximum number of work trips produced by any zone (`work_trips_produced`) is 2,837, and the maximum number of work trips attracted by any zone (`work_trips_attracted`) is 7,807. In addition to summary statistics, we can explore these variables by means of thematic maps (as you did in Exercise 2); here, the map is of `work_trips_produced`:
 ```{r}
 ggplot() + # Create a blank ggplot object
   geom_sf(data = hamilton_taz, # Plot the `sf` object; here we want to use `hamilton_taz`
@@ -234,7 +235,9 @@ ggplot() + # Create a blank ggplot object
           aes(color = Trips_work))
 ```
 
-This plot is essentially a point-to-point network, but it is not very informative. For starters, the trips do not actually move in _straight lines_ from origin to destination, but rather move on the road network. This kind of plot is sometimes called a _desire lines_ plot. Another reason the plot is not very informative is that a large number of the lines are actually for zone pairs with zero trips! The next chunk improves the plot in three ways: it includes the zoning system to provide more geographical context, it removes the lines that are for small number of trips, and modifies the lines (by changing their color, thickness, transparency) to enhance legibility:
+This plot is essentially a point-to-point network, but it is not very informative. For starters, the trips do not actually move in _straight lines_ from origin to destination, but rather move on the road network. This kind of plot is sometimes called a _desire lines_ plot. Another reason the plot is not very informative is that a large number of the lines are actually for zone pairs with zero trips!
+
+This next chunk improves the plot in three ways: it includes the zoning system to provide more geographical context, it removes the lines that are for small number of trips, and modifies the lines (by changing their color, thickness, transparency) to enhance legibility:
 ```{r}
 ggplot() + # Create a blank ggplot object
   geom_sf(data = hamilton_taz, # Plot the `sf` object; here we want to use `hamilton_taz`
@@ -496,6 +499,7 @@ There are numerous functions that have been used to represent the effect of cost
 $$
 f(c_{ij})=c_{ij}^{-\beta_3}=\frac{1}{c_{ij}^{\beta_3}}
 $$
+
 This is called a negative power function, and depending on the value of $\beta_3$, the decay can be slow or fast, thus making the effect of cost on interaction weaker or stronger. The following plot illustrates various negative power functions:
 ```{r}
 data.frame(cost = seq(from = 1, # Create a data frame with some made up values of cost. It does not really matter what these exact values are, because the objective is to illustrate the shape of the curves for different values of beta_3. Here, it is a sequence of cost from 1 to 5 in 0.1 intervals
@@ -588,7 +592,7 @@ The table looks clean, with no extraneous values.
 
 Calibration of the gravity model uses regression analysis (see Reading 1, 'Linear regression in `R`'). There are two differences with the way you used regression analysis in Exercise 2:
 
-1. In that exercise you were introduced to simple linear regression (a regression with only one variable in the right hand side); now we have a multivariate regression model (a model with two or more variables on the right hand side); and
+1. In that exercise, you were introduced to simple linear regression (a regression with only one variable in the right hand side); now we have a multivariate regression model (a model with two or more variables on the right hand side); and
 
 2. The regression model you saw before was for _continuous_ variables (variables that can take fractional values, essentially decimals); in the case of trips, it is convenient to treat them not as a continuous variable that potentially fractions of a trip (0.1 trip), but rather as counts, where trips can only take integer values (i.e., no decimals).
 
@@ -615,7 +619,7 @@ Use `summary()` to print the results of the model:
 summary(mod_work)
 ```
 
-We see that the parameters are significant for most variables (meaning they are significantly different from zero with probability as seen in $Pr(>|z|)$). Since the probabilities are so small we are confident in saying that the estimated values of the parameters are different from zero. Why is this important? Since the parameters are the exponents of the mass variables and the cost variables, a parameter of zero would say that the variable does not affect the number of trips between origins and destinations (since any number to the power of zero is one):
+We see that the parameters are significant for most variables (meaning they are significantly different from zero with probability as seen in $Pr(>|z|)$). Since the probabilities are so small, we are confident in saying that the estimated values of the parameters are different from zero. Why is this important? Since the parameters are the exponents of the mass variables and the cost variables, a parameter of zero would say that the variable does not affect the number of trips between origins and destinations (since any number to the power of zero is one):
 $$
 M_i^0=1
 $$
@@ -711,7 +715,7 @@ Despite failing to predict some of the biggest flows in the system, the model do
 
 ## Application
 
-The calibrated gravity model is informative about the trip-making behavior of the public. Particularly, the distance-decay function tells us about how people respond to the friction of space. This information can be used in different ways. Here, we will illustrate how it is useful to calculate accessibility.
+The calibrated gravity model is informative about the trip-making behaviour of the public. Particularly, the distance-decay function tells us about how people respond to the friction of space. This information can be used in different ways. Here, we will illustrate how it is useful to calculate accessibility.
 
 Recall that accessibility ($A$) is defined as the weighted sum of opportunities $W_j$ from the perspective of an origin $i$:
 $$
@@ -735,7 +739,7 @@ The summary statistics of accessibility to jobs in Hamilton are as follows:
 summary(accessibility_to_jobs)
 ```
 
-Accessibility in Hamilton ranges from 48,784 jobs to 62,653 jobs. We can join the accessibility to the zoning system to map this result:
+Accessibility to employment in Hamilton ranges from 48,784 jobs to 62,653 jobs. We can join the accessibility to the zoning system to map this result:
 ```{r}
 hamilton_taz %>% # Pass object `hamilton_taz` to the following function
   left_join(accessibility_to_jobs, # Join table `accessibility_to_jobs` to `hamilton_taz`
