@@ -33,7 +33,7 @@ always_allow_html: true
 
 # Introduction
 
-In this exercise, you will work on a spatial interaction model that combines the skills that you developed in Reading 4, and those you practiced previously in terms of visualizing geo-spatial information and estimating regression models. *The objective of the exercise will be to compare the potential of different neighborhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.*
+In this exercise, you will work on a spatial interaction model that combines the skills that you developed in Reading 4, and those you practiced previously in terms of visualizing geo-spatial information and estimating regression models. The objective of the exercise will be to compare the potential of different neighborhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.
 
 * Before working on this exercise, it is strongly recommended that you have completed the following reading.
     + Reading-4 ('Spatial Interaction Analysis', available as a template in your course package)
@@ -67,10 +67,11 @@ data("hamilton_taz_employment")
 data("hamilton_taz_ph")
 data("hamilton_taz_travel")
 data("od_full")```
+```
 
 # Context
 
-Words go here.
+Spatial interaction modelling makes use of data collected in travel surveys to estimate movement between origins and destinations. These models are important for understanding travel trends and planning for transportation needs. This is particularly useful for under-prioritized modes of travel, such as bicycling, because it is possible to determine trip flows by bicycle and to identify whether infrastructure is sufficient to connect those traffic analysis zones. For example, a recent [paper](https://link.springer.com/article/10.1007/s11116-021-10197-1?wt_mc=Internal.Event.1.SEM.ArticleAuthorOnlineFirst&utm_source=ArticleAuthorOnlineFirst&utm_medium=email&utm_content=AA_en_06082018&ArticleAuthorOnlineFirst_20210611), published by a graduate student at McMaster, used data from the 2016 Transportation Tomorrow Survey to investigate the built environment correlates of bicycling flows in Hamilton. The model was able to determine what correlates with the production of bicycle trips at the origin and the attraction of trips at destinations. Some trip flows had more bicycle trips than predicted by the model, which suggests that there is supportive infrastructure for bicyclists to travel between these zones. Spatial interaction models are an important part of the four-stages transportation model in step two for trip distribution.
 
 # Questions
 
@@ -82,10 +83,8 @@ Words go here.
 
 3. Use the traffic analysis zones and road network with the speeds you assumed in (2) to calculate the shortest path inter-centroid travel time. What is the diameter of the network in travel time? (20) 
 
-4. Join the travel time to the origin-destination table for further analysis (10)
+4. Join the travel time to the origin-destination table for further analysis. What is the trip length distribution of shopping trips? Hint: use `cut()` to create a categorical variable with suitable travel time intervals (you may need to experiment with different intervals); then group by that variable, and `summarize()` to sum all trips by group (see for example lines 409, 418, and 427 of Reading-4. Discuss the results of plotting the trip length distribution. Does the distribution surprise you or challenge your understanding of shopping trips? (20)
 
-5. What is the trip length distribution of shopping trips? Hint: use `cut()` to create a categorical variable with suitable travel time intervals (you may need to experiment with different intervals); then group by that variable, and `summarize()` to sum all trips by group (see for example lines 409, 418, and 427 of Reading-4. Discuss the results of plotting the trip length distribution (20)
-
-6. Join the attributes of the traffic analysis zones to the origin-destination table. With the information available calibrate a gravity model for shopping trips. Hint: remember to filter `Trips_shop` > 0. Plot and discuss the distance-decay function (20)
+6. Join the attributes of the traffic analysis zones to the origin-destination table. With the information available, calibrate a gravity model for shopping trips. Hint: remember to filter `Trips_shop` > 0. Plot and discuss the distance-decay function. (20)
 
 7. Suppose that you are planning to open a new business, and that you have a target demographic by household income. What is the name of your business? Choose one type of household by income level from your data as your target demographic (e.g., Inc_less_15k). Then choose two traffic analysis zones (the centroid is fine for this analysis) and calculate the market potential of your store. The market potential is the accessibility of your business to households of your target demographic. Which of the two zones you identified would be best for your new business and why? (20)
