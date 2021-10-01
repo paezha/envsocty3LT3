@@ -1,18 +1,134 @@
 ---
-title: "Template Title"
-author: "Your Name"
-date: "The Date"
-output: output_format
+title: "Exercise 5: Spatial interaction analysis in the Hamilton CMA"
+author:
+  # Enter your name and student number here:
+- name: My Name
+  student_number: 123456789
+subject: "ENVSOCTY 3LT3 Transportation Geography"
+
+# In the highlights you are asked to reflect about your learning experience while working on this exercise. This section is worth 10 marks.
+highlights: |
+    After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
+    
+    You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words.
+    
+# Write the concepts that in your opinion are threshold concepts in this exercise. A threshold concept is a key idea that once you grasp it, it changes your understanding of a topic, phenomenon, subject, method, etc. Write between three and five threshold concepts that apply to your learning experience working on this exercise. This section is worth 5 marks.
+threshold_concepts: 
+- threshold concept 1
+- threshold concept 2 
+- threshold concept 3
+- threshold concept 4
+
+# Do not edit below this line unless you know what you are doing
+# --------------------------------------------------------------
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    # The project-template-default.tex file was heavily  adapted from Steven V. Miller's template for academic manuscripts. See:
+    # http://svmiller.com/blog/2016/02/svm-r-markdown-manuscript/
+    # https://github.com/svmiller/svm-r-markdown-templates/blob/master/svm-latex-ms.tex
+    template: exercise-template-default.tex
+always_allow_html: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+For this exercise, you will compare a portion of the existing airline network in Northwestern United States to a hub-and-spoke configuration. The data for this task are found in the following table, which shows the number of domestic passengers (000s) for each O-D pair:.
+
+* Readings:
+    + 01 Control Flow in R.Rmd (found under READINGS)
+* Due date:	See course outline for due date.
+* Materials: This R Notebook
+* Instructions:	Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 3 (Name-Student Number).Rmd`
+
+Add new code chunkS by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+***
+
+#Preliminaries
+
+Begin by clearing the workspace and loading the datasets that you will need for this exercise. They are available from the Readings section. For instance, you will need the `rgdal` package to read the shape file. Make sure all packages that you need are installed and loaded `library()`. 
+```{r echo=FALSE}
+rm(list = ls())
 ```
 
-## Adding an RMarkdown Template
+The task at hand is as follows:
 
-This file is what a user will see when they select your template. Make sure that you update the fields in the yaml header. In particular you will want to update the `output` field to whatever format your template requires.
+Paez Pop is a small craft root beer manufacturer. To preserve quality, the company produces their fair trade, organic, probiotic root beer in only two plants, A and B, where spring water is readily available. From these two plants, the root beer is shipped to four stores (Store I, II, III, and IV). Because of the increased cost of diesel, shipping cost has become a major expense for the company, so they have hired you to determine whether shipping costs can be reduced. 
 
-This is a good place to demonstrate special features that your template provides. Ideally it should knit out-of-the-box, or at least contain clear instructions as to what needs changing.
+The plant production managers have estimated the output from their respective plants, as follows:
 
-Finally, be sure to remove this message!
+* Plant A: output is 20 truckloads of root beer
+* Plant B: output is 40 truckloads of root beer
+
+The CEO of Paez Pop has allocated the total output to the given warehouses by examining sales data from prior months, as follows:
+
+* Store I: 15 truckloads of root beer
+* Store II: 10 truckloads of root beer
+* Store III: 20 truckloads of root beer
+* Store IV: 15 truckloads of root beer
+
+
+The table below gives the cost of transportation, per truckload of root beer, from each plant to each store:
+
+Plant/Distribution  | Store I | Store II  | Store III  | Store IV
+------------------- | ------- | ------    | --------   | --------
+Plant A             | 290     | 280       | 500        | 250  
+Plant B             | 260     | 290       | 200        | 500
+
+
+
+The current distribution system that the company was using before you were hired is shown in the table below. The unit of measurement is the truckload:
+
+Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Supply
+------------------- | ------- | ------    | --------   | --------  | ------
+Plant A             | 5       | 0         | 0          | 15        | 20
+Plant B             | 10      | 10        | 20         | 0         | 40
+Demand              | 15      | 10        | 20         | 15
+
+
+
+The job for you is to determine the quantity (i.e., the number of truckloads) of root beer that should be shipped from each plant to each warehouse so that the company's total shipping cost is minimized.
+
+
+1. Create the initial simplex tableau. (10)
+
+
+2. Solve the problem using the simplex method, and generate a chart showing the optimized flows that you have generated for their distribution system. What is the minimized cost, and how much savings have you found for the company? (20)
+
+3. The key to consulting is getting repeat business from your clients, so you're happy when the CEO of Paez Pop calls you back months later to ask you to do some more work.
+
+His company's root beer has become so successful that they now estimate potential demand at Store I and Store IV has increased by 10 truckloads of root beer a month, at each of the two stores. This extra demand has been going unmet, for now, because they haven't yet had the ability to expand production capacity at either plant, and haven't modified their distribution system since you optimized it for them in question 2.
+
+Paez Pop has now saved up enough money to expand one, and only one, of their two plants by 20 truckloads of extra root beer production, so they can meet this new demand. The CEO knows the two plants have different transportation costs to the four stores, so he is wondering if you can tell him which of the two facilities he should expand, in order to minimize his company's transportation costs.
+
+Find which plant, when its production is increased by 20, will find Paez Pop the higher savings. (25)
+
+
+NEW QUESTION
+
+4. A few years pass, and Paez Pop has continued to expand. They have now added afternoon and night shifts, bringing total production at each plant up to 100 truckloads of beer a month. As well, as their brand has become more popular they have seen increased demand at the four original stores, and they have even started supplying their root beer to two new stores (Store V and Store VI). 
+
+Instead of coming to you to redesign their distribution system, they've just added transportation routes in an ad-hoc manner, so their current distribution system now looks like this:
+
+
+Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Store V | Store VI | Supply
+------------------- | ------- | ------    | --------   | --------  | ------  | -------- | ------
+Plant A             | 30      | 0         | 0          | 40        | 0       | 30       |  100
+Plant B             | 10      | 20        | 30         | 0         | 40      | 0        |  100
+Demand              | 40      | 20        | 30         | 40        | 40      | 30       | 
+
+Their transportation costs haven't changed for Stores I-IV. Transportation costs to the two new stores are as follows:
+
+Plant/Distribution  | Store V | Store VI  
+------------------- | ------- | ------   
+Plant A             | 680     | 190       
+Plant B             | 400     | 460      
+
+They have now come back to you to optimize their distribution system again. Determine minimized cost, create a chart of optimal flows, and state how much money you've saved them. (30)
+
+NEW QUESTION
+
+5. Paez Pop is thinking of trying to reduce costs by investing in a new, futuristic transportation trend: they're going to fire all their truck drivers at Plant B, and replace them with shiny new electric-powered autonomous vehicles from Tesla. They think this will save them 20% on all transport costs from plant B to each of the six stores. 
+
+(Plant A's truck drivers can't be replaced because they're unionized, so Plant A's transport costs will remain the same.)
+
+By how many percent would this plan reduce Paez Pop's total transport costs in a new optimized network? What do the flows look like now?
+

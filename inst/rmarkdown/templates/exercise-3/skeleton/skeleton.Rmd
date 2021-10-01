@@ -164,9 +164,9 @@ In this exercise you will get the opportunity to explore accessibility of Hamilt
 
 ## Network analysis in neighborhoods of Hamilton (85 marks)
 
-1. What is the density of nodes in Westdale? (5)
+1. What is the density of nodes (i.e., intersections) in Westdale? (5)
 
-2. What is the density of the network in Westdale? (5)
+2. What is the density of the network (i.e., length of links) in Westdale? (5)
 
 3. Calculate the degree of the nodes for the network in Westdale and plot the network showing the degree of the nodes. (5)
 
