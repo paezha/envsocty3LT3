@@ -154,7 +154,11 @@ ggplot() +
 
 # Context
 
-Words go here.
+By accessibility, we understand people’s ability to reach desired services, goods and activities. Different factors can affect accessibility, for example, quality, availability and affordability of transportation modes, quality of infrastructure, road network connectivity, government policies and subsidies, land use patterns, etc. We can evaluate accessibility of transportation network from various perspectives such as for a particular group, mode, location or activity [https://www.vtpi.org/access.pdf]. Reading 3 offers you a chance to learn about road network analysis and how to evaluate the accessibility of a network for particular locations (origin-destinations and neighbourhoods) and activities (eateries) for a particular mode (i.e. walking). 
+
+Accessibility is important as the goal of most transport activity is to reach to a destination, except the small portion of travel for which mobility is an end in itself (e.g., jogging, cruising, leisure train rides). As stated in this report, [https://www.vtpi.org/access.pdf] evaluation of  transportation system based on accessibility ensures improved roadways, rideshare and transit services, walking and cycling conditions, more accessible land use patterns to reduce travel distances, and telecommunications and delivery services that substitute for physical travel. 
+
+In this exercise you will get the opportunity to explore accessibility of Hamilton's road transportation systems for Westdale and a neighborhood of your choice. You will explore different parameters (e.g., node and network density, degree, betweenness, etc.) for these two neighborhoods to evaluate their accessibility and make a comparison. By completing this exercise, we should be able to develop an understanding on transportation network analysis and the importance of accessibility in transportation system design. 
 
 # Questions
 

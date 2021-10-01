@@ -433,7 +433,7 @@ plot(graph.atlas(6))
 plot(graph.atlas(7))
 ```
 
-Transitivity is a property of the network that influences how well it can withstand disruption. For example, in reference to the network on the left in the figure above, if the link between nodes 1 and 2 is lost, node 2 can no longer reach node 3. On the right, in contrast, even if the link between nodes 1 and 2 is lost, the nodes can still communicate through node 3. 
+High transitivity means that the network contains nodes that are densely connected internally. Transitivity is a property of the network that influences how well it can withstand disruption. For example, in reference to the network on the left in the figure above, if the link between nodes 1 and 2 is lost, node 2 can no longer reach node 3. On the right, in contrast, even if the link between nodes 1 and 2 is lost, the nodes can still communicate through node 3. 
 
 Put in different terms, transitivity captures a measure of _redundancy_ in the network. If a node is shut down in the actual network (due to a snowstorm, or a computer breakdown, or something else) redundancy means that the probability that the network can still function is higher. Think, by way of contrast, about a hub-and-spoke network: if the hub shuts down then the network loses _all_ connectivity.
 
@@ -544,7 +544,7 @@ my_nearest_nodes <- st_nearest_feature(my_addresses, # The first argument of the
 my_nearest_nodes
 ```
 
-We see that the nearest nodes to our sample addresses are nodes 100 (origin) and157 (destination).
+We see that the nearest nodes to our sample addresses are nodes 100 (origin) and 157 (destination).
 
 Now that we have a node of origin and a node of destination (which approximate the addresses we want), we can calculate the shortest path between them, using the `igraph` function `shortest_paths()`. The arguments (inputs) for this function are a network, a node (or nodes) of origin, a node (or nodes) of destination, the output for the shortest path(s) (nodes, edges, both), and the weights for the calculation of the shortest paths. Here we will use time as the measure of cost:
 ```{r}
