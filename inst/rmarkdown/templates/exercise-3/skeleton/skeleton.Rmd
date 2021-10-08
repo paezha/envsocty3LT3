@@ -1,5 +1,5 @@
 ---
-title: "Exercise 3: Network analysis and the potential for walking mobility and accessibility in neighborhoods"
+title: "Exercise 3: Network analysis and the potential for walking mobility and accessibility in neighbourhoods"
 author:
   # Enter your name and student number here:
 - name: My Name
@@ -33,7 +33,7 @@ always_allow_html: true
 
 # Introduction
 
-In this exercise, you will build on the geo-spatial analysis skills that you developed working on Exercise 2, and will add network analysis capabilities to your set of tools. The objective of the exercise will be to compare the potential of different neighborhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.
+In this exercise, you will build on the geo-spatial analysis skills that you developed working on Exercise 2, and will add network analysis capabilities to your set of tools. The objective of the exercise will be to compare the potential of different neighbourhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.
 
 * Before working on this exercise, it is strongly recommended that you have completed the following reading.
     + Reading-3 ('Network Analysis in R', available as a template in your course package)
@@ -92,7 +92,7 @@ hamilton_graph_local <- hamilton_graph_local %>% # Pass the object `hamilton_gra
            time = length/set_units(84, "m/min"))
 ```
 
-Extract Westdale from the neighborhood boundaries:
+Extract Westdale from the neighbourhood boundaries:
 ```{r}
 westdale <- hamilton_neighborhoods %>%
     filter(str_detect(Name, "Westdale"))
@@ -100,7 +100,7 @@ westdale <- hamilton_neighborhoods %>%
 
 The area of Westdale is:
 ```{r}
-westdale %>% # Pass the object `my_neighborhood` to the next function
+westdale %>% # Pass the object `my_neighbourhood` to the next function
     st_combine() %>% # Combine polygons
     st_area() # The function `st_area()` returns the areas of polygons
 ```
@@ -111,7 +111,7 @@ westdale_nodes <- hamilton_graph_local %>% # Pass the hamilton_graph_local objec
   activate(nodes) %>%  # Activate the nodes of the `tbl_graph` object
   as_tibble() %>% # Convert to data frame
   st_as_sf() %>% # Convert to simple features
-  st_crop(westdale) #%>% # Crop using `my_neighborhood`
+  st_crop(westdale) #%>% # Crop using `my_neighbourhood`
 
 westdale_graph <- hamilton_graph_local %>% # Pass the object `hamilton_graph_local` to the next function
   induced_subgraph(v = westdale_nodes$nodeID, impl = "copy_and_delete") %>% # Induced subgraph will take the input graph (that is `hamilton_graph_local`) and induce a subgraph that includes only the vertices (i.e., nodes) indicated in the argument; notice that we are passing the `nodeID` (the unique identifiers of the nodes) of our cropped list of nodes. The method for inducing the subgraph is to copy the elements that will be retained, and then deleting the rest.
@@ -156,17 +156,17 @@ ggplot() +
 
 By accessibility, we understand people’s ability to reach desired services, goods and activities. Different factors can affect accessibility, for example, quality, availability and affordability of transportation modes, quality of infrastructure, road network connectivity, government policies and subsidies, land use patterns, etc. We can evaluate accessibility of transportation network from various perspectives such as for a particular group, mode, location or activity [https://www.vtpi.org/access.pdf]. Reading 3 offers you a chance to learn about road network analysis and how to evaluate the accessibility of a network for particular locations (origin-destinations and neighbourhoods) and activities (eateries) for a particular mode (i.e. walking). 
 
-Weaver (1978) explored the suburban life of Westdale, Hamilton between 1911-1951 and noted that balanced planning of aesthetic and environmental concerns while incorporating financial concerns has made Westdale different from the other commuter suburbs [https://hssh.journals.yorku.ca/index.php/hssh/article/view/38934/35334]. Although it comprised of both blue and white collar folks, position of their housing and street pattern were designed in such a way that workingmen and their families' daily routines remained detached from the more affluents.
+Weaver [(1978)](https://hssh.journals.yorku.ca/index.php/hssh/article/view/38934/35334) explored the suburban life of Westdale, Hamilton between 1911-1951 and noted that balanced planning of aesthetic and environmental concerns while incorporating financial concerns has made Westdale different from other commuter suburbs in the region . Although it was originally comprised of both blue and white collar workers, the position of their housing and street pattern were designed in such a way that workingmen and their families' daily routines remained somewhat seggregated from more affluent families.
 
-As mentioned in the paper, "Located on a grid at the eastern extremity of Westdale,the workingmen's homes were positioned in such a way that affluent residents did not have occasion to travel through abruptly different social areas to shop, reach places of employment, or attend school. Major thoroughfares, like King and Main, as well as important feeder streets, like Longwood and Stirling, spanned Westdale but did not erode patterns of segregation supported by the location of parks, business districts, and school property." Regarding the central block "Crescentwood, Clinelands, and Paisley Gardens" Weaver (1978) mentioned "the streets here did not consist of a simple grid pattern like the workingmen's areas, but neither were they protected from the noise and commotion of through traffic like the elite fringe. Geographically and figuratively, the centre was truly mid-way". However, Westdale's history still progressed in step with national urban circumstances. 
+As mentioned in the paper, "Located on a grid at the eastern extremity of Westdale,the workingmen's homes were positioned in such a way that affluent residents did not have occasion to travel through abruptly different social areas to shop, reach places of employment, or attend school. Major thoroughfares, like King and Main, as well as important feeder streets, like Longwood and Stirling, spanned Westdale but did not erode patterns of segregation supported by the location of parks, business districts, and school property." Regarding the central block "Crescentwood, Clinelands, and Paisley Gardens" Weaver (1978) mentioned "the streets here did not consist of a simple grid pattern like the workingmen's areas, but neither were they protected from the noise and commotion of through traffic like the elite fringe. Geographically and figuratively, the centre was truly mid-way". However, Westdale evolved over time. For instance, there was an early covenant that prohibited sale of property in Westdale to Blacks, Italians, and Jews. Westdale today is a much more diverse neighbourhood. 
 
-Most early zoning advocates believed in racial hierarchy, openly embraced racial exclusion, and saw zoning as a way to achieve it. In their paper [https://discovery.ucl.ac.uk/id/eprint/10127513/], Anzumanova (2021) referred suburbanization as America's 'white flight', "where luxury retailers invites privileged populations to retreat and design their homes as comfortable bunkers, full of the accessories of art, travel and public life, without the risk of actual encounter of the manufactured threat posed by the public which was the threat of people of colour". "Federal incentive programmes and zoning policies subsidized the growth of American suburbs in the post second-war era, wherein white families fled urban environments in search of home ownership and, more critically, in search of racial homogeneity and communities designed to preserve that homogeneity through the discourses of private property."
+Most early zoning advocates believed in racial hierarchy, openly embraced racial exclusion, and saw zoning as a way to achieve it. Anzumanova [(2021)](https://discovery.ucl.ac.uk/id/eprint/10127513/) referred to suburbanization as America's 'white flight', "where luxury retailers invites privileged populations to retreat and design their homes as comfortable bunkers, full of the accessories of art, travel and public life, without the risk of actual encounter of the manufactured threat posed by the public which was the threat of people of colour" (p. 11). "Federal incentive programmes and zoning policies subsidized the growth of American suburbs in the post second-war era, wherein white families fled urban environments in search of home ownership and, more critically, in search of racial homogeneity and communities designed to preserve that homogeneity through the discourses of private property" (p. 2). A similar process may have happened in [Canada](https://en.wikipedia.org/wiki/White_flight#Canada), where sociologist Jason Edgerton [noted that](https://www.thestar.com/news/gta/2013/05/24/brampton_suffers_identity_crisis_as_newcomers_swell_citys_population.html) "after you control for retirement, low birth rate, etc. some of the other (shrinkage) could be white flight — former mainstream communities not comfortable being the minority". (Also see [Walks, 2007]( https://doi.org/10.1111/j.1541-0064.2007.00172.x), and [Marois and Bélanger, 2014](https://doi.org/10.1111/j.1541-0064.2013.12054.x)).
 
-In this exercise you will get the opportunity to explore accessibility of Hamilton's road transportation systems for Westdale and a neighborhood of your choice. You will explore different parameters (e.g., node and network density, degree, betweenness, etc.) for these two neighborhoods to evaluate their accessibility and make a comparison - for example, where the amenities are located?, are they near the most accessible network/ most important links?, etc. By completing this exercise, you should be able to develop an understanding on transportation network analysis and the importance of accessibility in transportation system design. Additionally, you will be able to explore the accessibility of different neighbourhoods in Hamilton and their distinct characteristics. 
+In this exercise you will have the opportunity to explore accessibility using Hamilton's road transportation systems for Westdale and a neighbourhood of your choice. You will explore different attributes of the network in the two neighbourhoods (e.g., node and network density, degree, betweenness, etc.), and will reflect on their accessibility in a comparative fashion - for example, where are  amenities located? Are they near the most accessible parts of the network/most important links?. By completing this exercise, you should be able to develop an understanding on transportation network analysis and its importance in shaping the workings of transportation systems. Additionally, you will be able to explore the accessibility of different neighbourhoods in Hamilton and their distinct characteristics. 
 
 # Questions
 
-## Network analysis in neighborhoods of Hamilton (85 marks)
+## Network analysis in neighbourhoods of Hamilton (85 marks)
 
 1. What is the density of nodes (i.e., intersections) in Westdale? (5)
 
@@ -176,18 +176,18 @@ In this exercise you will get the opportunity to explore accessibility of Hamilt
 
 4. Plot the degree distribution for the network. (5)
 
-5. Calculate the betweenness of the nodes and links of the network in Westdale and plot. (10)
+5. Calculate the betweenness of the nodes and links of the network in Westdale and plot. (5)
 
-6. Plot the eateries in Westdale along with the betweenness of the links. Discuss the pattern observed. (10)
+6. Plot the eateries in Westdale along with the betweenness of the links. Discuss the pattern observed. (5)
 
-7. Select a different neighborhood in Hamilton. Extract and prepare its network for analysis. (15)
+7. Select a different neighbourhood in Hamilton. Extract and prepare its network for analysis. (5)
 
-8. What is the density of the nodes and links in your chosen neighborhood? (5)
+8. What is the density of the nodes and links in your chosen neighbourhood? How does it compare to Westdale? (7)
 
-9. Plot the degree distribution of the nodes in your chosen neighborhood. How does it compare to Westdale? (10)
+9. Plot the degree distribution of the nodes in your chosen neighbourhood. How does it compare to Westdale? (7)
 
-10. Calculate the betweenness of the nodes and links in your chosen neighborhood and plot. How do these compare to Westdale? (10)
+10. Calculate the betweenness of the nodes and links in your chosen neighbourhood and plot. How do these compare to Westdale? (8)
 
-11. Plot the eateries in your chosen neighborhood along with the betweenness of the links. Discuss the pattern observed. (10)
+11. Plot the eateries in your chosen neighbourhood along with the betweenness of the links. Discuss the pattern observed. (8)
 
-12. Based on your analyses above, discuss Westdale and your chosen neighborhood in terms of their potential for supporting walking. (10)
+12. Based on your analyses above, discuss Westdale and your chosen neighbourhood. This is an open-ended question, so you could think for example, about what the designers of the networks in these neighbourhoods aimed to accomplish? Or, what mode shares would you expect to see in these neighbourhoods based on the pattern of their networks? Think critically and creatively. (20)
