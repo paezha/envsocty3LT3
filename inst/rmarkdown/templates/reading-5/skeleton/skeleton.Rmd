@@ -353,10 +353,6 @@ This is the road network that you worked with in Exercise 4. Check the notes for
 
 ## Motivating the transportation problem
 
-1156 15719 17436 19260 25290
-
-
-
 Consider a business with two small factories and three retail locations in the metropolitan region of Hamilton. The locations of the factories are approximated by nodes 25290 and 19260 in the network. The locations of the stores are approximated by nodes 1156, 15719, and 17436 in the network. The locations of factories and stores can be seen in the map below:
 ```{r}
 ggplot() + # Create a blank ggplot object 
