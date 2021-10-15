@@ -710,13 +710,13 @@ The objective function (basically the cost function), and the constraints, toget
 
 $s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ | Constant
 -------|--------|--------|--------|--------|---------
--1   |    0   |    1   |    0   |    0   |  16
--1   |    0   |    0   |    1   |    0   |  20
--1   |    0   |    0   |    0   |    1   |  22
- 0   |   -1   |    1   |    0   |    0   |  18
- 0   |   -1   |    0   |    1   |    0   |  16
- 0   |   -1   |    0   |    0   |    1   |  14
--800 |  -600  |   500  |   400  |   400  |  
+-1     |    0   |    1   |    0   |    0   |  16
+-1     |    0   |    0   |    1   |    0   |  20
+-1     |    0   |    0   |    0   |    1   |  22
+ 0     |   -1   |    1   |    0   |    0   |  18
+ 0     |   -1   |    0   |    1   |    0   |  16
+ 0     |   -1   |    0   |    0   |    1   |  14
+-800   |  -600  |   500  |   400  |   400  |  
 
 This second matrix encodes the same information as the first one, but in a different way. Now, the variables in the first row of the table are not flows, but rather represent _stocks_ at each of the five locations in our system: $s_{1}$ and $s_{2}$ are the columns for Factories I and II, respectively. Columns $s_{3}$, $s_{4}$, and $s_{5}$ are for Stores A, B, and C. The bottom row of this table says that we have 800 units and 600 units in Factories A and B that are "negative" in value (since candy at the factory cannot be sold), and that we have a demand of candy in Stores A, B, and C equal to 500, 400, and 400 respectively. The rightmost column now contains the unit cost of transportation.
 
@@ -755,8 +755,7 @@ $$
 
 To construct the simplex tableau, we augment the matrix of the dual problem with an identity matrix (a matrix with ones in the diagonal and zeros elsewhere) as follows:
 
-<!--
-Row    |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
+Row    | $s_1$  | $s_2$  | $s_3$  | $s_4$  | $s_5$  |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|    P   | Constant
 -------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
 $R_1$  |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
 $R_2$  |   -1   |    0   |    0   |    1   |    0   |    0   |   1    |    0   |    0   |    0   |    0   |    0   |   20
@@ -765,7 +764,6 @@ $R_4$  |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |
 $R_5$  |    0   |   -1   |    0   |    1   |    0   |    0   |   0    |    0   |    0   |    1   |    0   |    0   |   16
 $R_6$  |    0   |   -1   |    0   |    0   |    1   |    0   |   0    |    0   |    0   |    0   |    1   |    0   |   14
 $R_7$  |   800  |   600  |  -500  |  -400  |  -400  |    0   |   0    |    0   |    0   |    0   |    0   |    1   |    0
--->
 
 The last row of this table tells us (in the first column) that we have 800 units at Factory I that are available; in the second column, likewise, it says that we have 600 units there available to move; the next three columns say that we need 500 units in Store A, 400 in Store B, and 400 in Store C.  The last row of the columns corresponding to $x_{11}$ through $x_{23}$ are all zeros because we have not allocated any flows yet.
 
@@ -789,42 +787,40 @@ $$
 
 Since the value in the pivot column in row 4 is one and in row 1 is one, the operation gives a zero. Likewise, since the value in the pivot column in row 7 is -500 and the value in row 1 is one, the operation also gives a zero. The same operation needs to be conducted along the two rows that we are updating! See below for row 4:
 
-<!--
-Row   |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
-------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
-$R_4$ |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |    1   |    0   |    0   |    0   |   18
-$R_1$ |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
+Row    | $s_1$  | $s_2$  | $s_3$  | $s_4$  | $s_5$  |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|    P   | Constant
+-------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
+$R_4$  |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |    1   |    0   |    0   |    0   |   18
+$R_1$  |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
 
 Then the updated row 4 becomes:
 
-Row      |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
----------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
-$R_4$    |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |    1   |    0   |    0   |    0   |   18
-$R_1$    |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
----------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
-$R_4-R_1$| 0-(-1) | -1 - 0 |  1 - 1 |  0 - 0 |  0 - 0 | 0 - 1  | 0 - 0  | 0 - 0  | 1 - 0  | 0 - 0  | 0 - 0  | 0 - 0  | 18 - 16
+Row         | $s_1$  | $s_2$  | $s_3$  | $s_4$  | $s_5$  |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|    P   | Constant
+------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
+$R_4$       |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |    1   |    0   |    0   |    0   |   18
+$R_1$       |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
+------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
+$R_4$-$R_1$ |    1   |   -1   |    0   |    0   |    0   |  - 1   |   0    |    0   |    1   |    0   |    0   |    0   |    2
 
 And this is for row 7:
 
-Row      | $s_{1}$ | $s_{2}$ | $s_{3}$ | $s_{4}$ | $s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
----------|---------|---------|---------|---------|---------|--------|--------|--------|--------|--------|--------|--------|---------
-$R_7$    |   800   |   600   |  -500   |  -400   |  -400   |    0   |   0    |    0   |    0   |    0   |    0   |    1   |    0
-$500*R_1$|  -500   |    0    |    1    |    0    |    0    |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
----------|---------|---------|---------|---------|---------|--------|--------|--------|--------|--------|--------|--------|---------
-$R_4-R_1$| 800-500 | 600 + 0 |-500+500 | -400+0  | -400+0  | 0+500  |   0-0  |  0-0   |  0-0   |  0-0   |  0-0   |  1-0   | 0+500*16
+Row            |  $s_1$  |  $s_2$  |  $s_3$  | $s_4$  | $s_5$  |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|    P   | Constant
+---------------|---------|---------|---------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
+$R_7$          |   800   |   600   |  -500   |  -400  |  -400  |    0   |   0    |    0   |    0   |    0   |    0   |    1   |    0
+$500R_1$       |  -500   |    0    |   500   |    0   |    0   |   500  |   0    |    0   |    0   |    0   |    0   |    0   |  8000
+---------------|---------|---------|---------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
+$R_7$+$500R_1$ |   300   |   600   |    0    |  -400  |  -400  |   500  |   0    |    0   |    0   |    0   |    0   |    1   |  8000
 
 The updated tableau is shown below:
 
-Row    |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
-$R_1$  |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
-$R_2$  |   -1   |    0   |    0   |    1   |    0   |    0   |   1    |    0   |    0   |    0   |    0   |    0   |   20
-$R_3$  |   -1   |    0   |    0   |    0   |    1   |    0   |   0    |    1   |    0   |    0   |    0   |    0   |   22
-$R_4$  |    1   |   -1   |    0   |    0   |    0   |   -1   |   0    |    0   |    1   |    0   |    0   |    0   |    2
-$R_5$  |    0   |   -1   |    0   |    1   |    0   |    0   |   0    |    0   |    0   |    1   |    0   |    0   |   16
-$R_6$  |    0   |   -1   |    0   |    0   |    1   |    0   |   0    |    0   |    0   |    0   |    1   |    0   |   14
-$R_7$  |   300  |   600  |    0   |  -400  |  -400  |   500  |   0    |    0   |    0   |    0   |    0   |    1   | 8000
--->
+Row    |  $s_1$  |  $s_2$  |  $s_3$  | $s_4$  | $s_5$  |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|    P   | Constant
+-------|---------|---------|---------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
+$R_1$  |   -1    |    0    |    1    |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
+$R_2$  |   -1    |    0    |    0    |    1   |    0   |    0   |   1    |    0   |    0   |    0   |    0   |    0   |   20
+$R_3$  |   -1    |    0    |    0    |    0   |    1   |    0   |   0    |    1   |    0   |    0   |    0   |    0   |   22
+$R_4$  |    1    |   -1    |    0    |    0   |    0   |   -1   |   0    |    0   |    1   |    0   |    0   |    0   |    2
+$R_5$  |    0    |   -1    |    0    |    1   |    0   |    0   |   0    |    0   |    0   |    1   |    0   |    0   |   16
+$R_6$  |    0    |   -1    |    0    |    0   |    1   |    0   |   0    |    0   |    0   |    0   |    1   |    0   |   14
+$R_7$  |   300   |   600   |    0    |  -400  |  -400  |   500  |   0    |    0   |    0   |    0   |    0   |    1   | 8000
 
 If we try and look beyond the mechanics of these operations, notice (see the bottom row) how the stock at Factory I has been reduced by 500, the demand at Store A is now zero, and we have a flow of 500 going between Factory I and Store A. Furthermore, the total cost of transportation so far is 8,000 (last column of bottom row); this is the result of multiplying 500 units moved by the unit cost in that route, which was 16. We also see that the cost in row 4 is now 2: this is how much more expensive that route is relative to the least expensive alternative. Once we have exhausted the least expensive alternatives, this value tells us what is the additional cost per unit of using this route.
 
