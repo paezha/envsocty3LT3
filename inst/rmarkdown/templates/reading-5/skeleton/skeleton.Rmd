@@ -22,7 +22,7 @@ always_allow_html: true
 
 NOTE: This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
-We have seen in previous tutorials how R can effectively handle many data analysis operations, by means of data tables and data operations. We have also used a variety of geographic information tools for processing and analyzing data. Data analysis can be made more powerful by introducing elements of control flow.
+We have seen in previous readings how `R` can effectively handle many data analysis operations by means of data tables and data operations. We have also used a variety of geographic information tools for processing and analyzing data. Data analysis can be made more powerful by introducing elements of control flow.
 
 Control flow is the order in which instructions are executed in a program. An important category of control flow is a _conditional branch_, two forms of which we will introduce here:
 
@@ -33,19 +33,20 @@ In this tutorial, we will introduce conditional branching using the R statistica
 
 To use this note you will need the following:
 
-* This `R` markdown notebook.
-+ A file called `hamilton_graph_zoned.RData`
+* The following data objects (available in your course package)
+    + `hamilton_graph`
 
-You have already used the graph file (`hamilton_graph_zoned.RData`) in Reading and Exercise 04 ("Spatial Interaction"), and you will recall that it includes a portion of the road network in Hamilton, sourced from Open Street Maps. The graph has all roads, including provincial highways (e.g., the 403), and some nodes are labeled according to the zoning system used for the analysis of transportation data in Hamilton. 
+You have already used the graph object (`hamilton_graph`) in Readings 3 and 4, and you will recall that it includes the road network in Hamilton sourced from Open Street Maps. The graph has all roads, including provincial highways (e.g., the 403), and some nodes are labeled according to the zoning system used for the analysis of transportation data in Hamilton. 
 
 Next, we load the packages needed for analysis (some may need to be installed before they are available for loading):
 ```{r message=FALSE}
-library(igraph)
-library(scales)
-library(sf)
-library(tidygraph)
-library(tidyverse)
-library(units)
+library(envsocty3LT3) # Course package
+library(igraph) # Package for network analysis
+library(scales) # This package provides scales functions for visualization 
+library(sf) # Package to work with geospatial information in simple features format
+library(tidygraph) # Package to work with spatial networks
+library(tidyverse) # Family of packages for data manipulation, analysis, and visualization
+library(units) # Package for working with units in `R`
 ```
 
 ## Background
@@ -55,6 +56,7 @@ One way of motivating the transportation problem is as follows.
 We have seen how travelers respond to differences in the cost of transportation (think the distance-decay effect in spatial interaction). This effect implies that travelers display a preference for destinations that are less costly to reach.
 
 Imagine now the perspective of businesses who must compete for consumers. The classical example is the ice cream vendors on a long stretch of beach (this example is due to American statistician [Harold Hotelling](https://en.wikipedia.org/wiki/Harold_Hotelling)). This simple example has the following conditions: 
+
 1. The cost of relocation is zero. An ice-cream vendor can just move their cart to a new location if they wish to do so.
 
 2. We can treat the world as a line (beach-goers are all along the beach), which means that the problem has only one spatial dimension.
@@ -130,7 +132,6 @@ We see that there is an indifference point where the lines of price-plus-effort 
 $$
 p_1 = p_2\\
 $$
-
 Since $p$ depends on the _base price_ (the 5 dollars of the ice-cream) and the effort depends on the location of vendor 1 ($x_1$) and the location of vendor 2 $x_2$, we have that the total prices for the vendors are:
 $$
 p_1 = b_1 + (x - x_1)d_1\\
@@ -145,12 +146,10 @@ xd_1 - x_1d_1  - x_2d_2 + xd_2 = b_2 - b_1\\
 xd_1 + xd_2 = b_2 - b_1 + x_1d_1 + x_2d_2\\
 x(d_1 + d_2) = b_2 - b_1 + x_1d_1 + x_2d_2\\
 $$
-
 This means that the point of indifference is:
 $$
 x = \frac{b_2 - b_1 + x_1d_1 + x_2d_2}{d_1 + d_2} \\
 $$
-
 Let us say that one of the two vendors (the orange one) becomes a little greedy, and tries to capture a bigger share of the market. They can do this by relocating. Change the conditions here:
 ```{r} 
 location_1 = 5.5 # Location of vendor 1 (this must always be the one on the left)
@@ -340,41 +339,44 @@ As usual, before starting, it is useful to make sure that you have a clean Envir
 rm(list = ls())
 ```
 
-To read the files, you either need to *navigate to the directory where the files are and make it your working directory*, or *copy the files into the same directory as this markdown file*.
-
-Load road network:
+Load the data object with the road network:
 ```{r}
-load("hamilton_graph_zoned.RData")
+data("hamilton_graph")
 ```
 
-After loading the data file will can inspect the data object `hamilton_graph_zoned`:
+After loading the data file will can inspect the data object `hamilton_graph`:
 ```{r}
-hamilton_graph_zoned
+hamilton_graph
 ```
+
 This is the road network that you worked with in Exercise 4. Check the notes for that exercise if you need a refresher about this object.
 
 ## Motivating the transportation problem
 
-Consider a business with two small factories and three retail locations in the metropolitan region of Hamilton. The locations of the factories are approximated by nodes 23417 and 17531 in the network. The locations of the stores are approximated by nodes 1097, 14347, and 15975 in the network. The locations of factories and stores can be seen in the map below:
+1156 15719 17436 19260 25290
+
+
+
+Consider a business with two small factories and three retail locations in the metropolitan region of Hamilton. The locations of the factories are approximated by nodes 25290 and 19260 in the network. The locations of the stores are approximated by nodes 1156, 15719, and 17436 in the network. The locations of factories and stores can be seen in the map below:
 ```{r}
 ggplot() + # Create a blank ggplot object 
-  geom_sf(data = hamilton_graph_zoned %>% # Pass the tbl_graph object to the next function to activate the edges
+  geom_sf(data = hamilton_graph %>% # Pass the tbl_graph object to the next function to activate the edges
             activate(edges) %>% # Activate the edges of object `hamilton_graph_zoned`
             as_tibble() %>% # Convert to table
             st_as_sf(), # Convert to simple features for plotting the geo-spatial information
           color = "lightgray") + # Set the color of the edges to light gray
-  geom_sf(data = hamilton_graph_zoned %>% # Pass the tbl_graph object to the next function to activate the nodes
+  geom_sf(data = hamilton_graph %>% # Pass the tbl_graph object to the next function to activate the nodes
             activate(nodes) %>% # Activate the nodes of object `hamilton_graph_zoned`
             as_tibble() %>% # Convert to table
             st_as_sf() %>% # Convert to simple features for plotting the geo-spatial information
-            filter(nodeID == 23417 | nodeID == 17531), # Filter the nodes that correspond to the two factories
+            filter(nodeID == 25290 | nodeID == 19260), # Filter the nodes that correspond to the two factories
           color = "red", # Plot the factory nodes in red
           size = 4)  + # Set the size of the points
-  geom_sf(data = hamilton_graph_zoned %>% # Pass the tbl_graph object to the next function to activate the nodes
+  geom_sf(data = hamilton_graph %>% # Pass the tbl_graph object to the next function to activate the nodes
             activate(nodes) %>% # Activate the nodes of object `hamilton_graph_zoned`
             as_tibble() %>% # Convert to table
             st_as_sf() %>% # Convert to simple features for plotting the geo-spatial information
-            filter(nodeID == 1097 | nodeID == 14347 | nodeID == 15975), # Filter the nodes that correspond to the three stores
+            filter(nodeID == 1156 | nodeID == 15719 | nodeID == 17436), # Filter the nodes that correspond to the three stores
           color = "blue", # Plot the factory nodes in blue
           size = 4) # Set the size of the points
 ```
@@ -659,19 +661,23 @@ $$
 
 This is our _objective function_, the quantity that we use as our criterion to decide how efficient our decisions are. Previously, a decision with values $x_{12} = 400$, $x_{13} = 400$, and $x_{21} = 500$ was not as efficient as a decision with values $x_{11} = 500$, $x_{12} = 300$, $x_{22} = 100$, and $x_{23} = 400$, which achieved our goal of satisfying the demand without exceeding the amount of candy the factories could supply, and at a lower cost too. So, in reality, our objective is to find the decision variables that _minimize_ the cost:
 $$
-\text{min }C = 16x_{11} + 20x_{12} + 22x_{13} + 18x_{21} + 16x_{22} + 14x_{23}
+minC = 16x_{11} + 20x_{12} + 22x_{13} + 18x_{21} + 16x_{22} + 14x_{23}
 $$
 
 The conditions that the factories have a limit to how much candy they can supply are written as follows:
 $$
+\begin{array}{c}
 x_{11} + x_{12} + x_{13} \le 800\\
 x_{21} + x_{22} + x_{23} \le 600
+\end{array}
 $$
 We call these the _supply constraints_. The conditions that stores must receive at least as much as they need are the _demand constraints_, and are written like so:
 $$
+\begin{array}{c}
 x_{11} + x_{21} \ge 500\\
 x_{12} + x_{22} \ge 400\\
 x_{13} + x_{23} \ge 400
+\end{array}
 $$
 In addition to suppy and demand constraints, we also need to define another set of constraints that are perhaps a little less obvious:
 $$
@@ -679,8 +685,10 @@ x_{11} \ge 0; x_{12} \ge 0;\cdots;x_{23} \ge 0;
 $$
 These constraints are called _non-negativity constraints_, and basically say that flows must move in one direction, from factory to store. Negative flows would move from store from factory, something wasteful that does not help us to achieve our goal of having candy in the stores. Notice that the supply constraints are inequalities of the form "less than or equal to" where the demand constraints are inequalities of the form "greater than or equal to". For technical reasons, it is convenient to have all inequalities of the same type, something that we can achieve by multiplying both sides of the supply constraints by minus one:
 $$
+\begin{array}{c}
 -x_{11} - x_{12} - x_{13} \ge -800\\
 -x_{21} - x_{22} - x_{23} \ge -600
+\end{array}
 $$
 
 The objective function and the constraints can be written in the form of a matrix:
@@ -718,11 +726,12 @@ P = -800s_{1} - 600s_{2} + 500s_{3} + 400s_{4} + 400s_{5}
 $$
 In the equation above, $P$ is a made up quantity that is a summary of the value of the stock available at each site. We can see that stock that remains at the factories ($s_{1}$ and $s_{2}$) detracts from this quantity, whereas stock at the stores ($s_{3}$, $s_{4}$, and $s_{5}$) adds value. Whereas in the primal problem we wanted to _minimize_ the cost, the dual problem offers a different perspective, where we wish to _maximize_ the value of our stock:
 $$
-\text{max }P = -800s_{1} - 600s_{2} + 500s_{3} + 400s_{4} + 400s_{5}
+maxP = -800s_{1} - 600s_{2} + 500s_{3} + 400s_{4} + 400s_{5}
 $$
 
 This problem also has a set of constraints, as follows:
 $$
+\begin{array}{c}
 -s_{1} + s_{3} \le 16\\
 -s_{1} + s_{4} \le 16\\
 -s_{1} + s_{5} \le 16\\
@@ -730,6 +739,7 @@ $$
 -s_{2} + s_{4} \le 16\\
 -s_{2} + s_{5} \le 16\\
 s_{1} \ge 0;\cdots;s_{5} \ge 0
+\end{array}
 $$
 
 These constraints establish that the cost of transferring a unit of stock from a factory to a store must be _at most_ the cost on the route (we would not want to pay more than that!)
@@ -745,7 +755,8 @@ $$
 
 To construct the simplex tableau, we augment the matrix of the dual problem with an identity matrix (a matrix with ones in the diagonal and zeros elsewhere) as follows:
 
-Row   |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
+<!--
+Row    |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
 -------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
 $R_1$  |   -1   |    0   |    1   |    0   |    0   |    1   |   0    |    0   |    0   |    0   |    0   |    0   |   16
 $R_2$  |   -1   |    0   |    0   |    1   |    0   |    0   |   1    |    0   |    0   |    0   |    0   |    0   |   20
@@ -754,6 +765,7 @@ $R_4$  |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |
 $R_5$  |    0   |   -1   |    0   |    1   |    0   |    0   |   0    |    0   |    0   |    1   |    0   |    0   |   16
 $R_6$  |    0   |   -1   |    0   |    0   |    1   |    0   |   0    |    0   |    0   |    0   |    1   |    0   |   14
 $R_7$  |   800  |   600  |  -500  |  -400  |  -400  |    0   |   0    |    0   |    0   |    0   |    0   |    1   |    0
+-->
 
 The last row of this table tells us (in the first column) that we have 800 units at Factory I that are available; in the second column, likewise, it says that we have 600 units there available to move; the next three columns say that we need 500 units in Store A, 400 in Store B, and 400 in Store C.  The last row of the columns corresponding to $x_{11}$ through $x_{23}$ are all zeros because we have not allocated any flows yet.
 
@@ -769,12 +781,15 @@ The algorithm for the first step is as follows:
 
 To convert the pivot column into a unit column we use the pivot row to transform other values in the column to zeros. In the initial tableau we need to convert the one in the fourth row into a zero, and the -500 in the last row into a zero. So, we take row 1 (or $R_1$) and do the following:
 $$
+\begin{array}{c}
 R_4 - R_1\\
 R_7 + 500R_1
+\end{array}
 $$
 
 Since the value in the pivot column in row 4 is one and in row 1 is one, the operation gives a zero. Likewise, since the value in the pivot column in row 7 is -500 and the value in row 1 is one, the operation also gives a zero. The same operation needs to be conducted along the two rows that we are updating! See below for row 4:
 
+<!--
 Row   |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ |$x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$|   $P$  | Constant
 ------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------
 $R_4$ |    0   |   -1   |    1   |    0   |    0   |    0   |   0    |    0   |    1   |    0   |    0   |    0   |   18
@@ -809,6 +824,7 @@ $R_4$  |    1   |   -1   |    0   |    0   |    0   |   -1   |   0    |    0   |
 $R_5$  |    0   |   -1   |    0   |    1   |    0   |    0   |   0    |    0   |    0   |    1   |    0   |    0   |   16
 $R_6$  |    0   |   -1   |    0   |    0   |    1   |    0   |   0    |    0   |    0   |    0   |    1   |    0   |   14
 $R_7$  |   300  |   600  |    0   |  -400  |  -400  |   500  |   0    |    0   |    0   |    0   |    0   |    1   | 8000
+-->
 
 If we try and look beyond the mechanics of these operations, notice (see the bottom row) how the stock at Factory I has been reduced by 500, the demand at Store A is now zero, and we have a flow of 500 going between Factory I and Store A. Furthermore, the total cost of transportation so far is 8,000 (last column of bottom row); this is the result of multiplying 500 units moved by the unit cost in that route, which was 16. We also see that the cost in row 4 is now 2: this is how much more expensive that route is relative to the least expensive alternative. Once we have exhausted the least expensive alternatives, this value tells us what is the additional cost per unit of using this route.
 

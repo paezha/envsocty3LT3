@@ -31,27 +31,52 @@ output:
 always_allow_html: true
 ---
 
-For this exercise, you will compare a portion of the existing airline network in Northwestern United States to a hub-and-spoke configuration. The data for this task are found in the following table, which shows the number of domestic passengers (000s) for each O-D pair:.
+# Introduction
 
-* Readings:
-    + 01 Control Flow in R.Rmd (found under READINGS)
+For this exercise, you will work on a problem that requires you to develop a delivery schedule. For this. you will use the transportation problem
+
+<!--In this exercise, you will work on a spatial interaction model that combines the skills that you developed in Reading 4, and those you practiced previously in terms of visualizing geo-spatial information and estimating regression models. The objective of the exercise will be to compare the potential of different neighborhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.
+-->
+
+* Before working on this exercise, it is strongly recommended that you have completed the following readings.
+    + `Transportation Problem.pdf` (available with your contents in Avenue to Learn)
+    + Reading-4 ('Optimal Allocation of Flows and the Transportation Problem', available as a template in your course package)
 * Due date:	See course outline for due date.
-* Materials: This R Notebook
-* Instructions:	Answers must be provided by typing your solutions using RStudio and this R Notebook file. Change the name of the file to `Exercise 3 (Name-Student Number).Rmd`
+* Materials: the following data objects are used in this exercise (available in your course package)
+    + `hamilton_graph`
 
-Add new code chunkS by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*. When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-***
+## Preliminaries
 
-#Preliminaries
-
-Begin by clearing the workspace and loading the datasets that you will need for this exercise. They are available from the Readings section. For instance, you will need the `rgdal` package to read the shape file. Make sure all packages that you need are installed and loaded `library()`. 
+Begin by clearing the workspace:  
 ```{r echo=FALSE}
 rm(list = ls())
 ```
 
+Next, load the packages the you will use in this exercise. Make sure all packages that you need are installed and loaded `library()`:
+```{r message=FALSE}
+library(envsocty3LT3) # Course package
+library(igraph) # Package for network analysis
+library(scales) # This package provides scales functions for visualization 
+library(sf) # Package to work with geospatial information in simple features format
+library(tidygraph) # Package to work with spatial networks
+library(tidyverse) # Family of packages for data manipulation, analysis, and visualization
+library(units) # Package for working with units in `R`
+```
+
+Load road network:
+```{r}
+data("hamilton_graph")
+```
+
+## Context
+
+WORDS GO HERE.
+
+# Questions
+
 The task at hand is as follows:
 
-Paez Pop is a small craft root beer manufacturer. To preserve quality, the company produces their fair trade, organic, probiotic root beer in only two plants, A and B, where spring water is readily available. From these two plants, the root beer is shipped to four stores (Store I, II, III, and IV). Because of the increased cost of diesel, shipping cost has become a major expense for the company, so they have hired you to determine whether shipping costs can be reduced. 
+Paez Pop is a small craft root beer manufacturer. To preserve quality, the company produces their fair trade, organic, probiotic root beer in only two plants, A and B, where the secret ingredient is readily available. From these two plants, the root beer is shipped to four stores (Store I, II, III, and IV). Because of the increased cost of diesel, shipping cost has become a major expense for the company, so they have hired you to determine whether shipping costs can be reduced. 
 
 The plant production managers have estimated the output from their respective plants, as follows:
 
@@ -65,33 +90,43 @@ The CEO of Paez Pop has allocated the total output to the given warehouses by ex
 * Store III: 20 truckloads of root beer
 * Store IV: 15 truckloads of root beer
 
-
-The table below gives the cost of transportation, per truckload of root beer, from each plant to each store:
+The cost of transportation per truckload is $14/km:
 
 Plant/Distribution  | Store I | Store II  | Store III  | Store IV
 ------------------- | ------- | ------    | --------   | --------
 Plant A             | 290     | 280       | 500        | 250  
 Plant B             | 260     | 290       | 200        | 500
 
-
-
-The current distribution system that the company was using before you were hired is shown in the table below. The unit of measurement is the truckload:
+The current delivery schedule that the company uses is shown in the table below. The unit of measurement is the truckload:
 
 Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Supply
 ------------------- | ------- | ------    | --------   | --------  | ------
-Plant A             | 5       | 0         | 0          | 15        | 20
-Plant B             | 10      | 10        | 20         | 0         | 40
+Plant A             | 10      | 5         | 0          |  5        | 20
+Plant B             |  5      | 5         | 20         | 10        | 40
 Demand              | 15      | 10        | 20         | 15
 
+Your job is to determine the quantity (i.e., the number of truckloads) of root beer that should be shipped from each plant to each warehouse so that the company's total shipping cost is minimized.
 
+To begin, choose _one_ node from each column for the location of the two plants and the four stores:
+            
+Plant A | Plant B | Store I | Store II | Store III | Store IV
+--------|---------|---------|----------|-----------|----------
+  8940  |  19259  |   1156  |   10733  |   14096   |   13773  
+ 19172  |  19669  |  17193  |   15321  |   15321   |   16104
+ 25305  |  25625  |  23136  |   15719  |           |   23571
+ 25430  |         |         |          |           |
 
-The job for you is to determine the quantity (i.e., the number of truckloads) of root beer that should be shipped from each plant to each warehouse so that the company's total shipping cost is minimized.
+## Optimal delivery of Paez Pop in the Hamilton CMA (85 marks)
 
+1. Find the shortest-path distance from the plants to the stores and obtain a cost matrix (use a rate of $14/km) (10)
 
-1. Create the initial simplex tableau. (10)
+2. Calculate the cost of of transportation according to the current delivery schedule (20)
 
+3. Create the initial simplex tableau for this problem (20)
 
-2. Solve the problem using the simplex method, and generate a chart showing the optimized flows that you have generated for their distribution system. What is the minimized cost, and how much savings have you found for the company? (20)
+4. Solve the problem using the simplex method, and create a table showing the optimized flows that you have generated for their distribution system. What is the minimized cost, and how much savings have you found for the company? (30)
+
+NEW QUESTION
 
 3. The key to consulting is getting repeat business from your clients, so you're happy when the CEO of Paez Pop calls you back months later to ask you to do some more work.
 
@@ -101,13 +136,11 @@ Paez Pop has now saved up enough money to expand one, and only one, of their two
 
 Find which plant, when its production is increased by 20, will find Paez Pop the higher savings. (25)
 
-
 NEW QUESTION
 
 4. A few years pass, and Paez Pop has continued to expand. They have now added afternoon and night shifts, bringing total production at each plant up to 100 truckloads of beer a month. As well, as their brand has become more popular they have seen increased demand at the four original stores, and they have even started supplying their root beer to two new stores (Store V and Store VI). 
 
 Instead of coming to you to redesign their distribution system, they've just added transportation routes in an ad-hoc manner, so their current distribution system now looks like this:
-
 
 Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Store V | Store VI | Supply
 ------------------- | ------- | ------    | --------   | --------  | ------  | -------- | ------
@@ -130,5 +163,5 @@ NEW QUESTION
 
 (Plant A's truck drivers can't be replaced because they're unionized, so Plant A's transport costs will remain the same.)
 
-By how many percent would this plan reduce Paez Pop's total transport costs in a new optimized network? What do the flows look like now?
+By how many percent would this plan reduce Paez Pop's total transport costs in a new optimized network? What do the flows look like now? (15)
 
