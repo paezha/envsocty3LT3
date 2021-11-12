@@ -155,48 +155,49 @@ used by the Transportation Tomorrow Survey in the Greater Toronto and Hamilton A
 <p>Data Guide available (<a href='http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf'>http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_ph</span><span class='op'>)</span>
- <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>hamilton_taz_ph</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;     GTA06             population       drivers        vehicles   
-#&gt;  Length:297         Min.   :    0   Min.   :   0   Min.   :   0  
-#&gt;  Class :character   1st Qu.:  570   1st Qu.: 427   1st Qu.: 430  
-#&gt;  Mode  :character   Median : 2063   Median :1409   Median :1279  
-#&gt;                     Mean   : 2413   Mean   :1682   Mean   :1535  
-#&gt;                     3rd Qu.: 3536   3rd Qu.:2357   3rd Qu.:2255  
-#&gt;                     Max.   :13586   Max.   :9779   Max.   :8995  
-#&gt;                                                                  
-#&gt;    ft_workers       pt_workers       median_age     pop_density      
-#&gt;  Min.   :   0.0   Min.   :   0.0   Min.   :17.00   Min.   :    0.00  
-#&gt;  1st Qu.: 212.0   1st Qu.:  44.0   1st Qu.:38.00   1st Qu.:   85.34  
-#&gt;  Median : 798.0   Median : 190.0   Median :43.00   Median : 1561.20  
-#&gt;  Mean   : 976.8   Mean   : 266.7   Mean   :44.78   Mean   : 2164.80  
-#&gt;  3rd Qu.:1407.0   3rd Qu.: 393.0   3rd Qu.:52.00   3rd Qu.: 3328.21  
-#&gt;  Max.   :6361.0   Max.   :1699.0   Max.   :85.00   Max.   :24390.05  
-#&gt;                                    NA's   :24                        
-#&gt;      House          Apartment        Townhouse      total_dwellings 
-#&gt;  Min.   :   0.0   Min.   :   0.0   Min.   :   0.0   Min.   :286744  
-#&gt;  1st Qu.: 140.0   1st Qu.:   0.0   1st Qu.:   0.0   1st Qu.:286744  
-#&gt;  Median : 482.0   Median :  28.0   Median :   0.0   Median :286744  
-#&gt;  Mean   : 578.3   Mean   : 255.8   Mean   : 131.4   Mean   :286744  
-#&gt;  3rd Qu.: 873.0   3rd Qu.: 275.0   3rd Qu.: 168.0   3rd Qu.:286744  
-#&gt;  Max.   :3139.0   Max.   :2631.0   Max.   :1432.0   Max.   :286744  
-#&gt;                                                                     
-#&gt;  median_household_size  Inc_less_15k    Inc_15k_to_40k   Inc_40k_to_60k 
-#&gt;  Min.   :1.000         Min.   :  0.00   Min.   :   0.0   Min.   :  0.0  
-#&gt;  1st Qu.:2.000         1st Qu.:  0.00   1st Qu.:  13.0   1st Qu.: 18.0  
-#&gt;  Median :2.000         Median :  0.00   Median :  83.0   Median : 96.0  
-#&gt;  Mean   :2.304         Mean   : 45.75   Mean   : 149.2   Mean   :139.5  
-#&gt;  3rd Qu.:3.000         3rd Qu.: 55.00   3rd Qu.: 214.0   3rd Qu.:208.0  
-#&gt;  Max.   :5.000         Max.   :744.00   Max.   :1247.0   Max.   :726.0  
-#&gt;  NA's   :24                                                             
-#&gt;  Inc_60k_to_100k Inc_100k_to_125k Inc_more_125k    Inc_decline_dk  
-#&gt;  Min.   :  0.0   Min.   :  0.0    Min.   :   0.0   Min.   :   0.0  
-#&gt;  1st Qu.: 34.0   1st Qu.:  0.0    1st Qu.:  12.0   1st Qu.:  38.0  
-#&gt;  Median :141.0   Median : 75.0    Median :  85.0   Median : 121.0  
-#&gt;  Mean   :193.9   Mean   :100.8    Mean   : 156.8   Mean   : 179.5  
-#&gt;  3rd Qu.:312.0   3rd Qu.:149.0    3rd Qu.: 221.0   3rd Qu.: 256.0  
-#&gt;  Max.   :965.0   Max.   :722.0    Max.   :1468.0   Max.   :1088.0  
-#&gt;                                                                    </div></pre>
+    <pre class="examples"><span class='r-in'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_ph</span><span class='op'>)</span></span>
+<span class='r-in'> <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>hamilton_taz_ph</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     GTA06             population       drivers        vehicles   </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Length:297         Min.   :    0   Min.   :   0   Min.   :   0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Class :character   1st Qu.:  570   1st Qu.: 427   1st Qu.: 430  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mode  :character   Median : 2063   Median :1409   Median :1279  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                     Mean   : 2413   Mean   :1682   Mean   :1535  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                     3rd Qu.: 3536   3rd Qu.:2357   3rd Qu.:2255  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                     Max.   :13586   Max.   :9779   Max.   :8995  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    ft_workers       pt_workers       median_age     pop_density      </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   :   0.0   Min.   :   0.0   Min.   :17.00   Min.   :    0.00  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 212.0   1st Qu.:  44.0   1st Qu.:38.00   1st Qu.:   85.34  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median : 798.0   Median : 190.0   Median :43.00   Median : 1561.20  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   : 976.8   Mean   : 266.7   Mean   :44.78   Mean   : 2164.80  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.:1407.0   3rd Qu.: 393.0   3rd Qu.:52.00   3rd Qu.: 3328.21  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :6361.0   Max.   :1699.0   Max.   :85.00   Max.   :24390.05  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                    NA's   :24                        </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      House          Apartment        Townhouse      total_dwellings </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   :   0.0   Min.   :   0.0   Min.   :   0.0   Min.   :286744  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 140.0   1st Qu.:   0.0   1st Qu.:   0.0   1st Qu.:286744  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median : 482.0   Median :  28.0   Median :   0.0   Median :286744  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   : 578.3   Mean   : 255.8   Mean   : 131.4   Mean   :286744  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.: 873.0   3rd Qu.: 275.0   3rd Qu.: 168.0   3rd Qu.:286744  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :3139.0   Max.   :2631.0   Max.   :1432.0   Max.   :286744  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                     </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  median_household_size  Inc_less_15k    Inc_15k_to_40k   Inc_40k_to_60k </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   :1.000         Min.   :  0.00   Min.   :   0.0   Min.   :  0.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.:2.000         1st Qu.:  0.00   1st Qu.:  13.0   1st Qu.: 18.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median :2.000         Median :  0.00   Median :  83.0   Median : 96.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   :2.304         Mean   : 45.75   Mean   : 149.2   Mean   :139.5  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.:3.000         3rd Qu.: 55.00   3rd Qu.: 214.0   3rd Qu.:208.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :5.000         Max.   :744.00   Max.   :1247.0   Max.   :726.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  NA's   :24                                                             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Inc_60k_to_100k Inc_100k_to_125k Inc_more_125k    Inc_decline_dk  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Min.   :  0.0   Min.   :  0.0    Min.   :   0.0   Min.   :   0.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  1st Qu.: 34.0   1st Qu.:  0.0    1st Qu.:  12.0   1st Qu.:  38.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Median :141.0   Median : 75.0    Median :  85.0   Median : 121.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Mean   :193.9   Mean   :100.8    Mean   : 156.8   Mean   : 179.5  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  3rd Qu.:312.0   3rd Qu.:149.0    3rd Qu.: 221.0   3rd Qu.: 256.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Max.   :965.0   Max.   :722.0    Max.   :1468.0   Max.   :1088.0  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                                                                    </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
