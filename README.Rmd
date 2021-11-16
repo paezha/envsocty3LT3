@@ -36,25 +36,25 @@ This course package is designed for use in the course [ENVSOCTY 3LT3 _Transporta
 - Data sets used in the Readings and Exercises.
 - Custom functions.
 
-_Readings_ are like mini-chapters in a book. But they are interactive and editable, which meas you can work with them in ways not possible with conventional books.
+_Readings_ are desinged to be like mini-chapters in a book. What makes them different from a conventional book is that they are interactive and editable, which means that you can work with them in ways not possible with a conventional printed book.
 
-_Exercises_ are the documents that you will use to complete most of your coursework. The templates are pre-formatted for you, so you do not have to think about how to prepare the document, and can devote all your attention and energy to learn instead.
+_Exercises_ are the documents that you will use to complete most of your coursework. The templates are pre-formatted for you, so you do not have to think about how to prepare the document, and can instead devote your attention and energy to learn while creating great content.
 
 ## What do I need to use this course package?
 
-This course does not assume knowledge of, or experience working with `R`. So, no previous knowledge is required, other than some experience using computers in general, and maybe a word processor (e.g., Microsoft Word) and spreadsheets (e.g., Microsoft Excel). To use the package you will begin from the very basics: how to install and use the necessary software.
+This course does not assume knowledge of, or experience working with `R`. So, no previous knowledge is required, other than some experience using computers in general, and maybe a word processor (e.g., Microsoft Word) and spreadsheets (e.g., Microsoft Excel). To use the package you will begin from the very basics: how to install and use the necessary software: `R` and an Interactive Development Environment (e.g., RStudio) as explained next.
 
 ###	`R`: The open statistical computing project
 
 What is `R`?
 
-`R` is an open-source language for statistical computing. It was created in the early 1990s by [Ross Ihaka](https://en.wikipedia.org/wiki/Ross_Ihaka) and [Robert Gentleman](https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician)) at the University of Auckland, New Zealand, as a way to provide their students with an accessible, no-cost statistical application for their courses. `R` is now maintained by the `R` Development Core Team, and it continues to be developed by hundreds of contributors around the globe. `R` is an attractive alternative to other software packages for data analysis (e.g., Microsoft Excel, Matlab, Stata, ArcGIS) due to its open-source character (i.e., it is free), its flexibility, and large user community. The size of the `R` community means that if there is something you want to do (for instance, estimate a linear regression model or plot geographical information), it is very likely that someone has already developed a package for it.
+`R` is an open-source language for statistical computing. It was created in the early 1990s by [Ross Ihaka](https://en.wikipedia.org/wiki/Ross_Ihaka) and [Robert Gentleman](https://en.wikipedia.org/wiki/Robert_Gentleman_(statistician)) at the University of Auckland, New Zealand, as a way to provide their students with an accessible, no-cost statistical application for their courses. `R` is now maintained by the `R` Development Core Team, and it continues to be developed by hundreds of contributors around the globe. `R` is an attractive alternative to other software packages for data analysis (e.g., Microsoft Excel, Matlab, Stata, ArcGIS) due to its open-source character (i.e., it is free), its flexibility, and large user community. The size of the `R` community means that if there is something you want to do (for instance, estimate a linear regression model or plot geographical information), it is very likely that someone has already developed a package for it in `R`.
 
 A good way to think about `R` is as a core package, with a library of optional packages that can be attached to increase its core functionality. `R` can be downloaded for free at:
 
 https://cran.rstudio.com/
 
-`R` comes with a built-in console (a user graphical interface), but better alternatives to the basic interface include RStudio, which can also be downloaded for free:
+`R` comes with a built-in console (a graphical user interface), but better alternatives to the basic interface include Interactive Development Environments like RStudio, which can also be downloaded for free:
 
 https://www.rstudio.com/products/rstudio/download/
 
@@ -66,7 +66,7 @@ If you are working in the GIS lab at McMaster you will find that these have alre
 
 ### RStudio window: A Quick Tour
 
-RStudio is an _Interactive Development Environment_ (IDE for short). It takes the form of a familiar window application, and it provides a complete interface to interact with the language `R`. The application consists of a window with toolbars and several panes. Some panes include in addition several tabs. There are the usual drop-down menus for common operations. See Figure 1 below.
+RStudio is an _Interactive Development Environment_ (IDE for short). It takes the form of a familiar window application, and it provides a complete interface to interact with the language `R`. The application consists of a window with toolbars and several panes. Some panes include several tabs. There are the usual drop-down menus for common operations. See Figure 1 below.
 
 ```{r echo=FALSE}
 knitr::include_graphics("images/01-RStudio-Window-Anatomy.png")

@@ -35,14 +35,15 @@ following components:
 -   Data sets used in the Readings and Exercises.
 -   Custom functions.
 
-*Readings* are like mini-chapters in a book. But they are interactive
-and editable, which meas you can work with them in ways not possible
-with conventional books.
+*Readings* are desinged to be like mini-chapters in a book. What makes
+them different from a conventional book is that they are interactive and
+editable, which means that you can work with them in ways not possible
+with a conventional printed book.
 
 *Exercises* are the documents that you will use to complete most of your
 coursework. The templates are pre-formatted for you, so you do not have
-to think about how to prepare the document, and can devote all your
-attention and energy to learn instead.
+to think about how to prepare the document, and can instead devote your
+attention and energy to learn while creating great content.
 
 ## What do I need to use this course package?
 
@@ -51,7 +52,8 @@ This course does not assume knowledge of, or experience working with
 using computers in general, and maybe a word processor (e.g., Microsoft
 Word) and spreadsheets (e.g., Microsoft Excel). To use the package you
 will begin from the very basics: how to install and use the necessary
-software.
+software: `R` and an Interactive Development Environment (e.g., RStudio)
+as explained next.
 
 ### `R`: The open statistical computing project
 
@@ -71,7 +73,7 @@ open-source character (i.e., it is free), its flexibility, and large
 user community. The size of the `R` community means that if there is
 something you want to do (for instance, estimate a linear regression
 model or plot geographical information), it is very likely that someone
-has already developed a package for it.
+has already developed a package for it in `R`.
 
 A good way to think about `R` is as a core package, with a library of
 optional packages that can be attached to increase its core
@@ -79,9 +81,10 @@ functionality. `R` can be downloaded for free at:
 
 <https://cran.rstudio.com/>
 
-`R` comes with a built-in console (a user graphical interface), but
-better alternatives to the basic interface include RStudio, which can
-also be downloaded for free:
+`R` comes with a built-in console (a graphical user interface), but
+better alternatives to the basic interface include Interactive
+Development Environments like RStudio, which can also be downloaded for
+free:
 
 <https://www.rstudio.com/products/rstudio/download/>
 
@@ -111,8 +114,8 @@ RStudio is an *Interactive Development Environment* (IDE for short). It
 takes the form of a familiar window application, and it provides a
 complete interface to interact with the language `R`. The application
 consists of a window with toolbars and several panes. Some panes include
-in addition several tabs. There are the usual drop-down menus for common
-operations. See Figure 1 below.
+several tabs. There are the usual drop-down menus for common operations.
+See Figure 1 below.
 
 <img src="images/01-RStudio-Window-Anatomy.png" width="100%" /> **Figure
 1.** *RStudio IDE*
@@ -186,23 +189,25 @@ Figure 4 illustrates the steps to do this:
 <img src="images/04-Create-Project-Directory.gif" width="100%" />
 **Figure 4.** *Choose to store the project in a new directory*
 
-After you click ‘Create Project’, R Studio will restart the session, and
-you will have an `R` session in your new project. This will look like
-the image in Figure 5.
+After you click ‘Create Project’, you will have an `R` session with your
+new project. This will look like the image in Figure 5.
 <img src="images/05-New-Project.png" width="100%" /> **Figure 5.** *Your
 project keeps all your files nicely organized*
 
 ### Working with your preliminary reading in the course package
 
-All your readings are included in the course package. Each reading is
-like a mini-chapter in a book (instead of asking you to buy a book, we
-will give you the contents). But readings can be much more than that. To
-begin working with your preliminary reading, you begin by creating a new
-file and choosing R Markdown from a template. Select template
-`Reading-0` from the course package and give it a name. After you click
-‘OK’, a new R Markdown file will open in your editor. Also, notice that
-a new folder appears in your project to keep this file. The process is
-illustrated in Figure 6.
+You need to restart R Studio once after installing the package before
+you can access the readings and exercises.
+
+After doing so, you will find that all your readings are included in the
+course package. Each reading is like a mini-chapter in a book (instead
+of asking you to buy a book, we will give you the contents). But
+readings can be much more than that. To begin working with your
+preliminary reading, you begin by creating a new file and choosing R
+Markdown from a template. Select template `Reading-0` from the course
+package and give it a name. After you click ‘OK’, a new R Markdown file
+will open in your editor. Also, notice that a new folder appears in your
+project to keep this file. The process is illustrated in Figure 6.
 <img src="images/06-New-File-Reading.gif" width="100%" /> **Figure 6.**
 *Creating a new file from a template*
 
@@ -225,10 +230,13 @@ Figure 7 illustrates these steps.
 
 Once you are happy with your work using this file, you can create a pdf
 file to study by *knitting* the document. Knitting will convert the R
-Markdown to a pdf file. You can do this at any time, and as many times
-as you want. See Figure 8.
-<img src="images/08-Knitting.gif" width="100%" /> **Figure 8.** *Click
-‘Knit’ on the toolbar to convert your R Markdown into a pdf file*
+Markdown to a pdf file. Click the Knit button in the top left corner to
+do this. You can knit your document at any time, and as many times as
+you want; remember, you can always start afresh by creating a new R
+Markdown file with the same template. See Figure 8 for an example of
+knitting. <img src="images/08-Knitting.gif" width="100%" /> **Figure
+8.** *Click ‘Knit’ on the toolbar to convert your R Markdown into a pdf
+file*
 
 Figure 9 shows the result of knitting your R Markdown file.
 <img src="images/09-Knitted-Reading.png" width="100%" /> **Figure 9.**
@@ -281,7 +289,8 @@ experience working on this exercise. Figure 14 illustrates this step.
 
 The highlights and threshold concepts are the last element of your
 exercise, and after writing them you can knit the document to generate
-the pdf file for submission (see Figure 15).
+the pdf file for submission. Click the Knit button in the top left
+corner to knit (see Figure 15).
 <img src="images/15-Knitting-the-Exercise.gif" width="100%" /> **Figure
 14.** *Writing the highlights of the exercise*
 
