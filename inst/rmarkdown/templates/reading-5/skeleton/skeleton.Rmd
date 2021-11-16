@@ -67,7 +67,7 @@ Imagine now the perspective of businesses who must compete for consumers. The cl
 
 Under these conditions, we can set up the following situation.
 
-The initial location of the two ice-cream vendors is at points 2.5 and 7.5 along the beach. Both vendors offer ice-cream of identical quality, at $5 dollars a serving. Finally, the beach is homogeneous, so the effort needed to reach the ice cream vendors is the same irrespective of direction. These conditions can be expressed as follows:
+Between points 0 to 10, the initial location of the two ice-cream vendors is at points 2.5 and 7.5 along the beach. Both vendors offer ice-cream of identical quality, at $5 dollars a serving. Finally, the beach is homogeneous, so the effort needed to reach the ice cream vendors is the same irrespective of direction. These conditions can be expressed as follows:
 ```{r} 
 location_1 = 2.5 # Location of vendor 1 (this must always be the one on the left)
 location_2 = 7.5 # Location of vendor 2 (this must always be the one on the right)
@@ -133,6 +133,9 @@ $$
 p_1 = p_2\\
 $$
 Since $p$ depends on the _base price_ (the 5 dollars of the ice-cream) and the effort depends on the location of vendor 1 ($x_1$) and the location of vendor 2 $x_2$, we have that the total prices for the vendors are:
+
+***need to define b_1/ b_2 and d_1/ d_2***
+
 $$
 p_1 = b_1 + (x - x_1)d_1\\
 p_2 = b_2 + (x_2 - x)d_2\\
@@ -208,7 +211,7 @@ market_areas %>% # Pass market areas to the next function
   scale_color_manual(values = c("vendor_1" = "orange", "vendor_2" = "magenta")) # Set the colors of the lines to match the prices of each vendor
 ```
 
-By relocating, vendor 1 has pushed the point of indifference and captured a bigger market area, since now more people along the beach prefer their cart to the magenta ice-cream cart. This strategy of relocation gives raise to a dynamic process of tit-for-tat, since the magenta cart can relocate as well. Hotelling's insight is that the equilibrium situation with two vendors is when both are located in the middle of the beach and sharing the market 50-50. Neither has an incentive to move: the first one to move ends up with a smaller market share (you can experiment with this using the plots above; just remember, whichever cart is on the left automatically becomes `Vendor 1`). Unfortunately for beach-goers, the situation with two vendors at the center of the beach is not as convenient as two vendors at 2.5 and 7.5: some of them, those who are closest to the end of the beach, now have to walk a longer distance to get ice-cream!
+By relocating, vendor 1 has pushed the point of indifference and captured a bigger market area, since now more people along the beach prefer their cart to the magenta / ***orange???*** ice-cream cart. This strategy of relocation gives raise to a dynamic process of tit-for-tat, since the magenta cart can relocate as well. Hotelling's insight is that the equilibrium situation with two vendors is when both are located in the middle of the beach and sharing the market 50-50. Neither has an incentive to move: the first one to move ends up with a smaller market share (you can experiment with this using the plots above; just remember, whichever cart is on the left automatically becomes `Vendor 1`). Unfortunately for beach-goers, the situation with two vendors at the center of the beach is not as convenient as two vendors at 2.5 and 7.5: some of them, those who are closest to the end of the beach, now have to walk a longer distance to get ice-cream!
 
 Another strategy that vendor 1 could use to increase their share of the market (instead of relocating, which might lose them some customers at the end of the beach) is to offer the same ice-cream (the quality is not compromised), but at a lower price. We will return the vendors to their original positions, and change the price instead:
 ```{r} 
@@ -377,7 +380,7 @@ ggplot() + # Create a blank ggplot object
           size = 4) # Set the size of the points
 ```
 
-The two factories are in the periphery of the metropolitan region, Factory I to the west, and Factory II to the east. The three stores are centrally located, one in Burlington (Store A), one in downtown Hamilton (Store B), and the last in the Mountain (Store C).
+The two factories (shown as red) are in the periphery of the metropolitan region, Factory I to the west, and Factory II to the east. The three stores (shown as blue) are centrally located, one in Burlington (Store A), one in downtown Hamilton (Store B), and the last in the Mountain (Store C).
 
 Factory I can produce 800 units of candy per quarter, whereas the capacity of Factory II is 600 units of candy per quarter. Quarterly demand of candy at each of the stores is estimated at 500 units in Burlington, 400 units in Hamilton, and 400 units in the Mountain. This means that there are six possible flows, from Factory I to Stores A, B, and C (call these flows $x_{11}$, $x_{12}$, $x_{13}$), and from Factory II to Stores A, B, and C (call these flows $x_{21}$, $x_{22}$, $x_{23}$). The cost of transporting the product from the factories to the stores is known. The cost depends on the distance between the factory and the store, as well as other factors, such as congestion, possible delays, the physical configuration of the stores (is there a dock to speed unloading), and so on.
 
@@ -542,7 +545,7 @@ Speaking of automation, it is convenient at this point to introduce an important
 
 ### if-(then)-else statements
 
-An important control flow structure is if-(then)-else stataments. We have already seen statements of this kind before, most recently in line 510 of this notebook above. An if-(then)-else statement will execute a set of instructions _if_ a logical statement evaluates to `TRUE`. Otherwise, it will skip the instructions and proceed with the rest of the code.
+An important control flow structure is if-(then)-else statements. We have already seen statements of this kind before, most recently in line 510 of this notebook above. An if-(then)-else statement will execute a set of instructions _if_ a logical statement evaluates to `TRUE`. Otherwise, it will skip the instructions and proceed with the rest of the code.
 
 In addition to the `ifelse()` function that we use above, `R` can handle if-(then)-else statements like this:
 ```{r}
@@ -617,7 +620,7 @@ for(i in c(2,4,6,8,10)){
 
 Notice that the instructions contained in the loop will be executed _exactly_ the numbers of times predefined in the sequence provided in the statement.
 
-The `while` loop works differently. Sometimes we do not know before hand how long it will take to complete a task, so we wish the instructions to run as long as necessary until some predefined condition is met. This requires us to initialize said condition before entering the `while` loop. We can illustrate this using the `sample()` function to generate random integers, with or without replacement. Basically, the loop in the chunk below will print the value of `x` before substracting from it a random number between 1 and 3, until `x` becomes zero or a negative value:
+The `while` loop works differently. Sometimes we do not know before hand how long it will take to complete a task, so we wish the instructions to run as long as necessary until some predefined condition is met. This requires us to initialize said condition before entering the `while` loop. We can illustrate this using the `sample()` function to generate random integers, with or without replacement. Basically, the loop in the chunk below will print the value of `x` before subtracting from it a random number between 1 and 3, until `x` becomes zero or a negative value:
 ```{r}
 x <- 10 #initialize x
 while(x > 0){
@@ -675,7 +678,7 @@ x_{12} + x_{22} \ge 400\\
 x_{13} + x_{23} \ge 400
 \end{array}
 $$
-In addition to suppy and demand constraints, we also need to define another set of constraints that are perhaps a little less obvious:
+In addition to supply and demand constraints, we also need to define another set of constraints that are perhaps a little less obvious:
 $$
 x_{11} \ge 0; x_{12} \ge 0;\cdots;x_{23} \ge 0;  
 $$
@@ -698,7 +701,7 @@ $x_{11}$|$x_{12}$|$x_{13}$|$x_{21}$|$x_{22}$|$x_{23}$| Constant
  0   |    0   |    1   |    0   |    0   |    1   |   400
 16   |   20   |   22   |   18   |   16   |   14   |   
 
-If we examine the table we see that at the top we have the unknown flows ($x_{11}$ through $x_{23}$). The bottom row is the objective function (the cost multiplied by the flows) and the rightmost column are the constraints. The pattern of ones and zeros in the table indicates the possible flows; for example, the first column says that an outgoing flow from Factory I to Store A (the negative one in the second row) must match an incoming flow to Store A from Factory 1 (the positive one in the third row). In a similar fashion, we we inspect the second row, it says that all outgoing flows from Factory I (the negative ones) are constrained by the total supply at the factory (the negative 800).
+***need to check with Dr. Paez*** If we examine the table we see that at the top we have the unknown flows ($x_{11}$ through $x_{23}$). The bottom row is the objective function (the cost multiplied by the flows) and the rightmost column are the constraints. The pattern of ones and zeros in the table indicates the possible flows; for example, the first column says that an outgoing flow from Factory I to Store A (the negative one in the second row) must match an incoming flow to Store A from Factory 1 (the positive one in the third row). In a similar fashion, we inspect the second row, it says that all outgoing flows from Factory I (the negative ones) are constrained by the total supply at the factory (the negative 800).
 
 ### The dual problem
 
