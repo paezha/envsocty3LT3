@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • envsocty3LT3</title>
+<title>Road network in and around the Hamilton CMA. — hamilton_graph • envsocty3LT3</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,12 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Road network in and around the Hamilton CMA. — hamilton_graph" />
+<meta property="og:description" content="A tbl_graph object with the road network in and around the Hamilton CMA. The network was
+obtained from OpenStreetMap and includes highway links of type: motorway, motorway_link,
+primary, primary_link, residential, secondary, secondary_link, tertiary, and tertiary_link.
+The tbl_graph object consists of two tables: one table with the edges of the network and
+and one table with the nodes of the network. The object is projected as UTM Zone 17N." />
 
 
 
@@ -58,7 +63,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,96 +110,63 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Road network in and around the Hamilton CMA.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paezha/envsocty3LT3/blob/master/R/envsocty3LT3-package.R'><code>R/envsocty3LT3-package.R</code></a></small>
+    <div class="hidden name"><code>hamilton_graph.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>A tbl_graph object with the road network in and around the Hamilton CMA. The network was
+obtained from OpenStreetMap and includes highway links of type: motorway, motorway_link,
+primary, primary_link, residential, secondary, secondary_link, tertiary, and tertiary_link.
+The tbl_graph object consists of two tables: one table with the edges of the network and
+and one table with the nodes of the network. The object is projected as UTM Zone 17N.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_graph</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="energy_and_emissions.html">energy_and_emissions</a></code> </p>
-        </td>
-        <td><p>Energy and emissions data for world countries.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_graph.html">hamilton_graph</a></code> </p>
-        </td>
-        <td><p>Road network in and around the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_neighborhoods.html">hamilton_neighborhoods</a></code> </p>
-        </td>
-        <td><p>Hamilton neighborhoods.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_sustenance.html">hamilton_sustenance</a></code> </p>
-        </td>
-        <td><p>Establishments in and around the Hamilton CMA that serve food.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz.html">hamilton_taz</a></code> </p>
-        </td>
-        <td><p>Traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz_employment.html">hamilton_taz_employment</a></code> </p>
-        </td>
-        <td><p>Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz_ph.html">hamilton_taz_ph</a></code> </p>
-        </td>
-        <td><p>Person and households statistics for traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz_travel.html">hamilton_taz_travel</a></code> </p>
-        </td>
-        <td><p>Travel-related statistics for traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="od_full.html">od_full</a></code> </p>
-        </td>
-        <td><p>Origin-destination matrix for the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="travel_cost_car.html">travel_cost_car</a></code> </p>
-        </td>
-        <td><p>Travel cost by car in the Hamilton CMA.</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A large tbl_graph object consisting of two tables, one for nodes and one for edges (links)</p>
+<p>edges is simple features object with 35,142 rows and 6 variables:</p><dl>
+<dt>from</dt><dd><p>Unique identifier of origin node in the network</p></dd>
+<dt>to</dt><dd><p>Unique identifier of destination node in the network</p></dd>
+<dt>highway</dt><dd><p>OpenStreetMap classification of the link. For defintions, see: <a href='https://wiki.openstreetmap.org/wiki/Key:highway'>https://wiki.openstreetmap.org/wiki/Key:highway</a></p></dd>
+<dt>geometry</dt><dd><p>Geometry column</p></dd>
+<dt>EdgeID</dt><dd><p>Unique identifier of the edge</p></dd>
+<dt>length</dt><dd><p>Length of edge in meters</p></dd>
+
+</dl>
+
+<p>nodes is simple features object with 25,816 rows and 3 variables. The geometry is :</p><dl>
+<dt>nodeID</dt><dd><p>Unique identifier of node</p></dd>
+<dt>geometry</dt><dd><p>Geometry column</p></dd>
+<dt>GTA06</dt><dd><p></p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>OpenStreetMaps (<a href='https://www.openstreetmap.org/#map=3/71.34/-96.82'>https://www.openstreetmap.org/#map=3/71.34/-96.82</a>)</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_graph</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>hamilton_graph</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       Length Class  Mode       
+#&gt;  [1,]     1  -none- numeric    
+#&gt;  [2,]     1  -none- logical    
+#&gt;  [3,] 35142  -none- numeric    
+#&gt;  [4,] 35142  -none- numeric    
+#&gt;  [5,] 35142  -none- numeric    
+#&gt;  [6,] 35142  -none- numeric    
+#&gt;  [7,] 25817  -none- numeric    
+#&gt;  [8,] 25817  -none- numeric    
+#&gt;  [9,]     4  -none- list       
+#&gt; [10,]     3  -none- environment</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

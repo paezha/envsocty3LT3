@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • envsocty3LT3</title>
+<title>Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA. — hamilton_taz_employment • envsocty3LT3</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,11 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA. — hamilton_taz_employment" />
+<meta property="og:description" content="A table with statistics about jobs by traffic analysis zones in the Hamilton CMA.
+The zoning system is GTA06, and employment statistics are number of jobs in the
+traffic analysis zone. This file is a portion of the system used by the Transportation
+Tomorrow Survey in the Greater Toronto and Hamilton Area." />
 
 
 
@@ -58,7 +62,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,96 +109,57 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/paezha/envsocty3LT3/blob/master/R/envsocty3LT3-package.R'><code>R/envsocty3LT3-package.R</code></a></small>
+    <div class="hidden name"><code>hamilton_taz_employment.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>A table with statistics about jobs by traffic analysis zones in the Hamilton CMA.
+The zoning system is GTA06, and employment statistics are number of jobs in the
+traffic analysis zone. This file is a portion of the system used by the Transportation
+Tomorrow Survey in the Greater Toronto and Hamilton Area.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_employment</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="energy_and_emissions.html">energy_and_emissions</a></code> </p>
-        </td>
-        <td><p>Energy and emissions data for world countries.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_graph.html">hamilton_graph</a></code> </p>
-        </td>
-        <td><p>Road network in and around the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_neighborhoods.html">hamilton_neighborhoods</a></code> </p>
-        </td>
-        <td><p>Hamilton neighborhoods.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_sustenance.html">hamilton_sustenance</a></code> </p>
-        </td>
-        <td><p>Establishments in and around the Hamilton CMA that serve food.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz.html">hamilton_taz</a></code> </p>
-        </td>
-        <td><p>Traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz_employment.html">hamilton_taz_employment</a></code> </p>
-        </td>
-        <td><p>Employment statistics by place of employment for traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz_ph.html">hamilton_taz_ph</a></code> </p>
-        </td>
-        <td><p>Person and households statistics for traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hamilton_taz_travel.html">hamilton_taz_travel</a></code> </p>
-        </td>
-        <td><p>Travel-related statistics for traffic analysis zones in the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="od_full.html">od_full</a></code> </p>
-        </td>
-        <td><p>Origin-destination matrix for the Hamilton CMA.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="travel_cost_car.html">travel_cost_car</a></code> </p>
-        </td>
-        <td><p>Travel cost by car in the Hamilton CMA.</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A simple features object with 297 rows and 5 variables:</p><dl>
+<dt>GTA06</dt><dd><p>Unique identifier of zone in the GTA06 system</p></dd>
+<dt>Jobs_Manufacturing_Construction_Trades</dt><dd><p>Number of jobs in the traffic analysis zone of type Manufacturing/Construction/Trades</p></dd>
+<dt>Jobs_Retail</dt><dd><p>Number of jobs in the traffic analysis zone of type Retail, Sales and Service</p></dd>
+<dt>Jobs_Office_Clerical</dt><dd><p>Number of jobs in the traffic analysis zone of type Manufacturing/Construction/Trades</p></dd>
+<dt>Jobs_Professional</dt><dd><p>Number of jobs in the traffic analysis zone of type Professional/Management/Technical</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Transportation Tomorrow Survey (<a href='http://dmg.utoronto.ca/transportation-tomorrow-survey/tts-introduction'>http://dmg.utoronto.ca/transportation-tomorrow-survey/tts-introduction</a>)</p>
+<p>Data Guide available (<a href='http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf'>http://dmg.utoronto.ca/pdf/tts/2016/2016TTS_DataGuide.pdf</a>)</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'> <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>hamilton_taz_employment</span><span class='op'>)</span>
+ <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>hamilton_taz_employment</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;     GTA06           Jobs_Manufacturing_Construction_Trades  Jobs_Retail    
+#&gt;  Length:297         Min.   :   0.0                         Min.   :   0.0  
+#&gt;  Class :character   1st Qu.:   0.0                         1st Qu.:  45.0  
+#&gt;  Mode  :character   Median :  27.0                         Median : 164.0  
+#&gt;                     Mean   : 117.6                         Mean   : 277.6  
+#&gt;                     3rd Qu.:  92.0                         3rd Qu.: 362.0  
+#&gt;                     Max.   :5150.0                         Max.   :2154.0  
+#&gt;  Jobs_Office_Clerical Jobs_Professional
+#&gt;  Min.   :   0.0       Min.   :   0.0   
+#&gt;  1st Qu.:   0.0       1st Qu.:  57.0   
+#&gt;  Median :  52.0       Median : 162.0   
+#&gt;  Mean   : 114.9       Mean   : 368.8   
+#&gt;  3rd Qu.: 134.0       3rd Qu.: 399.0   
+#&gt;  Max.   :1730.0       Max.   :8083.0   </div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
