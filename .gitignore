@@ -3,6 +3,5 @@
 .Rdata
 .httr-oauth
 .DS_Store
-docs
 process-to-create-package.R
 images/Work-with-Exercises.tscproj

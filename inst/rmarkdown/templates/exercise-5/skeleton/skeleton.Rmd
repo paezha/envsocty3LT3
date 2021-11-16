@@ -107,7 +107,7 @@ Demand              | 15      | 10        | 20         | 15
 
 Your job is to determine the quantity (i.e., the number of truckloads) of root beer that should be shipped from each plant to each warehouse so that the company's total shipping cost is minimized.
 
-To begin, choose _one_ node from each column for the location of the two plants and the four stores:
+To begin, choose _one_ node from each column in the following table of node identifiers (nodeID in the `hamilton_graph`). You need a node for the location of the two plants and the four stores:
             
 Plant A | Plant B | Store I | Store II | Store III | Store IV
 --------|---------|---------|----------|-----------|----------
@@ -168,6 +168,10 @@ By how many percent would this plan reduce Paez Pop's total transport costs in a
 NEW QUESTION MAYBE?
 
 Think of a technological development, for instance, unbreakable glass bottles that reduce the cost of shipping. So if the cost of adopting this technology is X, and the cost of shipment is reduced by Y% while increasing sales by Z%, does it make sense to adopt the technology. Or, how long would it take to recoup the investment?
+
+NEW QUESTION?
+
+6. Neigbhors have complained about trucks in residential neighborhoods, how would things change is all local streets were closed to trucks. 
 
 NEW VERSION?
 
