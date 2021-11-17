@@ -132,7 +132,7 @@ We see that there is an indifference point where the lines of price-plus-effort 
 $$
 p_1 = p_2\\
 $$
-The price plus effort $p$ depends on the _base price_ $b$ of each vendor, so $b_1$ is the base price of vendor 1 (the 5 dollars of the ice-cream) and $b_2$ is the base prices of vendor 2.  The effort depends on the location of vendor 1 ($x_1$) and the location of vendor 2 $x_2$, as well as the effort of moving $d$ to reach them (so $d_1$ is the effort per unit distance moved to reach vendor 1 and $d_2$ is the effort per unit distance moved to reach vendor 2). Accordingly, we have that the total prices for the vendors are:
+The price plus effort $p$ depends on the _base price_ $b$ of each vendor, so $b_1$ is the base price of vendor 1 (the 5 dollars of the ice-cream) and $b_2$ is the base prices of vendor 2. The effort depends on the location of vendor 1 ($x_1$) and the location of vendor 2 $x_2$, as well as the effort of moving $d$ to reach them (so $d_1$ is the effort per unit distance moved to reach vendor 1 and $d_2$ is the effort per unit distance moved to reach vendor 2). Accordingly, we have that the total prices for the vendors are:
 $$
 p_1 = b_1 + (x - x_1)d_1\\
 p_2 = b_2 + (x_2 - x)d_2\\
@@ -701,19 +701,19 @@ If we examine the table we see that at the top we have the unknown flows ($x_{11
 
 ### The dual problem
 
-***Revise this table for clarification*** The objective function (basically the cost function), and the constraints, together constitute the _primal_ version of the transportation problem (so called because it is the first formulation of the problem). The primal of the problem can be used to obtain the _dual_ version of the problem. If we interchange the rows and columns of the matrix (this is called the _transpose_ of the matrix), we obtain the following:
+The objective function (basically the cost function), and the constraints, together constitute the _primal_ version of the transportation problem (so called because it is the first formulation of the problem). The primal of the problem can be used to obtain the _dual_ version of the problem. If we interchange the rows and columns of the matrix (this is called the _transpose_ of the matrix), we obtain the following:
 
-$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ | Constant
--------|--------|--------|--------|--------|---------
--1     |    0   |    1   |    0   |    0   |  16
--1     |    0   |    0   |    1   |    0   |  20
--1     |    0   |    0   |    0   |    1   |  22
- 0     |   -1   |    1   |    0   |    0   |  18
- 0     |   -1   |    0   |    1   |    0   |  16
- 0     |   -1   |    0   |    0   |    1   |  14
--800   |  -600  |   500  |   400  |   400  |  
+Row    |$s_{1}$ |$s_{2}$ |$s_{3}$ |$s_{4}$ |$s_{5}$ | Constant
+-------|--------|--------|--------|--------|--------|---------
+Row 1  |   -1   |    0   |    1   |    0   |    0   |  16
+Row 2  |   -1   |    0   |    0   |    1   |    0   |  20
+Row 3  |   -1   |    0   |    0   |    0   |    1   |  22
+Row 4  |    0   |   -1   |    1   |    0   |    0   |  18
+Row 5  |    0   |   -1   |    0   |    1   |    0   |  16
+Row 6  |    0   |   -1   |    0   |    0   |    1   |  14
+Row 7  |  -800  |  -600  |   500  |   400  |   400  |  
 
-This second matrix encodes the same information as the first one, but in a different way. Now, the variables in the first row of the table are not flows, but rather represent _stocks_ at each of the five locations in our system: $s_{1}$ and $s_{2}$ are the columns for Factories I and II, respectively. Columns $s_{3}$, $s_{4}$, and $s_{5}$ are for Stores A, B, and C. The bottom row of this table says that we have 800 units and 600 units in Factories A and B that are "negative" in value (since candy at the factory cannot be sold), and that we have a demand of candy in Stores A, B, and C equal to 500, 400, and 400 respectively. The rightmost column now contains the unit cost of transportation.
+This second matrix encodes the same information as the first one, but in a different way. Now, the values in the rows of the table are not flows, but rather represent _stocks_ at each of the five locations in our system: $s_{1}$ and $s_{2}$ are the columns for Factories I and II, respectively. Columns $s_{3}$, $s_{4}$, and $s_{5}$ are for Stores A, B, and C. The bottom row of this table says that we have 800 units and 600 units in Factories A and B that are "negative" in value (since candy at the factory cannot be sold), and that we have a demand of candy in Stores A, B, and C equal to 500, 400, and 400 respectively. The rightmost column now contains the unit cost of transportation.
 
 Working from the transposed matrix, the dual problem can be formulated with the following objective function:
 $$

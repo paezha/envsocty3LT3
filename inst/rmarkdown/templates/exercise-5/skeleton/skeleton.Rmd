@@ -70,7 +70,26 @@ data("hamilton_graph")
 
 ## Context
 
-WORDS GO HERE.
+As discussed in the project description of the City of Hamilton's Truck Route Master Plan (TRMP) review study [https://www.hamilton.ca/city-planning/master-plans-class-eas/truck-route-master-plan], the City of Hamilton is a goods movement gateway between Southern Ontario and international markets because of its the goods movement corridors (rail lines, highways) and intermodal freight facilities (airport, port, rail yards). "Trucks also support the quality of life for residents and the economic vitality of local businesses by transporting goods - such as consumer items, industry components and products, construction equipment and materials - to, from and within Hamilton" including removal of waste products (City's waste management) and support services that enhance neighbourhood quality of life. "However, because of their increased size and weight and potential safety and environmental impacts, the movement of trucks needs special consideration."
+
+According to Ontario Trucking Association's guidelines [https://ontruck.org/wp-content/uploads/2016/04/OTA-Local-Truck-Routes-A-Guide-FINAL_public.pdf], considerations for selecting a truck route are as follows: 
+
+- "To provide safe, efficient and connective routes to best service commercial and non-commercial truck travel while minimizing impact to surrounding communities.
+- To provide a seamless transition between external truck traffic and the internal road network
+- To provide easy access to truck information in the form of consistent, readable and accurate signage, readily available maps and reduced time and weight restrictions".
+
+"Any municipality, regardless of size, has the ability to develop a set of rules and policies that ensure future development does not impede the flow of goods. Each community has different characteristics and, therefore, different transportation needs. Smaller municipalities with less money to spend on capital-intensive projects can add freight-conscious policies into their Official Plan, while larger jurisdictions with greater populations and greater freight movement concerns may undertake larger projects" [https://ontruck.org/wp-content/uploads/2016/04/OTA-Local-Truck-Routes-A-Guide-FINAL_public.pdf].
+
+With a more focus on community livability and economic development, "the City of Hamilton operates a designated truck route network  [https://www.hamilton.ca/city-planning/master-plans-class-eas/truck-route-master-plan] that designates where truck traffic can travel in order to:
+
+- Recognize and minimize the impacts of truck traffic on the interests of the greater community such as safety, congestion, noise, and air quality
+- Support economic and employment activities
+- Support the safe and efficient movement of goods and services
+- Protect the City’s road infrastructure that cannot bear heavy loads or roads where truck traffic would be unsuitable (e.g. narrow lanes, weight restrictions on bridges)".
+
+However, the previous Truck Route Master Plan (TRMP) of 2010 is not free of criticism [https://www.environmenthamilton.org/truckroute_reboot_petition]. According to the local advocates "We need local delivery trucks in our neighbourhoods, but massive industrial trucks with no local destination create serious safety concerns when they cut through residential areas. Unfortunately, this is currently perfectly legal under Hamilton’s permissive truck route system". This is something on which the local leaders advocates are trying get the attention of the City of Hamilton. [https://www.hamiltonnews.com/news-story/9248810-hamilton-s-proposed-truck-route-review-will-emphasize-safe-streets-for-residents/].  
+
+
 
 # Questions
 
