@@ -40,7 +40,7 @@ For this exercise, you will work on a problem that requires you to develop a del
 
 * Before working on this exercise, it is strongly recommended that you have completed the following readings.
     + `Transportation Problem.pdf` (available with your contents in Avenue to Learn)
-    + Reading-5 ('Optimal Allocation of Flows and the Transportation Problem', available as a template in your course package)
+    + Reading-4 ('Optimal Allocation of Flows and the Transportation Problem', available as a template in your course package)
 * Due date:	See course outline for due date.
 * Materials: the following data objects are used in this exercise (available in your course package)
     + `hamilton_graph`
@@ -70,26 +70,26 @@ data("hamilton_graph")
 
 ## Context
 
-The City of Hamilton is a goods movement gateway between Southern Ontario and international markets, a role it enjoys thanks to goods movement corridors (rail lines, highways) and intermodal freight facilities (airport, port, rail yards). As noted in the City of Hamilton's Truck Route Master Plan ([TRMP](https://www.hamilton.ca/city-planning/master-plans-class-eas/truck-route-master-plan)) review study, "[t]rucks...support the quality of life for residents and the economic vitality of local businesses by transporting goods - such as consumer items, industry components and products, construction equipment and materials - to, from and within Hamilton". This includes removal of waste products (City's waste management) and support services that enhance neighbourhood quality of life. At the same time, the movement of trucks requires special consideration to account for "their increased size and weight and potential safety and environmental impacts."
+As discussed in the project description of the City of Hamilton's Truck Route Master Plan (TRMP) review study [https://www.hamilton.ca/city-planning/master-plans-class-eas/truck-route-master-plan], the City of Hamilton is a goods movement gateway between Southern Ontario and international markets because of its the goods movement corridors (rail lines, highways) and intermodal freight facilities (airport, port, rail yards). "Trucks also support the quality of life for residents and the economic vitality of local businesses by transporting goods - such as consumer items, industry components and products, construction equipment and materials - to, from and within Hamilton" including removal of waste products (City's waste management) and support services that enhance neighbourhood quality of life. "However, because of their increased size and weight and potential safety and environmental impacts, the movement of trucks needs special consideration."
 
-According to Ontario Trucking Association's [guidelines](https://ontruck.org/wp-content/uploads/2016/04/OTA-Local-Truck-Routes-A-Guide-FINAL_public.pdf), there are a number of considerations for selecting truck routes:
+According to Ontario Trucking Association's guidelines [https://ontruck.org/wp-content/uploads/2016/04/OTA-Local-Truck-Routes-A-Guide-FINAL_public.pdf], considerations for selecting a truck route are as follows: 
 
-- To provide safe, efficient and connective routes to best service commercial and non-commercial truck travel while minimizing impact to surrounding communities.
+- "To provide safe, efficient and connective routes to best service commercial and non-commercial truck travel while minimizing impact to surrounding communities.
 - To provide a seamless transition between external truck traffic and the internal road network
-- To provide easy access to truck information in the form of consistent, readable and accurate signage, readily available maps and reduced time and weight restrictions.
+- To provide easy access to truck information in the form of consistent, readable and accurate signage, readily available maps and reduced time and weight restrictions".
 
-Local communities need the ability to develop rules and policies to facilitate the flow of goods. The Ontario Trucking Association recommends that municipalities develop plans that are freight-conscious depending on their ability to invest in projects. Accordingly, "[s]maller municipalities with less money to spend on capital-intensive projects can add freight-conscious policies into their Official Plan, while larger jurisdictions with greater populations and greater freight movement concerns may undertake larger projects".
+"Any municipality, regardless of size, has the ability to develop a set of rules and policies that ensure future development does not impede the flow of goods. Each community has different characteristics and, therefore, different transportation needs. Smaller municipalities with less money to spend on capital-intensive projects can add freight-conscious policies into their Official Plan, while larger jurisdictions with greater populations and greater freight movement concerns may undertake larger projects" [https://ontruck.org/wp-content/uploads/2016/04/OTA-Local-Truck-Routes-A-Guide-FINAL_public.pdf].
 
-The economic importance of the movement of goods, however, need to pay attention to the different characteristics and needs of the communities they pass through and/or serve. The 2010 Truck Route Master Plan (TRMP) of the City of Hamilton was not [free of criticism](https://www.environmenthamilton.org/truckroute_reboot_petition) in this respect. According to the local advocates, "we need local delivery trucks in our neighbourhoods, but massive industrial trucks with no local destination create serious safety concerns when they cut through residential areas. Unfortunately, this is currently perfectly legal under Hamilton’s permissive truck route system". This is something on which the local leaders advocates worked to [bring to the attention](https://www.hamiltonnews.com/news-story/9248810-hamilton-s-proposed-truck-route-review-will-emphasize-safe-streets-for-residents/) of the City of Hamilton.  
-
-With its renewed focus on community livability and economic development, the City of Hamilton has adopted a master plan that aims to balance the needs of freight movement and the livability of neighbourhoods. In this way, the city has created a [designated truck route network](https://www.hamilton.ca/city-planning/master-plans-class-eas/truck-route-master-plan) in order to:
+With a more focus on community livability and economic development, "the City of Hamilton operates a designated truck route network  [https://www.hamilton.ca/city-planning/master-plans-class-eas/truck-route-master-plan] that designates where truck traffic can travel in order to:
 
 - Recognize and minimize the impacts of truck traffic on the interests of the greater community such as safety, congestion, noise, and air quality
 - Support economic and employment activities
 - Support the safe and efficient movement of goods and services
-- Protect the City’s road infrastructure that cannot bear heavy loads or roads where truck traffic would be unsuitable (e.g. narrow lanes, weight restrictions on bridges).
+- Protect the City’s road infrastructure that cannot bear heavy loads or roads where truck traffic would be unsuitable (e.g. narrow lanes, weight restrictions on bridges)".
 
-Clearly, the movement of goods has impacts for the local economy and the livability of a region, so its study is an important component in transportation planning. 
+However, the previous Truck Route Master Plan (TRMP) of 2010 is not free of criticism [https://www.environmenthamilton.org/truckroute_reboot_petition]. According to the local advocates "We need local delivery trucks in our neighbourhoods, but massive industrial trucks with no local destination create serious safety concerns when they cut through residential areas. Unfortunately, this is currently perfectly legal under Hamilton’s permissive truck route system". This is something on which the local leaders advocates are trying get the attention of the City of Hamilton. [https://www.hamiltonnews.com/news-story/9248810-hamilton-s-proposed-truck-route-review-will-emphasize-safe-streets-for-residents/].  
+
+
 
 # Questions
 
@@ -109,7 +109,7 @@ The CEO of Paez Pop has allocated the total output to the given warehouses by ex
 * Store III: 20 truckloads of root beer
 * Store IV: 15 truckloads of root beer
 
-Currently, the cost of transportation in dollars per truckload for the whole route is as shown in the next table for each of the routes:
+Currently, the cost of transportation in dollars per truckload is as shown in the next table for each of the routes:
 
 Plant/Distribution  | Store I | Store II  | Store III  | Store IV
 ------------------- | ------- | ------    | --------   | --------
@@ -123,6 +123,11 @@ Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Supply
 Plant A             | 10      | 5         | 0          |  5        | 20
 Plant B             |  5      | 5         | 20         | 10        | 40
 Demand              | 15      | 10        | 20         | 15
+
+```{r}
+290 * 10 + 280 * 5 + 500 * 0 + 250 * 5 + 260 * 5 + 290 * 5 + 200 * 20 + 500 * 10
+```
+
 
 Your job is to determine the quantity (i.e., the number of truckloads) of root beer that should be shipped from each plant to each warehouse so that the company's total shipping cost is minimized.
 
@@ -152,3 +157,44 @@ His company's root beer has become so successful that they now estimate potentia
 Paez Pop has now saved up enough money to expand one, and only one, of their two plants by 20 truckloads of extra root beer production, so they can meet this new demand. The CEO knows the two plants have different transportation costs to the four stores, so he is wondering if you can tell him which of the two facilities he should expand, in order to minimize his company's transportation costs.
 
 Find which plant, when its production is increased by 20, will find Paez Pop the higher savings. (15)
+
+NEW QUESTION
+
+4. A few years pass, and Paez Pop has continued to expand. They have now added afternoon and night shifts, bringing total production at each plant up to 100 truckloads of beer a month. As well, as their brand has become more popular they have seen increased demand at the four original stores, and they have even started supplying their root beer to two new stores (Store V and Store VI). 
+
+Instead of coming to you to redesign their distribution system, they've just added transportation routes in an ad-hoc manner, so their current distribution system now looks like this:
+
+Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Store V | Store VI | Supply
+------------------- | ------- | ------    | --------   | --------  | ------  | -------- | ------
+Plant A             | 30      | 0         | 0          | 40        | 0       | 30       |  100
+Plant B             | 10      | 20        | 30         | 0         | 40      | 0        |  100
+Demand              | 40      | 20        | 30         | 40        | 40      | 30       | 
+
+Their transportation costs haven't changed for Stores I-IV. Transportation costs to the two new stores are as follows:
+
+Plant/Distribution  | Store V | Store VI  
+------------------- | ------- | ------   
+Plant A             | 680     | 190       
+Plant B             | 400     | 460      
+
+They have now come back to you to optimize their distribution system again. Determine minimized cost, create a chart of optimal flows, and state how much money you've saved them. (30)
+
+NEW QUESTION
+
+5. Paez Pop is thinking of trying to reduce costs by investing in a new, futuristic transportation trend: they're going to fire all their truck drivers at Plant B, and replace them with shiny new electric-powered autonomous vehicles from Tesla. They think this will save them 20% on all transport costs from plant B to each of the six stores. 
+
+(Plant A's truck drivers can't be replaced because they're unionized, so Plant A's transport costs will remain the same.)
+
+By how many percent would this plan reduce Paez Pop's total transport costs in a new optimized network? What do the flows look like now? (15)
+
+NEW QUESTION MAYBE?
+
+Think of a technological development, for instance, unbreakable glass bottles that reduce the cost of shipping. So if the cost of adopting this technology is X, and the cost of shipment is reduced by Y% while increasing sales by Z%, does it make sense to adopt the technology. Or, how long would it take to recoup the investment?
+
+NEW QUESTION?
+
+6. Neighbors have complained about trucks in residential neighborhoods, how would things change is all local streets were closed to trucks. 
+
+NEW VERSION?
+
+Make it instead of an individual exercise something that students can do in pairs and compete.
