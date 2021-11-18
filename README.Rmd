@@ -198,6 +198,6 @@ The highlights and threshold concepts are the last element of your exercise, and
 ```{r echo=FALSE}
 knitr::include_graphics("images/15-Knitting-the-Exercise.gif")
 ```
-__Figure 14.__ _Writing the highlights of the exercise_
+__Figure 14.__ _Knitting the exercise_
 
 You are now ready to submit the exercise following the instructions in the course outline.
