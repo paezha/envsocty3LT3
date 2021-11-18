@@ -7,12 +7,14 @@ author:
 subject: "ENVSOCTY 3LT3 Transportation Geography"
 
 # In the highlights you are asked to reflect about your learning experience while working on this exercise. This section is worth 10 marks.
+
 highlights: |
     After completing the questions in the assignment, use this space to briefly write your thoughts about your learning experience. What did you learn working on this assignment? How were you challenged? Or was it easy?
     
     You can use more than one paragraph but remember to indent the paragraphs. This summary does not need to be very long, try to write it in about 200 words.
     
 # Write the concepts that in your opinion are threshold concepts in this exercise. A threshold concept is a key idea that once you grasp it, it changes your understanding of a topic, phenomenon, subject, method, etc. Write between three and five threshold concepts that apply to your learning experience working on this exercise. This section is worth 5 marks.
+
 threshold_concepts: 
 - threshold concept 1
 - threshold concept 2 
@@ -33,10 +35,8 @@ always_allow_html: true
 
 # Introduction
 
-For this exercise, you will work on a problem that requires you to develop a delivery schedule. For this. you will use the transportation problem
+For this exercise, you will work on a problem that requires you to develop a delivery schedule based on your learning from Reading 5 and the Transportation Problem document available in the A2L. For this. you will use a freight transportation problem and apply your learning to determine the transportation cost for freight transport, and shortest path to minimize the cost. Also, by exploring the strategies of goods distribution, you will find the solution to optimize the flows and minimize transportation costs. Lastly, you will determine the optimum goods flow schedule to minimize the cost when demand for goods increases and therefore, company increases the production and supply.
 
-<!--In this exercise, you will work on a spatial interaction model that combines the skills that you developed in Reading 4, and those you practiced previously in terms of visualizing geo-spatial information and estimating regression models. The objective of the exercise will be to compare the potential of different neighborhoods in the City of Hamilton to support mobility by walking. You will work with network data and will see how different network configurations, along with the distribution of opportunities in the landscape, can facilitate or hinder mobility, and increase or decrease accessibility. You will be asked to think about the different configurations, how they came to be, and what is their potential legacy in terms of future mobility and accessibility.
--->
 
 * Before working on this exercise, it is strongly recommended that you have completed the following readings.
     + `Transportation Problem.pdf` (available with your contents in Avenue to Learn)
