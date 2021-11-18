@@ -292,7 +292,7 @@ exercise, and after writing them you can knit the document to generate
 the pdf file for submission. Click the Knit button in the top left
 corner to knit (see Figure 15).
 <img src="images/15-Knitting-the-Exercise.gif" width="100%" /> **Figure
-14.** *Writing the highlights of the exercise*
+14.** *Knitting the exercise*
 
 You are now ready to submit the exercise following the instructions in
 the course outline.
