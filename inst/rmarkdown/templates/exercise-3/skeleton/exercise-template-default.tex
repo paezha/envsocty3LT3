@@ -75,8 +75,6 @@ $endif$
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{tcolorbox}
 \definecolor{vlightgray}{gray}{0.8}
-% Redefine shadecolor for code chunks which in the pandoc template is defined using LaTeX package color
-\definecolor{shadecolor}{gray}{0.9}
 \newtcolorbox{textbox}{
   fonttitle = \bfseries,
   colback = vlightgray,
@@ -84,6 +82,8 @@ $endif$
   coltext = black,
   boxsep = 5pt,
   arc = 4pt}
+% Redefine shadecolor for code chunks, due to conflict between packages color and xcolor
+\definecolor{shadecolor}{RGB}{248,248,248}
 
 $if(graphics)$
 \usepackage{graphicx,grffile}
