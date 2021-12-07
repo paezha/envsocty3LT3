@@ -67,7 +67,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>Package <code>envsocty3LT3</code> is an open educational resource that aims to combine various advantages of working with the <a href="https://www.r-project.org/" class="external-link"><code>R</code> statistical computing project</a>:</p>
+<p>Package {envsocty3LT3} is an open educational resource that aims to combine various advantages of working with the <a href="https://www.r-project.org/" class="external-link"><code>R</code> statistical computing project</a>:</p>
 <ul>
 <li>Ease of distribution</li>
 <li>Reproducibility</li>
@@ -115,11 +115,17 @@
 <div class="section level2">
 <h2 id="quick-start-guide">Quick Start Guide<a class="anchor" aria-label="anchor" href="#quick-start-guide"></a>
 </h2>
-<p>Once you have installed <code>R</code> and RStudio you are ready to install the course package <code>envsocty3LT3</code>. The package is available from <a href="https://github.com/paezha/envsocty3LT3" class="external-link">GitHub</a>, and to install it you need to run the following code in your <code>R</code> console:</p>
+<p>Once you have installed <code>R</code> and RStudio you are ready to install the course package {envsocty3LT3}. The package is available from <a href="https://github.com/paezha/envsocty3LT3" class="external-link">GitHub</a>, and to install it you need to run the following code in your <code>R</code> console:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"paezha/envsocty3LT3"</span><span class="op">)</span></code></pre></div>
-<p>This will download the package to your personal library of packages and install it to make the package available for use locally.</p>
+<p>This will download the package to your personal library of packages and install it to make the package available for use locally. Behind the scenes, {envsocty3LT3} uses LaTeX to convert documents to PDF. For this you need to have install LaTeX in your system. The simplest approach on any platform is with <code>R</code> package <a href="https://yihui.name/tinytex/" class="external-link">tinytex</a>, as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'tinytex'</span>, <span class="st">'rmarkdown'</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">tinytex</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tinytex/man/install_tinytex.html" class="external-link">install_tinytex</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p>After restarting R Studio, confirm that you have LaTeX with the following command:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">tinytex</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/pkg/tinytex/man/is_tinytex.html" class="external-link">is_tinytex</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="recommended-workflow">Recommended Workflow<a class="anchor" aria-label="anchor" href="#recommended-workflow"></a>
@@ -140,9 +146,9 @@
 <p>You need to restart R Studio once after installing the package before you can access the readings and exercises.</p>
 <p>After doing so, you will find that all your readings are included in the course package. Each reading is like a mini-chapter in a book (instead of asking you to buy a book, we will give you the contents). But readings can be much more than that. To begin working with your preliminary reading, you begin by creating a new file and choosing R Markdown from a template. Select template <code>Reading-0</code> from the course package and give it a name. After you click ‘OK’, a new R Markdown file will open in your editor. Also, notice that a new folder appears in your project to keep this file. The process is illustrated in Figure 6. <img src="images/06-New-File-Reading.gif" width="100%"><strong>Figure 6.</strong> <em>Creating a new file from a template</em></p>
 <p>Your new file is an R Markdown document. This is a text file with <em>chunks</em> of code that can be executed. Reading 0 will introduce you to the use of R Markdown. The document is editable, which means that you can annotate it. To begin with, you can add your name to the list of authors of the document. You can execute code by clicking on the ‘play’ icon on the top-right corner of a chunk of code. The template also includes a definition for a <em>textbox</em>. You can introduce a textbox in the text using this format:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">:::</span>{.textbox data<span class="op">-</span>latex=<span class="st">""</span>}</span>
-<span id="cb2-2"><a href="#cb2-2"></a>This is my annotation.</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="op">:::</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">:::</span>{.textbox data<span class="op">-</span>latex=<span class="st">""</span>}</span>
+<span id="cb4-2"><a href="#cb4-2"></a>This is my annotation.</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">:::</span></span></code></pre></div>
 <p>Figure 7 illustrates these steps. <img src="images/07-Working-with-Reading.gif" width="100%"><strong>Figure 7.</strong> <em>Working with your reading</em></p>
 <p>Once you are happy with your work using this file, you can create a pdf file to study by <em>knitting</em> the document. Knitting will convert the R Markdown to a pdf file. Click the Knit button in the top left corner to do this. You can knit your document at any time, and as many times as you want; remember, you can always start afresh by creating a new R Markdown file with the same template. See Figure 8 for an example of knitting. <img src="images/08-Knitting.gif" width="100%"><strong>Figure 8.</strong> <em>Click ‘Knit’ on the toolbar to convert your R Markdown into a pdf file</em></p>
 <p>Figure 9 shows the result of knitting your R Markdown file. <img src="images/09-Knitted-Reading.png" width="100%"><strong>Figure 9.</strong> <em>The result of knitting is a pdf file with your reading</em></p>
@@ -216,7 +222,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.0.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
