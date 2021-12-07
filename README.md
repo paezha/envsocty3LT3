@@ -13,7 +13,7 @@ status](https://www.r-pkg.org/badges/version/envsocty3LT3)](https://CRAN.R-proje
 <img src="images/mcm-col_jpg.jpg" align="right" width=260 />
 <!-- badges: end -->
 
-Package `envsocty3LT3` is an open educational resource that aims to
+Package {envsocty3LT3} is an open educational resource that aims to
 combine various advantages of working with the [`R` statistical
 computing project](https://www.r-project.org/):
 
@@ -150,7 +150,7 @@ and it is in this pane where this kind of content can be previewed.
 ## Quick Start Guide
 
 Once you have installed `R` and RStudio you are ready to install the
-course package `envsocty3LT3`. The package is available from
+course package {envsocty3LT3}. The package is available from
 [GitHub](https://github.com/paezha/envsocty3LT3), and to install it you
 need to run the following code in your `R` console:
 
@@ -160,7 +160,23 @@ remotes::install_github("paezha/envsocty3LT3")
 ```
 
 This will download the package to your personal library of packages and
-install it to make the package available for use locally.
+install it to make the package available for use locally. Behind the
+scenes, {envsocty3LT3} uses LaTeX to convert documents to PDF. For this
+you need to have install LaTeX in your system. The simplest approach on
+any platform is with `R` package [tinytex](https://yihui.name/tinytex/),
+as follows:
+
+``` r
+install.packages(c('tinytex', 'rmarkdown'))
+tinytex::install_tinytex()
+```
+
+After restarting R Studio, confirm that you have LaTeX with the
+following command:
+
+``` r
+tinytex:::is_tinytex() 
+```
 
 ## Recommended Workflow
 
