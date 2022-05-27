@@ -36,7 +36,7 @@ This course package is designed for use in the course [ENVSOCTY 3LT3 _Transporta
 - Data sets used in the Readings and Exercises.
 - Custom functions.
 
-_Readings_ are desinged to be like mini-chapters in a book. What makes them different from a conventional book is that they are interactive and editable, which means that you can work with them in ways not possible with a conventional printed book.
+_Readings_ are designed to be like mini-chapters in a book. What makes them different from a conventional book is that they are interactive and editable, which means that you can work with them in ways not possible with a conventional printed book.
 
 _Exercises_ are the documents that you will use to complete most of your coursework. The templates are pre-formatted for you, so you do not have to think about how to prepare the document, and can instead devote your attention and energy to learn while creating great content.
 
