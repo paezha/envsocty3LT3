@@ -1,5 +1,5 @@
 ---
-title: "Exercise 5: Spatial interaction analysis in the Hamilton CMA"
+title: "Exercise 5: Logistics and deliveries"
 author:
   # Enter your name and student number here:
 - name: My Name

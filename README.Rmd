@@ -29,6 +29,10 @@ Package {envsocty3LT3} is an open educational resource that aims to combine vari
 - Availability of templates for computational notebooks
 - Rigor in documentation of data sets and computational products
 
+See the Quickstart guide below on instructions to install and start using the package.
+
+
+
 This course package is designed for use in the course [ENVSOCTY 3LT3 _Transportation Geography_](https://academiccalendars.romcmaster.ca/preview_course_nopop.php?catoid=41&coid=221967) offered by the [School of Earth, Environment and Society](https://www.science.mcmaster.ca/ees/) at [McMaster University](https://www.mcmaster.ca/). The course package includes the following components:
 
 - Document templates with _Readings_. 
@@ -37,6 +41,27 @@ This course package is designed for use in the course [ENVSOCTY 3LT3 _Transporta
 - Custom functions.
 
 _Readings_ are designed to be like mini-chapters in a book. What makes them different from a conventional book is that they are interactive and editable, which means that you can work with them in ways not possible with a conventional printed book.
+
+These include:
+
+```{r echo=FALSE, eval=FALSE}
+file.edit("inst/rmarkdown/templates/exercise-1/skeleton/skeleton.Rmd")
+file.edit("inst/rmarkdown/templates/exercise-2/skeleton/skeleton.Rmd")
+file.edit("inst/rmarkdown/templates/exercise-3/skeleton/skeleton.Rmd")
+file.edit("inst/rmarkdown/templates/exercise-4/skeleton/skeleton.Rmd")
+file.edit("inst/rmarkdown/templates/exercise-5/skeleton/skeleton.Rmd")
+file.edit("inst/rmarkdown/templates/exercise-6/skeleton/skeleton.Rmd")
+```
+
+- Exercise 1: Energy consumption trends
+- Exercise 2: Geographic information for transportation analysis
+- Exercise 3: Network analysis and the potential for walking mobility and accessibility in neighbourhoods
+- Exercise 4: Spatial interaction analysis in the Hamilton CMA
+- Exercise 5: Logistics and deliveries
+<!-- These are suggested topics (RL): -->
+<!-- - Exercise 6: Spatial interaction modelling -->
+<!-- - Exercise 6: Exploring transport systems with OSM data -->
+
 
 _Exercises_ are the documents that you will use to complete most of your coursework. The templates are pre-formatted for you, so you do not have to think about how to prepare the document, and can instead devote your attention and energy to learn while creating great content.
 
