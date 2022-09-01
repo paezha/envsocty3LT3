@@ -22,6 +22,9 @@ computing project](https://www.r-project.org/):
 -   Availability of templates for computational notebooks
 -   Rigor in documentation of data sets and computational products
 
+See the Quickstart guide below on instructions to install and start
+using the package.
+
 This course package is designed for use in the course [ENVSOCTY 3LT3
 *Transportation
 Geography*](https://academiccalendars.romcmaster.ca/preview_course_nopop.php?catoid=41&coid=221967)
@@ -39,6 +42,18 @@ following components:
 them different from a conventional book is that they are interactive and
 editable, which means that you can work with them in ways not possible
 with a conventional printed book.
+
+These include:
+
+-   Exercise 1: Energy consumption trends
+-   Exercise 2: Geographic information for transportation analysis
+-   Exercise 3: Network analysis and the potential for walking mobility
+    and accessibility in neighbourhoods
+-   Exercise 4: Spatial interaction analysis in the Hamilton CMA
+-   Exercise 5: Logistics and deliveries
+    <!-- These are suggested topics (RL): -->
+    <!-- - Exercise 6: Spatial interaction modelling -->
+    <!-- - Exercise 6: Exploring transport systems with OSM data -->
 
 *Exercises* are the documents that you will use to complete most of your
 coursework. The templates are pre-formatted for you, so you do not have
