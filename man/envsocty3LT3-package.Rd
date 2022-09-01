@@ -12,6 +12,7 @@ Course package for ENVSOCTY 3LT3 Transportation Geography.
 Useful links:
 \itemize{
   \item \url{https://github.com/paezha/envsocty3LT3}
+  \item \url{https://paezha.github.io/envsocty3LT3/}
   \item Report bugs at \url{https://github.com/paezha/envsocty3LT3/issues}
 }
 

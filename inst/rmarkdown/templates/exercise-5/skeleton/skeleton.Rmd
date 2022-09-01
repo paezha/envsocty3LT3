@@ -109,37 +109,31 @@ The CEO of Paez Pop has allocated the total output to the given warehouses by ex
 * Store III: 20 truckloads of root beer
 * Store IV: 15 truckloads of root beer
 
-Currently, the cost of transportation in dollars per truckload for the whole route is as shown in the next table for each of the routes:
-
-Plant/Distribution  | Store I | Store II  | Store III  | Store IV
-------------------- | ------- | ------    | --------   | --------
-Plant A             | 290     | 280       | 500        | 250  
-Plant B             | 260     | 290       | 200        | 500
-
 The current delivery schedule that the company uses is shown in the table below. The unit of measurement is the truckload:
 
 Plant/Distribution  | Store I | Store II  | Store III  | Store IV  | Supply
 ------------------- | ------- | ------    | --------   | --------  | ------
-Plant A             | 10      | 5         | 0          |  5        | 20
-Plant B             |  5      | 5         | 20         | 10        | 40
+Plant A             |  7      | 3         | 2          |  8        | 20
+Plant B             |  8      | 7         | 18         |  7        | 40
 Demand              | 15      | 10        | 20         | 15
 
 Your job is to determine the quantity (i.e., the number of truckloads) of root beer that should be shipped from each plant to each warehouse so that the company's total shipping cost is minimized.
 
 To begin, choose _one_ node from each column in the following table of node identifiers (nodeID in the `hamilton_graph`). You need a node for the location of the two plants and the four stores:
             
+Find all combinations of origins and destinations:
 Plant A | Plant B | Store I | Store II | Store III | Store IV
 --------|---------|---------|----------|-----------|----------
   8940  |  19259  |   1156  |   10733  |   14096   |   13773  
- 19172  |  19669  |  17193  |   15321  |   15321   |   16104
- 25305  |  25625  |  23136  |   15719  |           |   23571
+ 19172  |  19669  |  17193  |   15719  |   15321   |   16104
+ 25305  |  25625  |  23136  |          |           |   23571
  25430  |         |         |          |           |
 
 ## Optimal delivery of Paez Pop in the Hamilton CMA (85 marks)
 
-1. Calculate the cost of of transportation according to the current delivery schedule (10)
+1. Find the shortest-path distances from the plants to the stores and obtain a cost matrix (use a rate of $14/km per truckload) (10)
 
-2. Find the shortest-path distances from the plants to the stores and obtain a cost matrix (use a rate of $14/km per truckload) (10)
+2. Calculate the cost of of transportation according to the current delivery schedule (10)
 
 3. Create the initial simplex tableau for this problem (20)
 
