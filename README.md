@@ -6,11 +6,11 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+experimental](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/envsocty3LT3)](https://CRAN.R-project.org/package=envsocty3LT3)
-<!-- Institutional logo: save in folder `images` -->
-<img src="images/mcm-col_jpg.jpg" align="right" width=260 />
+<!-- Institutional logo: save in folder `man/figures` -->
+<img src="man/figures/mcm-col_jpg.jpg" align="right" width=260 />
 <!-- badges: end -->
 
 Package {envsocty3LT3} is an open educational resource that aims to
@@ -21,6 +21,9 @@ computing project](https://www.r-project.org/):
 -   Reproducibility
 -   Availability of templates for computational notebooks
 -   Rigor in documentation of data sets and computational products
+
+See the Quickstart guide below on instructions to install and start
+using the package.
 
 This course package is designed for use in the course [ENVSOCTY 3LT3
 *Transportation
@@ -35,10 +38,22 @@ following components:
 -   Data sets used in the Readings and Exercises.
 -   Custom functions.
 
-*Readings* are desinged to be like mini-chapters in a book. What makes
+*Readings* are designed to be like mini-chapters in a book. What makes
 them different from a conventional book is that they are interactive and
 editable, which means that you can work with them in ways not possible
 with a conventional printed book.
+
+These include:
+
+-   Exercise 1: Energy consumption trends
+-   Exercise 2: Geographic information for transportation analysis
+-   Exercise 3: Network analysis and the potential for walking mobility
+    and accessibility in neighbourhoods
+-   Exercise 4: Spatial interaction analysis in the Hamilton CMA
+-   Exercise 5: Logistics and deliveries
+    <!-- These are suggested topics (RL): -->
+    <!-- - Exercise 6: Spatial interaction modelling -->
+    <!-- - Exercise 6: Exploring transport systems with OSM data -->
 
 *Exercises* are the documents that you will use to complete most of your
 coursework. The templates are pre-formatted for you, so you do not have
@@ -117,8 +132,8 @@ consists of a window with toolbars and several panes. Some panes include
 several tabs. There are the usual drop-down menus for common operations.
 See Figure 1 below.
 
-<img src="images/01-RStudio-Window-Anatomy.png" width="100%" /> **Figure
-1.** *RStudio IDE*
+<img src="man/figures/01-RStudio-Window-Anatomy.png" width="100%" />
+**Figure 1.** *RStudio IDE*
 
 The editor pane allows you to open and work with text and other files.
 In these files you can write instructions that can be passed on to `R`
@@ -190,25 +205,25 @@ way to keep your work in this course nicely organized.
 
 You can create a new project using the buttons in the toolbar. Figure 2
 shows one way of doing this:
-<img src="images/02-Create-Project-1.gif" width="100%" /> **Figure 2.**
-*Create new project - option 1*
+<img src="man/figures/02-Create-Project-1.gif" width="100%" /> **Figure
+2.** *Create new project - option 1*
 
 Figure 3 shows an alternative way of doing the same, using the button
 for managing projects in the R Studio interface:
-<img src="images/03-Create-Project-2.gif" width="100%" /> **Figure 3.**
-*Create new project - option 2*
+<img src="man/figures/03-Create-Project-2.gif" width="100%" /> **Figure
+3.** *Create new project - option 2*
 
 You then need to select a new directory to store your new project. Give
 the new directory a name, and save it in a place that you can easily
 find (for instance, the folder where you keep your academic work).
 Figure 4 illustrates the steps to do this:
-<img src="images/04-Create-Project-Directory.gif" width="100%" />
+<img src="man/figures/04-Create-Project-Directory.gif" width="100%" />
 **Figure 4.** *Choose to store the project in a new directory*
 
 After you click ‘Create Project’, you will have an `R` session with your
 new project. This will look like the image in Figure 5.
-<img src="images/05-New-Project.png" width="100%" /> **Figure 5.** *Your
-project keeps all your files nicely organized*
+<img src="man/figures/05-New-Project.png" width="100%" /> **Figure 5.**
+*Your project keeps all your files nicely organized*
 
 ### Working with your preliminary reading in the course package
 
@@ -224,8 +239,8 @@ Markdown from a template. Select template `Reading-0` from the course
 package and give it a name. After you click ‘OK’, a new R Markdown file
 will open in your editor. Also, notice that a new folder appears in your
 project to keep this file. The process is illustrated in Figure 6.
-<img src="images/06-New-File-Reading.gif" width="100%" /> **Figure 6.**
-*Creating a new file from a template*
+<img src="man/figures/06-New-File-Reading.gif" width="100%" /> **Figure
+6.** *Creating a new file from a template*
 
 Your new file is an R Markdown document. This is a text file with
 *chunks* of code that can be executed. Reading 0 will introduce you to
@@ -241,8 +256,8 @@ the text using this format:
     :::
 
 Figure 7 illustrates these steps.
-<img src="images/07-Working-with-Reading.gif" width="100%" /> **Figure
-7.** *Working with your reading*
+<img src="man/figures/07-Working-with-Reading.gif" width="100%" />
+**Figure 7.** *Working with your reading*
 
 Once you are happy with your work using this file, you can create a pdf
 file to study by *knitting* the document. Knitting will convert the R
@@ -250,13 +265,13 @@ Markdown to a pdf file. Click the Knit button in the top left corner to
 do this. You can knit your document at any time, and as many times as
 you want; remember, you can always start afresh by creating a new R
 Markdown file with the same template. See Figure 8 for an example of
-knitting. <img src="images/08-Knitting.gif" width="100%" /> **Figure
-8.** *Click ‘Knit’ on the toolbar to convert your R Markdown into a pdf
-file*
+knitting. <img src="man/figures/08-Knitting.gif" width="100%" />
+**Figure 8.** *Click ‘Knit’ on the toolbar to convert your R Markdown
+into a pdf file*
 
 Figure 9 shows the result of knitting your R Markdown file.
-<img src="images/09-Knitted-Reading.png" width="100%" /> **Figure 9.**
-*The result of knitting is a pdf file with your reading*
+<img src="man/figures/09-Knitted-Reading.png" width="100%" /> **Figure
+9.** *The result of knitting is a pdf file with your reading*
 
 Since you can edit and annotate the text, you can essentially
 *customize* the chapter so that it is a unique reflection of your
@@ -273,23 +288,24 @@ the template for `Exercise-1`. Figure 10 illustrates the steps. Use the
 following naming convention for your exercise files:
 `exercise-number-studentnumber`. Once you click ‘OK’ a new R Markdown
 file will appear in your editor, as well as a new folder where this file
-resides. <img src="images/10-Start-New-Exercise.gif" width="100%" />
+resides.
+<img src="man/figures/10-Start-New-Exercise.gif" width="100%" />
 **Figure 10.** *Creating a new file to work on an exercise*
 
 To begin, you can edit the header of the document with your personal
 information, like name and student number (see Figure 11).
-<img src="images/11-Working-on-an-Exercise-YAML.gif" width="100%" />
+<img src="man/figures/11-Working-on-an-Exercise-YAML.gif" width="100%" />
 **Figure 11.** *Entering your personal information in the header of the
 R Markdown document*
 
 You can also run chunks of code (see Figure 12).
-<img src="images/12-Working-on-an-Exercise-Chunks.gif" width="100%" />
+<img src="man/figures/12-Working-on-an-Exercise-Chunks.gif" width="100%" />
 **Figure 12.** *Running chunks of code in your exercise*
 
 And importantly, to work on your exercise, you can enter your answers as
 text and create new chunks of code to do any calculations you need for
 your answers, as shown in Figure 13.
-<img src="images/13-Working-on-an-Exercise-Answers.gif" width="100%" />
+<img src="man/figures/13-Working-on-an-Exercise-Answers.gif" width="100%" />
 **Figure 13.** *Working to answer the questions in your exercise*
 
 After you complete your exercise, you will need to return to the header
@@ -300,15 +316,15 @@ threshold concepts are key ideas that once you grasp them they change
 your understanding of a topic, phenomenon, subject, method, etc. Write
 between three and five threshold concepts that apply to your learning
 experience working on this exercise. Figure 14 illustrates this step.
-<img src="images/14-Working-on-an-Exercise-Highlights.gif" width="100%" />
+<img src="man/figures/14-Working-on-an-Exercise-Highlights.gif" width="100%" />
 **Figure 14.** *Writing the highlights of the exercise*
 
 The highlights and threshold concepts are the last element of your
 exercise, and after writing them you can knit the document to generate
 the pdf file for submission. Click the Knit button in the top left
 corner to knit (see Figure 15).
-<img src="images/15-Knitting-the-Exercise.gif" width="100%" /> **Figure
-14.** *Knitting the exercise*
+<img src="man/figures/15-Knitting-the-Exercise.gif" width="100%" />
+**Figure 15.** *Knitting the exercise*
 
 You are now ready to submit the exercise following the instructions in
 the course outline.
