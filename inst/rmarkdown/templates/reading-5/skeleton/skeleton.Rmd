@@ -728,11 +728,11 @@ This problem also has a set of constraints, as follows:
 $$
 \begin{array}{c}
 -s_{1} + s_{3} \le 16\\
--s_{1} + s_{4} \le 16\\
--s_{1} + s_{5} \le 16\\
--s_{2} + s_{3} \le 16\\
+-s_{1} + s_{4} \le 20\\
+-s_{1} + s_{5} \le 22\\
+-s_{2} + s_{3} \le 18\\
 -s_{2} + s_{4} \le 16\\
--s_{2} + s_{5} \le 16\\
+-s_{2} + s_{5} \le 14\\
 s_{1} \ge 0;\cdots;s_{5} \ge 0
 \end{array}
 $$
