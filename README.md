@@ -4,23 +4,29 @@
 # envsocty3LT3
 
 <!-- badges: start -->
+<!-- License --->
 
-[![Lifecycle:
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /><br /></a>This
+work is licensed under a
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative
+Commons Attribution-NonCommercial-ShareAlike 4.0 International
+License</a><br />. <!-- Other badges --> [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/envsocty3LT3)](https://CRAN.R-project.org/package=envsocty3LT3)
 <!-- Institutional logo: save in folder `man/figures` -->
-<img src="man/figures/mcm-col_jpg.jpg" align="right" width=260 />
+<img src="man/figures/mcm-col_jpg.jpg" align="right" width=250 />
+
 <!-- badges: end -->
 
 Package {envsocty3LT3} is an open educational resource that aims to
 combine various advantages of working with the [`R` statistical
 computing project](https://www.r-project.org/):
 
--   Ease of distribution
--   Reproducibility
--   Availability of templates for computational notebooks
--   Rigor in documentation of data sets and computational products
+- Ease of distribution
+- Reproducibility
+- Availability of templates for computational notebooks
+- Rigor in documentation of data sets and computational products
 
 See the Quickstart guide below on instructions to install and start
 using the package.
@@ -33,10 +39,10 @@ Society](https://www.science.mcmaster.ca/ees/) at [McMaster
 University](https://www.mcmaster.ca/). The course package includes the
 following components:
 
--   Document templates with *Readings*.
--   Document templates with *Exercises*.
--   Data sets used in the Readings and Exercises.
--   Custom functions.
+- Document templates with *Readings*.
+- Document templates with *Exercises*.
+- Data sets used in the Readings and Exercises.
+- Custom functions.
 
 *Readings* are designed to be like mini-chapters in a book. What makes
 them different from a conventional book is that they are interactive and
@@ -45,15 +51,15 @@ with a conventional printed book.
 
 These include:
 
--   Exercise 1: Energy consumption trends
--   Exercise 2: Geographic information for transportation analysis
--   Exercise 3: Network analysis and the potential for walking mobility
-    and accessibility in neighbourhoods
--   Exercise 4: Spatial interaction analysis in the Hamilton CMA
--   Exercise 5: Logistics and deliveries
-    <!-- These are suggested topics (RL): -->
-    <!-- - Exercise 6: Spatial interaction modelling -->
-    <!-- - Exercise 6: Exploring transport systems with OSM data -->
+- Exercise 1: Energy consumption trends
+- Exercise 2: Geographic information for transportation analysis
+- Exercise 3: Network analysis and the potential for walking mobility
+  and accessibility in neighbourhoods
+- Exercise 4: Spatial interaction analysis in the Hamilton CMA
+- Exercise 5: Logistics and deliveries
+  <!-- These are suggested topics (RL): -->
+  <!-- - Exercise 6: Spatial interaction modelling -->
+  <!-- - Exercise 6: Exploring transport systems with OSM data -->
 
 *Exercises* are the documents that you will use to complete most of your
 coursework. The templates are pre-formatted for you, so you do not have

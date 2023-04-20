@@ -16,10 +16,14 @@ knitr::opts_chunk$set(
 # envsocty3LT3
 
 <!-- badges: start -->
+<!-- License --->
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /><br /></a>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a><br />.
+<!-- Other badges -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN status](https://www.r-pkg.org/badges/version/envsocty3LT3)](https://CRAN.R-project.org/package=envsocty3LT3)
 <!-- Institutional logo: save in folder `man/figures` -->
-<img src="man/figures/mcm-col_jpg.jpg" align="right" width=260 />
+<img src="man/figures/mcm-col_jpg.jpg" align="right" width=250 />
+
 <!-- badges: end -->
 
 Package {envsocty3LT3} is an open educational resource that aims to combine various advantages of working with the [`R` statistical computing project](https://www.r-project.org/):
